@@ -1,3 +1,4 @@
+export { useBlock } from "./useBlock"
 export { useSigner } from "./useSigner"
 export { useAccount } from "./useAccount"
 export { useChainId } from "./useChainId"

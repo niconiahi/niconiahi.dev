@@ -1,4 +1,3 @@
-// import fs from "fs"
 import { create } from "ipfs-core"
 import type { CID, IPFS } from "ipfs-core"
 
@@ -23,22 +22,6 @@ export async function setFile(ipfs: IPFS, file: File): Promise<AddResult> {
     content: buffer,
   })
 
-  // const reader = new FileReader()
-
-  // https://developer.mozilla.org/en-US/docs/Web/API/FileReader/result
-  // reader.onload = function () {
-  //   const result = reader.result as string | null
-  //   console.log("setFile ~ result", result)
-
-  //   if (!result) return
-
-  //   const path = "../images"
-
-  //   fs.writeFileSync(path, result)
-  // }
-
-  // reader.readAsText(file)
-
   return addResult
 }
 
@@ -52,12 +35,11 @@ export async function setString(
   path?: string,
 ): Promise<AddResult> {
   const textEncoder = new TextEncoder()
-
-  const uint8Array = textEncoder.encode(string)
+  const content = textEncoder.encode(string)
 
   const addResult = await ipfs.add({
     path,
-    content: uint8Array,
+    content,
   })
 
   return addResult
