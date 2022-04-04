@@ -39,12 +39,15 @@
     content: '';
     position: absolute;
     left: 0;
+    right: 0;
     bottom: 0;
-    border-radius: inherit;
-    height: theme('spacing.2');
-    width: theme('width.full');
-    background: theme('backgroundColor.gray.900');
     z-index: 2;
+
+    border-radius: inherit;
+
+    height: theme('spacing.2');
+
+    background: theme('backgroundColor.gray.900');
 
     transition-property: theme('transitionProperty.all');
     transition-timing-function: theme('transitionTimingFunction.in');
@@ -55,14 +58,15 @@
     content: '';
     position: absolute;
     left: 0;
+    right: 0;
     bottom: 0;
     z-index: 1;
-    transform: translateY(0rem);
+
     border-radius: inherit;
-    height: theme('spacing.2');
-    width: theme('width.full');
     border-width: 1px;
     border-color: theme('borderColor.gray.900');
+
+    height: theme('spacing.2');
     background-image: repeating-linear-gradient(
       -40deg,
       theme('colors.gray.900'),
@@ -74,6 +78,7 @@
     backface-visibility: hidden;
     background-size: theme('spacing.2') theme('spacing.2');
 
+    transform: scaleX(0.9) translateY(0rem);
     transition-property: theme('transitionProperty.all');
     transition-timing-function: theme('transitionTimingFunction.in');
     transition-duration: theme('transitionDuration.100');
@@ -81,7 +86,7 @@
 
   .btn-primary:hover:after {
     animation: stripe-motion 12s infinite linear forwards;
-    transform: translateY(0.4rem);
+    transform: scaleX(1) translateY(0.4rem);
   }
 
   .btn-primary:hover:before {
