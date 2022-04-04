@@ -1,8 +1,23 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+const colors = require("tailwindcss/colors")
+const defaultTheme = require("tailwindcss/defaultTheme")
+
 module.exports = {
   mode: "jit",
-  purge: ["./app/**/*.{ts,tsx}"],
+  darkMode: "class",
+  content: ["./app/**/*.{ts,tsx}"],
   theme: {
-    extend: {},
+    minWidth: {
+      60: "15rem",
+    },
+    extend: {
+      fontFamily: {
+        sans: ["Source Code Pro", ...defaultTheme.fontFamily.sans],
+      },
+      colors: {
+        gray: colors.neutral,
+      },
+    },
   },
   variants: {
     extend: {},

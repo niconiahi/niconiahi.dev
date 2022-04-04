@@ -1,6 +1,7 @@
 export * from "./array"
 export * from "./block"
 export * from "./error"
+export * from "./string"
 export * from "./provider"
 export * from "./artifact"
 export * from "./db.server"

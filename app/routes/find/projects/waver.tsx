@@ -1,5 +1,4 @@
 import { ChangeEvent, ReactElement, useEffect, useState } from "react"
-import invariant from "tiny-invariant"
 import type { BigNumber } from "@ethersproject/bignumber"
 
 import { ChainId, Waver as WaverContract } from "~/types"
@@ -18,10 +17,6 @@ export type Wave = {
 }
 
 export default function WaverProject(): ReactElement {
-  const [waves, setWaves] = useState<Wave[]>([])
-  const [message, setMessage] = useState<string>("")
-  const [wavesCount, setWavesCount] = useState<number>(0)
-
   const metamask = useMetamask()
   const chainId = useChainId({ metamask })
   const account = useAccount({ metamask })
@@ -33,6 +28,40 @@ export default function WaverProject(): ReactElement {
   async function handleConnectMetamaskClick(): Promise<void> {
     connectMetamask()
   }
+
+  if (!waverContract || !account) {
+    return (
+      <div className="flex flex-col w-full items-center justify-end space-y-2">
+        <p className="text-gray-500">You need to connect your Metamask</p>
+        <button className="btn-primary" onClick={handleConnectMetamaskClick}>
+          Connect wallet
+        </button>
+      </div>
+    )
+  }
+
+  if (!isRinkeby) {
+    return (
+      <div>
+        <h3>This section works on Rinkeby. Try changing to it from Metamask</h3>
+      </div>
+    )
+  }
+
+  return <Waver account={account} waverContract={waverContract} />
+}
+
+function Waver({
+  account,
+  waverContract,
+}: {
+  account: string
+  waverContract: WaverContract
+}): ReactElement {
+  const [message, setMessage] = useState<string>("")
+
+  const [waves, setWaves] = useState<Wave[]>([])
+  const [wavesCount, setWavesCount] = useState<number>(0)
 
   function handleMessageChange(event: ChangeEvent<HTMLInputElement>): void {
     const { value: message } = event.target
@@ -50,40 +79,8 @@ export default function WaverProject(): ReactElement {
     return waverContract.getWaves()
   }
 
-  useEffect(
-    function getInitialWaves() {
-      if (!waverContract) return
-
-      getWaves(waverContract).then(setWaves)
-    },
-    [waverContract],
-  )
-
-  useEffect(
-    function getInitialWaves() {
-      if (!waverContract) return
-
-      getWaves(waverContract).then(setWaves)
-    },
-    [waverContract],
-  )
-
-  useEffect(
-    function getInitialWavesCount() {
-      if (!waverContract) return
-
-      getWavesCount(waverContract).then(setWavesCount)
-    },
-    [waverContract],
-  )
-
   async function handleWave(): Promise<void> {
     try {
-      invariant(
-        waverContract,
-        "You must instance Wave Portal contract in order to wave",
-      )
-
       const waveTxn = await waverContract.wave(message, {
         gasLimit: 300000,
       })
@@ -99,9 +96,21 @@ export default function WaverProject(): ReactElement {
     }
   }
 
-  useEffect(() => {
-    if (!waverContract) return
+  useEffect(
+    function getInitialWaves() {
+      getWaves(waverContract).then(setWaves)
+    },
+    [waverContract],
+  )
 
+  useEffect(
+    function getInitialWavesCount() {
+      getWavesCount(waverContract).then(setWavesCount)
+    },
+    [waverContract],
+  )
+
+  useEffect(() => {
     function handleNewWave(
       from: string,
       timestamp: BigNumber,
@@ -122,37 +131,18 @@ export default function WaverProject(): ReactElement {
     }
   }, [waverContract])
 
-  if (!isRinkeby) {
-    return (
-      <div>
-        <h3>This section works on Rinkeby. Try changing to it from Metamask</h3>
-      </div>
-    )
-  }
-
   return (
     <div className="flex w-full flex-col items-center justify-center">
       <h1 className="text-2xl">Wave at me</h1>
       <h3>I have been waved {wavesCount} times</h3>
       <div className="flex w-full flex-col items-stretch space-y-2">
         <div className="flex w-full items-center justify-end space-x-2">
-          {account ? (
-            <>
-              <h3>
-                Connected with account{" "}
-                <span className="text-indigo-500 underline underline-offset-2">
-                  {account}
-                </span>
-              </h3>
-            </>
-          ) : (
-            <button
-              className="rounded-sm bg-indigo-500 p-2 text-white"
-              onClick={handleConnectMetamaskClick}
-            >
-              Connect wallet
-            </button>
-          )}
+          <h3>
+            Connected with account{" "}
+            <span className="text-indigo-500 underline underline-offset-2">
+              {account}
+            </span>
+          </h3>
         </div>
         <div className="flex items-center justify-end space-x-2">
           <label aria-label="message" htmlFor="message">

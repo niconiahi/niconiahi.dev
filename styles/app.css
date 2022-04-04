@@ -1,6 +1,91 @@
 @import url("a11yreset.css");
 @import url("utilitary.css");
 
+:root {
+  --stripe-height: 0.2rem;
+}
+
+@font-face {
+  font-family: "Source Code Pro";
+  src: url("/fonts/SourceCodePro-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes stripe-motion {
+    0% { background-position: 0% 0; }
+    100% { background-position: 100% 0; }
+}
+
+@layer components {
+  .btn-primary {
+    display: block;
+    text-transform: uppercase;
+    padding: theme('spacing.2');
+    color: theme('colors.gray.100');
+    border-radius: theme('borderRadius.sm');
+    background: theme('colors.gray.900');
+    @apply transition;
+
+    position: relative;
+  }
+
+  .btn-primary:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    border-radius: inherit;
+    height: theme('spacing.2');
+    width: theme('width.full');
+    background: theme('backgroundColor.gray.900');
+    z-index: 2;
+
+    transition-property: theme('transitionProperty.all');
+    transition-timing-function: theme('transitionTimingFunction.in');
+    transition-duration: theme('transitionDuration.100');
+  }
+
+  .btn-primary:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 1;
+    transform: translateY(0rem);
+    border-radius: inherit;
+    height: theme('spacing.2');
+    width: theme('width.full');
+    border-width: 1px;
+    border-color: theme('borderColor.gray.900');
+    background-image: repeating-linear-gradient(
+      -40deg,
+      theme('colors.gray.900'),
+      theme('colors.gray.900') 1px,
+      theme('colors.gray.100') 2px,
+      theme('colors.gray.100') 5px
+    );
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    background-size: theme('spacing.2') theme('spacing.2');
+
+    transition-property: theme('transitionProperty.all');
+    transition-timing-function: theme('transitionTimingFunction.in');
+    transition-duration: theme('transitionDuration.100');
+  }
+
+  .btn-primary:hover:after {
+    animation: stripe-motion 12s infinite linear forwards;
+    transform: translateY(0.4rem);
+  }
+
+  .btn-primary:hover:before {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}

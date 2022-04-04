@@ -1,14 +1,12 @@
 import { useState, ReactElement, useEffect } from "react"
 import type { Event } from "@ethersproject/contracts"
 import type { BigNumber } from "@ethersproject/bignumber"
-import invariant from "tiny-invariant"
 
 import { ETHERSCAN_URL } from "~/constants"
 import { bigNumberToString } from "~/helpers"
 import { ChainId, Transfers as TransfersContract, TransferEvent } from "~/types"
 import {
   useChainId,
-  useAccount,
   useMetamask,
   useBlockNumber,
   useConnectMetamask,
@@ -18,7 +16,6 @@ import {
 export default function TransfersProject(): ReactElement {
   const metamask = useMetamask()
 
-  const account = useAccount({ metamask })
   const chainId = useChainId({ metamask })
   const blockNumber = useBlockNumber({ chainId })
   const connectMetamask = useConnectMetamask()
@@ -30,7 +27,7 @@ export default function TransfersProject(): ReactElement {
     connectMetamask()
   }
 
-  if (!account || !transfersContract || !blockNumber) {
+  if (!transfersContract || !blockNumber) {
     return (
       <div className="flex w-full items-center justify-end space-x-2">
         <h3>You need to connect your Metamask</h3>
@@ -53,14 +50,14 @@ export default function TransfersProject(): ReactElement {
   }
 
   return (
-    <Information
+    <Transfers
       blockNumber={blockNumber}
       transfersContract={transfersContract}
     />
   )
 }
 
-function Information({
+function Transfers({
   blockNumber,
   transfersContract,
 }: {
@@ -74,7 +71,47 @@ function Information({
     undefined,
   )
 
+  const TRANSFER_BLOCKS_AMOUNT = 3000
+  const BLOCK_CONFIRMATIONS = 20
+
+  const [transfers, setTransfers] = useState<TransferEvent[]>([])
+
   const isLoading = !name || !symbol || !decimals || !totalSupply
+
+  useEffect(() => {
+    async function getPastTransfers() {
+      const transfersFilter = transfersContract.filters.Transfer()
+      const transfers = await transfersContract.queryFilter(
+        transfersFilter,
+        blockNumber - TRANSFER_BLOCKS_AMOUNT,
+        blockNumber,
+      )
+
+      setTransfers(transfers)
+    }
+
+    getPastTransfers()
+  }, [blockNumber, transfersContract])
+
+  useEffect(() => {
+    function handleTransferOff(transfersContract: TransfersContract) {
+      transfersContract.off("Transfer", () => {
+        console.warn(`Unsubscribed from "Transfer" Transfers contract's event`)
+      })
+    }
+
+    function handleTransferOn(transfersContract: TransfersContract) {
+      transfersContract.on("Transfer", (transfer: TransferEvent) => {
+        setTransfers((prevTransfers) => [...prevTransfers, transfer])
+      })
+    }
+
+    handleTransferOn(transfersContract)
+
+    return () => {
+      handleTransferOff(transfersContract)
+    }
+  }, [transfersContract])
 
   useEffect(() => {
     async function getInformation() {
@@ -100,6 +137,10 @@ function Information({
         <p>Gathering information...</p>
       </div>
     )
+  }
+
+  function byConfirmations(transfer: Event) {
+    return blockNumber - transfer.blockNumber > BLOCK_CONFIRMATIONS
   }
 
   const totalSupplyLabel = bigNumberToString(totalSupply, decimals)
@@ -132,96 +173,29 @@ function Information({
       </div>
       <div className="flex flex-col items-center justify-center">
         <h3>Transfers</h3>
-        <Transfers
-          blockNumber={blockNumber}
-          decimals={decimals}
-          symbol={symbol}
-          transfersContract={transfersContract}
-        />
+        <ul className="flex flex-col items-center justify-center">
+          {transfers
+            .filter(byConfirmations)
+            .map(({ args, transactionHash }) => {
+              const url = ETHERSCAN_URL + transactionHash
+
+              const { from, to, value: bigAmount } = args
+              const amount = bigNumberToString(bigAmount, decimals)
+
+              const key = `${from}_${to}_${amount}_${transactionHash}`
+
+              return (
+                <a
+                  key={key}
+                  className="underline-offset-2 hover:underline"
+                  href={url}
+                >
+                  {from} to {to} for {amount} {symbol}
+                </a>
+              )
+            })}
+        </ul>
       </div>
     </div>
-  )
-}
-
-function Transfers({
-  symbol,
-  decimals,
-  blockNumber,
-  transfersContract,
-}: {
-  symbol: string
-  decimals: number
-  blockNumber: number
-  transfersContract: TransfersContract
-}): ReactElement {
-  const TRANSFER_BLOCKS_AMOUNT = 3000
-  const BLOCK_CONFIRMATIONS = 20
-
-  const [transfers, setTransfers] = useState<TransferEvent[]>([])
-
-  useEffect(() => {
-    async function getPastTransfers() {
-      const transfersFilter = transfersContract.filters.Transfer()
-      const transfers = await transfersContract.queryFilter(
-        transfersFilter,
-        blockNumber - TRANSFER_BLOCKS_AMOUNT,
-        blockNumber,
-      )
-
-      setTransfers(transfers)
-    }
-
-    getPastTransfers()
-  }, [blockNumber, transfersContract])
-
-  useEffect(() => {
-    if (!transfersContract) return
-
-    function handleTransferOff(transfersContract: TransfersContract) {
-      transfersContract.off("Transfer", () => {
-        console.warn(`Unsubscribed from "Transfer" Transfers contract's event`)
-      })
-    }
-
-    function handleTransferOn(transfersContract: TransfersContract) {
-      transfersContract.on("Transfer", (transfer: TransferEvent) => {
-        setTransfers((prevTransfers) => [...prevTransfers, transfer])
-      })
-    }
-
-    handleTransferOn(transfersContract)
-
-    return () => {
-      handleTransferOff(transfersContract)
-    }
-  }, [transfersContract])
-
-  function byConfirmations(transfer: Event) {
-    return blockNumber - transfer.blockNumber > BLOCK_CONFIRMATIONS
-  }
-
-  return (
-    <ul className="flex flex-col items-center justify-center">
-      {transfers.filter(byConfirmations).map(({ args, transactionHash }) => {
-        invariant(args, "Transfer events should include arguments")
-
-        const url = ETHERSCAN_URL + transactionHash
-
-        const { from, to, value: bigAmount } = args
-        const amount = bigNumberToString(bigAmount, decimals)
-
-        const key = `${from}_${to}_${amount}_${transactionHash}`
-
-        return (
-          <a
-            key={key}
-            className="underline-offset-2 hover:underline"
-            href={url}
-          >
-            {from} to {to} for {amount} {symbol}
-          </a>
-        )
-      })}
-    </ul>
   )
 }

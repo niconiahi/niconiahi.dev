@@ -7,34 +7,85 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useCatch,
 } from "remix"
 import type { MetaFunction } from "remix"
 
 import appStyles from "~/styles/app.css"
 
 export const meta: MetaFunction = () => {
-  return { title: "Web3 sides" }
+  return { title: "niconiahi.dev" }
 }
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: appStyles }]
 }
 
-export default function App(): ReactElement {
+function Document({
+  children,
+  title,
+}: {
+  children: React.ReactNode
+  title?: string
+}) {
   return (
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
-        <meta content="width=device-width,initial-scale=1" name="viewport" />
+        <link href="/favicon.png" rel="icon" type="image/png" />
+        {title ? <title>{title}</title> : null}
         <Meta />
         <Links />
       </head>
       <body>
-        <Outlet />
+        {children}
         <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === "development" && <LiveReload />}
       </body>
     </html>
+  )
+}
+
+export default function App(): ReactElement {
+  return (
+    <Document>
+      <Outlet />
+    </Document>
+  )
+}
+
+export function CatchBoundary(): ReactElement {
+  const caught = useCatch()
+
+  switch (caught.status) {
+    case 404:
+      return (
+        <Document title={`${caught.status} ${caught.statusText}`}>
+          <h1>
+            {caught.status} {caught.statusText}
+          </h1>
+        </Document>
+      )
+
+    default:
+      throw new Error(
+        `Unexpected caught response with status: ${caught.status}`,
+      )
+  }
+}
+
+export function ErrorBoundary({ error }: { error: Error }): ReactElement {
+  console.error(error)
+
+  return (
+    <Document>
+      <h1>App Error</h1>
+      <pre>{error.message}</pre>
+      <p>
+        Replace this UI with what you want users to see when your app throws
+        uncaught errors.
+      </p>
+    </Document>
   )
 }

@@ -1,0 +1,13 @@
+.magic-underline:before {
+  content: '';
+  position: absolute;
+  left: 0.3em;
+  right: 0.3em;
+  bottom: -0.25em;
+  will-change: transform;
+  background: white;
+  height: 4px;
+}
+.magic-underline:hover:before {
+  width: calc(100% - 2rem);
+}

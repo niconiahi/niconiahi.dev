@@ -8,7 +8,7 @@ export function useMetamask(): Web3Provider | undefined {
     if (!window || provider) return
 
     setProvider(new Web3Provider((window as any).ethereum))
-  }, [provider, setProvider])
+  }, [provider])
 
   return provider
 }
