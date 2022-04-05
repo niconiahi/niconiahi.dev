@@ -1,10 +1,10 @@
-import { JsonRpcSigner } from "@ethersproject/providers"
+import { Web3Provider, JsonRpcSigner } from "@ethersproject/providers"
 
-import { useMetamask } from "~/hooks"
-
-export function useSigner(): JsonRpcSigner | undefined {
-  const metamask = useMetamask()
-
+export function useSigner({
+  metamask,
+}: {
+  metamask?: Web3Provider
+}): JsonRpcSigner | undefined {
   if (!metamask) return undefined
 
   return metamask.getSigner()

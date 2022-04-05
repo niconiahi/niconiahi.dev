@@ -4,6 +4,7 @@ import type { BigNumber } from "@ethersproject/bignumber"
 import { big } from "~/helpers"
 import { ChainId, Mint as MintContract } from "~/types"
 import {
+  useSigner,
   useChainId,
   useAccount,
   useGasPrice,
@@ -16,12 +17,12 @@ import {
 
 export default function MintProject(): ReactElement {
   const metamask = useMetamask()
-
+  const signer = useSigner({ metamask })
   const account = useAccount({ metamask })
   const chainId = useChainId({ metamask })
   const blockNumber = useBlockNumber({ chainId })
-  const mintContract = useMintContract()
-  const connectMetamask = useConnectMetamask()
+  const mintContract = useMintContract({ signer })
+  const connectMetamask = useConnectMetamask({ metamask })
 
   const isRinkeby = chainId === ChainId.Rinkeby
 
@@ -29,14 +30,11 @@ export default function MintProject(): ReactElement {
     connectMetamask()
   }
 
-  if (!account || !mintContract || typeof blockNumber !== "number") {
+  if (!account || !blockNumber || !mintContract) {
     return (
-      <div className="flex w-full items-center justify-end space-x-2">
-        <h3>You need to connect your Metamask</h3>
-        <button
-          className="rounded-sm bg-indigo-500 p-2 text-white"
-          onClick={handleConnectMetamaskClick}
-        >
+      <div className="flex flex-col w-full items-center justify-end space-y-2">
+        <p className="text-gray-500">You need to connect your Metamask</p>
+        <button className="btn-primary" onClick={handleConnectMetamaskClick}>
           Connect wallet
         </button>
       </div>
@@ -46,7 +44,7 @@ export default function MintProject(): ReactElement {
   if (!isRinkeby) {
     return (
       <div>
-        <h3>This section works on Rinkeby. Try changing to it from Metamask</h3>
+        <p>This section works on Rinkeby. Try changing to it from Metamask</p>
       </div>
     )
   }

@@ -3,6 +3,7 @@ import type { BigNumber } from "@ethersproject/bignumber"
 
 import { ChainId, Counter as CounterContract } from "~/types"
 import {
+  useSigner,
   useAccount,
   useChainId,
   useMetamask,
@@ -12,10 +13,11 @@ import {
 
 export default function CounterProject(): ReactElement {
   const metamask = useMetamask()
+  const signer = useSigner({ metamask })
   const account = useAccount({ metamask })
   const chainId = useChainId({ metamask })
-  const counterContract = useCounterContract()
-  const connectMetamask = useConnectMetamask()
+  const counterContract = useCounterContract({ signer })
+  const connectMetamask = useConnectMetamask({ metamask })
 
   const isRinkeby = chainId === ChainId.Rinkeby
 

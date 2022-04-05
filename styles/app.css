@@ -18,8 +18,17 @@
 @tailwind utilities;
 
 @keyframes stripe-motion {
-    0% { background-position: 0% 0; }
-    100% { background-position: 100% 0; }
+  0% { background-position: 0% 0; }
+  100% { background-position: 100% 0; }
+}
+
+@keyframes stripe-slide-in {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(0.4rem);
+  }
 }
 
 @layer components {
@@ -30,7 +39,6 @@
     color: theme('colors.gray.100');
     border-radius: theme('borderRadius.sm');
     background: theme('colors.gray.900');
-    @apply transition;
 
     position: relative;
   }
@@ -49,9 +57,7 @@
 
     background: theme('backgroundColor.gray.900');
 
-    transition-property: theme('transitionProperty.all');
-    transition-timing-function: theme('transitionTimingFunction.in');
-    transition-duration: theme('transitionDuration.100');
+    @apply transition;
   }
 
   .btn-primary:after {
@@ -78,15 +84,13 @@
     backface-visibility: hidden;
     background-size: theme('spacing.2') theme('spacing.2');
 
-    transform: scaleX(0.9) translateY(0rem);
-    transition-property: theme('transitionProperty.all');
-    transition-timing-function: theme('transitionTimingFunction.in');
-    transition-duration: theme('transitionDuration.100');
+    @apply transition;
   }
 
   .btn-primary:hover:after {
-    animation: stripe-motion 12s infinite linear forwards;
-    transform: scaleX(1) translateY(0.4rem);
+    animation: 
+      stripe-motion 12s infinite linear 0.15s forwards,
+      stripe-slide-in 0.15s linear forwards;
   }
 
   .btn-primary:hover:before {

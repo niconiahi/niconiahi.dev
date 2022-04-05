@@ -1,11 +1,15 @@
+import { JsonRpcSigner } from "@ethersproject/providers"
 import { Waver__factory as waveFactory } from "../../../typechain-types"
 
 import { Waver } from "~/types"
-import { useMetamask, useSigner } from "~/hooks"
+import { useMetamask } from "~/hooks"
 import { RIKEBY_CONTRACT_ADDRESSES } from "~/constants"
 
-export function useWaverContract(): Waver | undefined {
-  const signer = useSigner()
+export function useWaverContract({
+  signer,
+}: {
+  signer?: JsonRpcSigner
+}): Waver | undefined {
   const metamask = useMetamask()
   const address = RIKEBY_CONTRACT_ADDRESSES.waver
 

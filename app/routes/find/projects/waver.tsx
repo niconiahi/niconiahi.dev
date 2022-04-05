@@ -3,6 +3,7 @@ import type { BigNumber } from "@ethersproject/bignumber"
 
 import { ChainId, Waver as WaverContract } from "~/types"
 import {
+  useSigner,
   useAccount,
   useChainId,
   useMetamask,
@@ -18,10 +19,12 @@ export type Wave = {
 
 export default function WaverProject(): ReactElement {
   const metamask = useMetamask()
+
+  const signer = useSigner({ metamask })
   const chainId = useChainId({ metamask })
   const account = useAccount({ metamask })
-  const waverContract = useWaverContract()
-  const connectMetamask = useConnectMetamask()
+  const waverContract = useWaverContract({ signer })
+  const connectMetamask = useConnectMetamask({ metamask })
 
   const isRinkeby = chainId === ChainId.Rinkeby
 

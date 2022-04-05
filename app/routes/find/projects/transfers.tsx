@@ -6,6 +6,7 @@ import { ETHERSCAN_URL } from "~/constants"
 import { bigNumberToString } from "~/helpers"
 import { ChainId, Transfers as TransfersContract, TransferEvent } from "~/types"
 import {
+  useSigner,
   useChainId,
   useMetamask,
   useBlockNumber,
@@ -16,10 +17,11 @@ import {
 export default function TransfersProject(): ReactElement {
   const metamask = useMetamask()
 
+  const signer = useSigner({ metamask })
   const chainId = useChainId({ metamask })
   const blockNumber = useBlockNumber({ chainId })
-  const connectMetamask = useConnectMetamask()
-  const transfersContract = useTransfersContract()
+  const connectMetamask = useConnectMetamask({ metamask })
+  const transfersContract = useTransfersContract({ signer })
 
   const isMainnet = chainId === ChainId.Mainnet
 
@@ -29,12 +31,9 @@ export default function TransfersProject(): ReactElement {
 
   if (!transfersContract || !blockNumber) {
     return (
-      <div className="flex w-full items-center justify-end space-x-2">
-        <h3>You need to connect your Metamask</h3>
-        <button
-          className="rounded-sm bg-indigo-500 p-2 text-white"
-          onClick={handleConnectMetamaskClick}
-        >
+      <div className="flex flex-col w-full items-center justify-end space-y-2">
+        <p className="text-gray-500">You need to connect your Metamask</p>
+        <button className="btn-primary" onClick={handleConnectMetamaskClick}>
           Connect wallet
         </button>
       </div>
@@ -44,7 +43,7 @@ export default function TransfersProject(): ReactElement {
   if (!isMainnet) {
     return (
       <div>
-        <h3>This section works on Mainnet. Try changing to it from Metamask</h3>
+        <p>This section works on Mainnet. Try changing to it from Metamask</p>
       </div>
     )
   }
@@ -67,16 +66,13 @@ function Transfers({
   const [name, setName] = useState<string | undefined>(undefined)
   const [symbol, setSymbol] = useState<string | undefined>(undefined)
   const [decimals, setDecimals] = useState<number | undefined>(undefined)
+  const [transfers, setTransfers] = useState<TransferEvent[]>([])
   const [totalSupply, setTotalSupply] = useState<BigNumber | undefined>(
     undefined,
   )
 
   const TRANSFER_BLOCKS_AMOUNT = 3000
   const BLOCK_CONFIRMATIONS = 20
-
-  const [transfers, setTransfers] = useState<TransferEvent[]>([])
-
-  const isLoading = !name || !symbol || !decimals || !totalSupply
 
   useEffect(() => {
     async function getPastTransfers() {
@@ -130,6 +126,8 @@ function Transfers({
 
     getInformation()
   }, [transfersContract])
+
+  const isLoading = !name || !symbol || !decimals || !totalSupply
 
   if (isLoading) {
     return (
