@@ -20,6 +20,8 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: appStyles }]
 }
 
+console.log(process.env.NODE_ENV)
+
 function Document({
   children,
   title,
