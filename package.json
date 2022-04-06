@@ -14,7 +14,7 @@
     "deploy": "fly deploy --remote-only",
     "reinstall": "rm -rf node_modules package-lock.json && npm i",
     "postinstall": "remix setup node",
-    "build": "npm run build:css && NODE_ENV=production npm run build:app",
+    "build": "npm run build:css && npm run build:app",
     "build:css": "postcss styles --base styles --dir app/styles --env production",
     "build:app": "remix build",
     "dev": "pm2-dev pm2.config.js",
