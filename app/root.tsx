@@ -1,15 +1,14 @@
 import { ReactElement } from "react"
+import type { MetaFunction, LinksFunction } from "remix"
 import {
-  Links,
-  LinksFunction,
-  LiveReload,
   Meta,
+  Links,
   Outlet,
   Scripts,
-  ScrollRestoration,
   useCatch,
+  LiveReload,
+  ScrollRestoration,
 } from "remix"
-import type { MetaFunction } from "remix"
 
 import appStyles from "~/styles/app.css"
 
