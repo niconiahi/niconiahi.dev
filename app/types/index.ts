@@ -7,4 +7,6 @@ export type {
   TransactionStateType,
 } from "~/hooks/useTransaction"
 
+export { XyzNextValueType } from "~/providers/xyz-provider"
+
 export type { TransferEvent } from "../../typechain-types/ERC20"

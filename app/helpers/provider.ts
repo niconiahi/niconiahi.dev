@@ -2,10 +2,10 @@ import { JsonRpcProvider } from "@ethersproject/providers"
 
 import { ChainId } from "~/types"
 
-export function getProvider({
+export function getRpcProvider({
   chainId,
 }: {
-  chainId: ChainId
+  chainId?: ChainId
 }): JsonRpcProvider {
   switch (chainId) {
     case ChainId.Mainnet: {
@@ -22,6 +22,12 @@ export function getProvider({
     }
     case ChainId.Localhost: {
       return new JsonRpcProvider()
+    }
+    default: {
+      return new JsonRpcProvider(
+        "https://eth-mainnet.alchemyapi.io/v2/a5n7e0kB6LJg5nDUx2cFqEYeDoa8aeqP",
+        chainId,
+      )
     }
   }
 }

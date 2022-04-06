@@ -14,16 +14,16 @@ import {
 
 import { getUrl, getIpfs, setFile } from "~/helpers"
 
-const uploadHandler = unstable_createFileUploadHandler({
-  maxFileSize: 5_000_000,
-  file: ({ filename }) => filename,
-})
-
 type ActionData = {
   src?: string
 }
 
 export const action: ActionFunction = async ({ request }) => {
+  const uploadHandler = unstable_createFileUploadHandler({
+    maxFileSize: 5_000_000,
+    file: ({ filename }) => filename,
+  })
+
   const formData = await unstable_parseMultipartFormData(request, uploadHandler)
   const file = formData.get("file") as File | null
 

@@ -1,7 +1,8 @@
 import { ReactElement } from "react"
-import { json, Link, LoaderFunction, Outlet, useLoaderData } from "remix"
+import { json, Link, Outlet, useLoaderData, LoaderFunction } from "remix"
 
-import { firstLetterToUpper } from "~/helpers"
+import { useXyz } from "~/hooks"
+import { firstLetterToUpper, truncateString } from "~/helpers"
 
 enum ProjectType {
   Web3,
@@ -14,9 +15,10 @@ type Project = {
 
 type LoaderData = {
   projects: Project[]
+  currentProject?: Project
 }
 
-export const loader: LoaderFunction = () => {
+export const loader: LoaderFunction = ({ request }) => {
   const projects: Project[] = [
     { path: "counter", type: ProjectType.Web3 },
     {
@@ -41,15 +43,29 @@ export const loader: LoaderFunction = () => {
     },
   ]
 
-  return json<LoaderData>({ projects })
+  const { url } = request
+
+  const projectName = getProjectName(url)
+  const currentProject = projects.find(
+    (project) => project.path === projectName,
+  )
+
+  return json<LoaderData>({ projects, currentProject })
 }
 
 export default function Index(): ReactElement {
-  const { projects } = useLoaderData<LoaderData>()
+  const { account } = useXyz()
+  const { projects, currentProject } = useLoaderData<LoaderData>()
 
   return (
     <>
       <nav className="min-w-60 border-r border-gray-700 p-4">
+        {account && currentProject?.type === ProjectType.Web3 ? (
+          <div className="absolute top-4 right-4 border-2 p-2 border-gray-900 rounded-md flex space-x-2 items-center justify-center">
+            <div className="w-2 h-2 bg-green-400 rounded outline outline-1 outline-gray-900" />
+            <h1>{truncateString(account)}</h1>
+          </div>
+        ) : null}
         <ul className="flex flex-col">
           {projects.map(({ path }) => (
             <Link
@@ -67,4 +83,16 @@ export default function Index(): ReactElement {
       </main>
     </>
   )
+}
+
+function getProjectName(url: string): string | undefined {
+  const regex = /([^\/]+$)/
+
+  const matches = url.match(regex)
+
+  if (!matches) return undefined
+
+  const [projectName] = matches
+
+  return projectName
 }

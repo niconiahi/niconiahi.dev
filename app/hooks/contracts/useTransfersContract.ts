@@ -1,19 +1,14 @@
-import { JsonRpcSigner } from "@ethersproject/providers"
 import { Transfers__factory as transfersFactory } from "../../../typechain-types"
 
+import { useXyz } from "~/hooks"
 import { Transfers } from "~/types"
-import { useMetamask } from "~/hooks"
 import { MAINNET_CONTRACT_ADDRESSES } from "~/constants"
 
-export function useTransfersContract({
-  signer,
-}: {
-  signer?: JsonRpcSigner
-}): Transfers | undefined {
-  const metamask = useMetamask()
+export function useTransfersContract(): Transfers | undefined {
+  const { signer } = useXyz()
   const address = MAINNET_CONTRACT_ADDRESSES.transfers
 
-  if (!metamask || !signer) return undefined
+  if (!signer) return undefined
 
   return transfersFactory.connect(address, signer)
 }

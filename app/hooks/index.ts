@@ -1,11 +1,4 @@
-export { useBlock } from "./useBlock"
-export { useSigner } from "./useSigner"
-export { useAccount } from "./useAccount"
-export { useChainId } from "./useChainId"
-export { useProvider } from "./useProvider"
-export { useMetamask } from "./useMetamask"
 export { useGasPrice } from "./useGasPrice"
-export { useBlockNumber } from "./useBlockNumber"
 export { useTransaction } from "./useTransaction"
 export { useConnectMetamask } from "./useConnectMetamask"
 
@@ -13,3 +6,5 @@ export { useMintContract } from "./contracts/useMintContract"
 export { useWaverContract } from "./contracts/useWaverContract"
 export { useCounterContract } from "./contracts/useCounterContract"
 export { useTransfersContract } from "./contracts/useTransfersContract"
+
+export { useXyz } from "~/providers/xyz-provider"

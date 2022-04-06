@@ -4,25 +4,17 @@ import type { BigNumber } from "@ethersproject/bignumber"
 import { big } from "~/helpers"
 import { ChainId, Mint as MintContract } from "~/types"
 import {
-  useSigner,
-  useChainId,
-  useAccount,
+  useXyz,
   useGasPrice,
-  useMetamask,
   useTransaction,
-  useBlockNumber,
   useMintContract,
   useConnectMetamask,
 } from "~/hooks"
 
 export default function MintProject(): ReactElement {
-  const metamask = useMetamask()
-  const signer = useSigner({ metamask })
-  const account = useAccount({ metamask })
-  const chainId = useChainId({ metamask })
-  const blockNumber = useBlockNumber({ chainId })
-  const mintContract = useMintContract({ signer })
-  const connectMetamask = useConnectMetamask({ metamask })
+  const mintContract = useMintContract()
+  const connectMetamask = useConnectMetamask()
+  const { chainId, blockNumber, account } = useXyz()
 
   const isRinkeby = chainId === ChainId.Rinkeby
 

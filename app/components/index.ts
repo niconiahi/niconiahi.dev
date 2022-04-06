@@ -1,6 +1,6 @@
-import PostCard from "~/components/PostCard"
-import IconLink from "~/components/IconLink"
-import IconButton from "~/components/IconButton"
-import Presentation from "~/components/Presentation"
+import PostCard from "~/components/post-card"
+import IconLink from "~/components/icon-link"
+import IconButton from "~/components/icon-button"
+import Presentation from "~/components/presentation"
 
 export { PostCard, IconLink, IconButton, Presentation }

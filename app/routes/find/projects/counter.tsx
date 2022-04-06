@@ -1,33 +1,52 @@
 import { ReactElement, useEffect, useState } from "react"
+import { json, LoaderFunction, useLoaderData } from "remix"
 import type { BigNumber } from "@ethersproject/bignumber"
 
 import { ChainId, Counter as CounterContract } from "~/types"
-import {
-  useSigner,
-  useAccount,
-  useChainId,
-  useMetamask,
-  useCounterContract,
-  useConnectMetamask,
-} from "~/hooks"
+import { useXyz, useConnectMetamask } from "~/hooks"
+
+import { getCounterContract, getRpcProvider } from "~/helpers"
+import { useCounterContract } from "~/hooks/contracts/useCounterContract"
+
+type LoaderData = {
+  counterCount: number
+}
+
+export const loader: LoaderFunction = async () => {
+  const chainId = ChainId.Rinkeby
+  const provider = getRpcProvider({ chainId })
+  const counterContract = getCounterContract({ provider })
+
+  async function getCounterCount(counterContract: CounterContract) {
+    const currentCount = await counterContract.value()
+    const counterCount = currentCount.toNumber()
+
+    return counterCount
+  }
+
+  const counterCount = await getCounterCount(counterContract)
+
+  return json<LoaderData>({ counterCount })
+}
 
 export default function CounterProject(): ReactElement {
-  const metamask = useMetamask()
-  const signer = useSigner({ metamask })
-  const account = useAccount({ metamask })
-  const chainId = useChainId({ metamask })
-  const counterContract = useCounterContract({ signer })
-  const connectMetamask = useConnectMetamask({ metamask })
+  const { counterCount } = useLoaderData<LoaderData>()
+
+  const counterContract = useCounterContract()
+  const connectMetamask = useConnectMetamask()
+  const { chainId, account } = useXyz()
 
   const isRinkeby = chainId === ChainId.Rinkeby
 
   async function handleConnectMetamaskClick(): Promise<void> {
-    console.log("clicking connect metamask")
-
     connectMetamask()
   }
 
-  if (!account || !counterContract) {
+  if (
+    account === undefined ||
+    chainId === undefined ||
+    counterContract === undefined
+  ) {
     return (
       <div className="flex flex-col w-full items-center justify-end space-y-2">
         <p className="text-gray-500">You need to connect your Metamask</p>
@@ -46,35 +65,28 @@ export default function CounterProject(): ReactElement {
     )
   }
 
-  return <Counter account={account} counterContract={counterContract} />
+  return (
+    <Counter counterContract={counterContract} counterCount={counterCount} />
+  )
 }
 
 function Counter({
-  account,
+  counterCount: initialCounterCount,
   counterContract,
 }: {
-  account: string
+  counterCount: number
   counterContract: CounterContract
 }): ReactElement {
-  const [counter, setCounter] = useState<undefined | number>(undefined)
-
-  useEffect(() => {
-    async function getCounterCount(counterContract: CounterContract) {
-      const currentCount = await counterContract.value()
-      const counter = currentCount.toNumber()
-
-      setCounter(counter)
-    }
-
-    getCounterCount(counterContract)
-  }, [counterContract])
+  const [counterCount, setCounterCount] = useState<undefined | number>(
+    initialCounterCount,
+  )
 
   useEffect(
     function handleIncreasedEvent() {
       counterContract.on("Increased", (bigNextCounter: BigNumber) => {
         const nextCounter = bigNextCounter.toNumber()
 
-        setCounter(nextCounter)
+        setCounterCount(nextCounter)
       })
 
       return () => {
@@ -91,10 +103,11 @@ function Counter({
   }
 
   return (
-    <div className="flex flex-col items-start">
-      <button onClick={handleIncrease}>Increase</button>
-      <span>Counter: {counter}</span>
-      <span>Signer: {account}</span>
+    <div className="flex flex-col items-center space-y-2">
+      <p className="text-gray-500">{counterCount} counts and counting!</p>
+      <button className="btn-primary" onClick={handleIncrease}>
+        Increase
+      </button>
     </div>
   )
 }

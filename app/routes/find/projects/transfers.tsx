@@ -5,23 +5,12 @@ import type { BigNumber } from "@ethersproject/bignumber"
 import { ETHERSCAN_URL } from "~/constants"
 import { bigNumberToString } from "~/helpers"
 import { ChainId, Transfers as TransfersContract, TransferEvent } from "~/types"
-import {
-  useSigner,
-  useChainId,
-  useMetamask,
-  useBlockNumber,
-  useConnectMetamask,
-  useTransfersContract,
-} from "~/hooks"
+import { useXyz, useConnectMetamask, useTransfersContract } from "~/hooks"
 
 export default function TransfersProject(): ReactElement {
-  const metamask = useMetamask()
-
-  const signer = useSigner({ metamask })
-  const chainId = useChainId({ metamask })
-  const blockNumber = useBlockNumber({ chainId })
-  const connectMetamask = useConnectMetamask({ metamask })
-  const transfersContract = useTransfersContract({ signer })
+  const connectMetamask = useConnectMetamask()
+  const transfersContract = useTransfersContract()
+  const { chainId, blockNumber } = useXyz()
 
   const isMainnet = chainId === ChainId.Mainnet
 

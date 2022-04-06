@@ -2,14 +2,7 @@ import { ChangeEvent, ReactElement, useEffect, useState } from "react"
 import type { BigNumber } from "@ethersproject/bignumber"
 
 import { ChainId, Waver as WaverContract } from "~/types"
-import {
-  useSigner,
-  useAccount,
-  useChainId,
-  useMetamask,
-  useWaverContract,
-  useConnectMetamask,
-} from "~/hooks"
+import { useWaverContract, useConnectMetamask, useXyz } from "~/hooks"
 
 export type Wave = {
   waver: string
@@ -18,13 +11,9 @@ export type Wave = {
 }
 
 export default function WaverProject(): ReactElement {
-  const metamask = useMetamask()
-
-  const signer = useSigner({ metamask })
-  const chainId = useChainId({ metamask })
-  const account = useAccount({ metamask })
-  const waverContract = useWaverContract({ signer })
-  const connectMetamask = useConnectMetamask({ metamask })
+  const waverContract = useWaverContract()
+  const connectMetamask = useConnectMetamask()
+  const { chainId, account } = useXyz()
 
   const isRinkeby = chainId === ChainId.Rinkeby
 
@@ -166,18 +155,16 @@ function Waver({
           </button>
         </div>
         <section className="flex w-full flex-col space-y-2">
-          {waves
-            ? waves.map(({ message, waver }, index) => (
-                <article
-                  key={`wave_card_${waver}_${message.slice(0, 10)}_${index}`}
-                  className="bg-red-300 p-2"
-                >
-                  <p>
-                    Waver {waver} said: {message}
-                  </p>
-                </article>
-              ))
-            : null}
+          {waves.map(({ message, waver }, index) => (
+            <article
+              key={`wave_card_${waver}_${message.slice(0, 10)}_${index}`}
+              className="bg-red-300 p-2"
+            >
+              <p>
+                Waver {waver} said: {message}
+              </p>
+            </article>
+          ))}
         </section>
       </div>
     </div>

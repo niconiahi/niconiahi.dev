@@ -1,17 +1,18 @@
 import invariant from "tiny-invariant"
-import { Web3Provider } from "@ethersproject/providers"
 
-export function useConnectMetamask({
-  metamask,
-}: {
-  metamask?: Web3Provider
-}): () => Promise<void> {
+import { useXyz } from "~/hooks"
+import { XyzNextValueType } from "~/types"
+
+export function useConnectMetamask(): () => Promise<void> {
+  const { provider, set } = useXyz()
+
   async function connectMetamask() {
-    invariant(metamask, "You need to have Metamask installed")
+    invariant(provider, "You need to have Metamask installed")
 
-    await metamask.send("eth_requestAccounts", []).then((accounts) => {
-      // TODO: set "accounts" on provider
-      console.log("accounts", accounts)
+    await provider.provider.send("eth_requestAccounts", []).then((accounts) => {
+      const [account] = accounts
+
+      set({ type: XyzNextValueType.Account, value: account })
     })
   }
 
