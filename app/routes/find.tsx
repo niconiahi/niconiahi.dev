@@ -9,7 +9,7 @@ import { EXTERNAL_ROUTES, ROUTES } from "~/constants"
 export default function Find(): ReactElement {
   return (
     <div className="flex flex-1">
-      <section className="min-w-60 flex flex-col bg-gray-100 dark:bg-gray-900 h-screen p-4 border-r border-gray-700">
+      <section className="min-w-60 flex flex-col bg-gray-100 dark:bg-gray-900 h-screen p-4 border-r-2 border-gray-900">
         <header className="mb-8">
           <Link to={ROUTES.home}>
             <h1 className="text-3xl text-black dark:text-gray-100 magic-underline px-2">

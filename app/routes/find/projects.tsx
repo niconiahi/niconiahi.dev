@@ -59,7 +59,7 @@ export default function Index(): ReactElement {
 
   return (
     <>
-      <nav className="min-w-60 border-r border-gray-700 p-4">
+      <nav className="min-w-60 border-r-2 border-gray-900 p-4">
         {account && currentProject?.type === ProjectType.Web3 ? (
           <div className="absolute top-4 right-4 border-2 p-2 border-gray-900 rounded-md flex space-x-2 items-center justify-center">
             <div className="w-2 h-2 bg-green-400 rounded outline outline-1 outline-gray-900" />
