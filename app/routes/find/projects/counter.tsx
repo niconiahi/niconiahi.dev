@@ -2,11 +2,10 @@ import { ReactElement, useEffect, useState } from "react"
 import { json, LoaderFunction, useLoaderData } from "remix"
 import type { BigNumber } from "@ethersproject/bignumber"
 
+import { AddressDisplay } from "~/components"
+import { getRpcProvider, getCounterContract } from "~/helpers"
 import { ChainId, Counter as CounterContract } from "~/types"
-import { useXyz, useConnectMetamask } from "~/hooks"
-
-import { getCounterContract, getRpcProvider } from "~/helpers"
-import { useCounterContract } from "~/hooks/contracts/useCounterContract"
+import { useXyz, useConnectMetamask, useCounterContract } from "~/hooks"
 
 type LoaderData = {
   counterCount: number
@@ -66,7 +65,10 @@ export default function CounterProject(): ReactElement {
   }
 
   return (
-    <Counter counterContract={counterContract} counterCount={counterCount} />
+    <>
+      <AddressDisplay account={account} />
+      <Counter counterContract={counterContract} counterCount={counterCount} />
+    </>
   )
 }
 

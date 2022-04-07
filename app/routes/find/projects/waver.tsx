@@ -3,6 +3,7 @@ import type { BigNumber } from "@ethersproject/bignumber"
 
 import { ChainId, Waver as WaverContract } from "~/types"
 import { useWaverContract, useConnectMetamask, useXyz } from "~/hooks"
+import { AddressDisplay } from "~/components"
 
 export type Wave = {
   waver: string
@@ -40,7 +41,12 @@ export default function WaverProject(): ReactElement {
     )
   }
 
-  return <Waver account={account} waverContract={waverContract} />
+  return (
+    <>
+      <AddressDisplay account={account} />
+      <Waver account={account} waverContract={waverContract} />
+    </>
+  )
 }
 
 function Waver({

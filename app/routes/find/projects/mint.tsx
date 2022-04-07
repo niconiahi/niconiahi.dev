@@ -10,6 +10,7 @@ import {
   useMintContract,
   useConnectMetamask,
 } from "~/hooks"
+import { AddressDisplay } from "~/components"
 
 export default function MintProject(): ReactElement {
   const mintContract = useMintContract()
@@ -42,11 +43,14 @@ export default function MintProject(): ReactElement {
   }
 
   return (
-    <Mint
-      account={account}
-      blockNumber={blockNumber}
-      mintContract={mintContract}
-    />
+    <>
+      <AddressDisplay account={account} />
+      <Mint
+        account={account}
+        blockNumber={blockNumber}
+        mintContract={mintContract}
+      />
+    </>
   )
 }
 

@@ -1,6 +1,6 @@
 import PostCard from "~/components/post-card"
 import IconLink from "~/components/icon-link"
 import IconButton from "~/components/icon-button"
-import Presentation from "~/components/presentation"
+import AddressDisplay from "~/components/address-display"
 
-export { PostCard, IconLink, IconButton, Presentation }
+export { PostCard, IconLink, IconButton, AddressDisplay }

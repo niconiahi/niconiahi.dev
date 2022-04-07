@@ -6,11 +6,12 @@ import { ETHERSCAN_URL } from "~/constants"
 import { bigNumberToString } from "~/helpers"
 import { ChainId, Transfers as TransfersContract, TransferEvent } from "~/types"
 import { useXyz, useConnectMetamask, useTransfersContract } from "~/hooks"
+import { AddressDisplay } from "~/components"
 
 export default function TransfersProject(): ReactElement {
   const connectMetamask = useConnectMetamask()
   const transfersContract = useTransfersContract()
-  const { chainId, blockNumber } = useXyz()
+  const { chainId, blockNumber, account } = useXyz()
 
   const isMainnet = chainId === ChainId.Mainnet
 
@@ -18,7 +19,7 @@ export default function TransfersProject(): ReactElement {
     connectMetamask()
   }
 
-  if (!transfersContract || !blockNumber) {
+  if (!transfersContract || !blockNumber || !account) {
     return (
       <div className="flex flex-col w-full items-center justify-end space-y-2">
         <p className="text-gray-500">You need to connect your Metamask</p>
@@ -38,10 +39,13 @@ export default function TransfersProject(): ReactElement {
   }
 
   return (
-    <Transfers
-      blockNumber={blockNumber}
-      transfersContract={transfersContract}
-    />
+    <>
+      <AddressDisplay account={account} />
+      <Transfers
+        blockNumber={blockNumber}
+        transfersContract={transfersContract}
+      />
+    </>
   )
 }
 
