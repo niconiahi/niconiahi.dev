@@ -9,14 +9,14 @@
     "node": ">=14"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=production remix-serve build",
+    "start": "remix-serve build",
     "commit": "npx cz",
     "deploy": "fly deploy --remote-only",
     "reinstall": "rm -rf node_modules package-lock.json && npm i",
     "postinstall": "remix setup node",
     "build": "npm run build:css && npm run build:app",
     "build:css": "postcss styles --base styles --dir app/styles --env production",
-    "build:app": "remix build",
+    "build:app": "cross-env NODE_ENV=production remix build",
     "dev": "pm2-dev pm2.config.js",
     "dev:css": "postcss styles --base styles --dir app/styles -w",
     "dev:app": "remix dev",
