@@ -1,3 +1,5 @@
+// TODO: integrate headless ui dialog as Toast
+// import { Dialog } from "@headlessui/react"
 import React, {
   FC,
   useRef,
@@ -5,6 +7,7 @@ import React, {
   useEffect,
   useContext,
   createContext,
+  ReactElement,
 } from "react"
 import invariant from "tiny-invariant"
 
@@ -13,15 +16,29 @@ import { useTransaction } from "~/hooks"
 import { TransactionOn, TransactionStateType, TransactionState } from "~/types"
 
 export type TransactionToastMessages = {
-  titles: Record<TransactionStateType, string | undefined>
-  descriptions: Record<TransactionStateType, string | undefined>
+  titles: {
+    [TransactionStateType.Idle]: undefined
+    [TransactionStateType.Mined]: string
+    [TransactionStateType.Failed]: string
+    [TransactionStateType.Mining]: string
+    [TransactionStateType.Pending]: string
+    [TransactionStateType.Confirmed]: string
+  }
+  descriptions: {
+    [TransactionStateType.Idle]: undefined
+    [TransactionStateType.Mined]: string
+    [TransactionStateType.Failed]: string
+    [TransactionStateType.Mining]: string
+    [TransactionStateType.Pending]: string
+    [TransactionStateType.Confirmed]: string
+  }
 }
 
 const DEFAULT_OPTIONS = {
   titles: {
     [TransactionStateType.Idle]: undefined,
-    [TransactionStateType.Mined]: "Transaction succeeded",
-    [TransactionStateType.Failed]: "Transaction mining",
+    [TransactionStateType.Mined]: "Transaction mined",
+    [TransactionStateType.Failed]: "Transaction failed",
     [TransactionStateType.Mining]: "Transaction mining",
     [TransactionStateType.Pending]: "Transaction pending",
     [TransactionStateType.Confirmed]: "Transaction confirmed",
@@ -75,12 +92,7 @@ export const TransactionToastProvider: FC = ({ children }) => {
 
   // effects
   useEffect(() => {
-    const updateToast = (
-      state: TransactionState,
-      messages: TransactionToastMessages,
-    ): void => {
-      const { descriptions, titles } = messages
-
+    const handleOn = (state: TransactionState): void => {
       switch (state.state) {
         case TransactionStateType.Idle:
           invariant(
@@ -93,8 +105,6 @@ export const TransactionToastProvider: FC = ({ children }) => {
 
           return
         case TransactionStateType.Mined:
-          console.log("render mined toast")
-
           invariant(
             state.state === TransactionStateType.Mined,
             "Transaction provider => state should be success",
@@ -103,14 +113,8 @@ export const TransactionToastProvider: FC = ({ children }) => {
           const onMined = on?.[TransactionStateType.Mined]
           onMined?.(state)
 
-          setTimeout(() => {
-            // close toast
-          }, 3000)
-
           return
         case TransactionStateType.Failed:
-          console.log("render failed toast")
-
           invariant(
             state.state === TransactionStateType.Failed,
             "Transaction provider => state should be failed",
@@ -119,21 +123,8 @@ export const TransactionToastProvider: FC = ({ children }) => {
           const onFailed = on?.[TransactionStateType.Failed]
           onFailed?.(state)
 
-          setTimeout(() => {
-            // close toast
-          }, 3000)
-
           return
         case TransactionStateType.Mining:
-          console.log("render mining toast")
-          console.log("mining toast title =>", titles[state.state])
-          console.log("mining toast description =>", descriptions[state.state])
-
-          // <MiningToast
-          //   description={descriptions[state]}
-          //   title={titles[state]}
-          // />,
-
           invariant(
             state.state === TransactionStateType.Mining,
             "Transaction provider => state should be mining",
@@ -144,8 +135,6 @@ export const TransactionToastProvider: FC = ({ children }) => {
 
           return
         case TransactionStateType.Pending:
-          console.log("render pending toast")
-
           invariant(
             state.state === TransactionStateType.Pending,
             "Transaction provider => state should be pending",
@@ -156,8 +145,6 @@ export const TransactionToastProvider: FC = ({ children }) => {
 
           return
         case TransactionStateType.Confirmed:
-          console.log("render confirmed toast")
-
           invariant(
             state.state === TransactionStateType.Confirmed,
             "Transaction provider => state should be confirmed",
@@ -172,12 +159,13 @@ export const TransactionToastProvider: FC = ({ children }) => {
       }
     }
 
-    updateToast(state, messages)
-  }, [messages, on, state])
+    handleOn(state)
+  }, [on, state])
 
   return (
     <TransactionToastContext.Provider value={{ composeMessages, setOn }}>
       {children}
+      <Toast key={state.state} messages={messages} state={state} />
     </TransactionToastContext.Provider>
   )
 }
@@ -214,3 +202,73 @@ export const useTransactionToast = ({
     }
   }, [composeMessages, messages, mounted, on, setOn])
 }
+
+function Toast({
+  state,
+  messages,
+}: {
+  state: TransactionState
+  messages: TransactionToastMessages
+}): ReactElement | null {
+  const { descriptions, titles } = messages
+
+  function getTitle(type: TransactionStateType): string | undefined {
+    if (type === TransactionStateType.Idle) return undefined
+
+    return titles[type]
+  }
+
+  function getDescription(type: TransactionStateType): string | undefined {
+    if (type === TransactionStateType.Idle) return undefined
+
+    return descriptions[type]
+  }
+
+  const title = getTitle(state.state)
+  const description = getDescription(state.state)
+
+  if (state.state === TransactionStateType.Idle) return null
+
+  return (
+    <aside className="flex flex-col absolute bottom-4 right-4 border-2 p-2 border-gray-900 rounded-md space-x-2 items-center justify-center">
+      <p>{title}</p>
+      <p>{description}</p>
+    </aside>
+  )
+}
+
+// function MiningToast({
+//   title,
+//   description,
+// }: {
+//   title: string
+//   description: string
+// }): ReactElement {
+//   const [isOpen, setIsOpen] = useState<boolean>(true)
+
+//   return (
+//     <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
+//       <Dialog.Overlay />
+//       <Dialog.Title>{title}</Dialog.Title>
+//       <Dialog.Description>{description}</Dialog.Description>
+//     </Dialog>
+//   )
+// }
+
+// function MinedToast({
+//   title,
+//   description,
+// }: {
+//   title: string
+//   description: string
+// }): ReactElement {
+//   const [isOpen, setIsOpen] = useState<boolean>(true)
+
+//   return (
+//     <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
+//       <Dialog.Overlay />
+//       <Dialog.Title>{title}</Dialog.Title>
+//       <Dialog.Description>{description}</Dialog.Description>
+//     </Dialog>
+//   )
+// }
