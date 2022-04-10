@@ -2,6 +2,11 @@ import { ReactElement } from "react"
 import { json, Link, Outlet, useLoaderData, LoaderFunction } from "remix"
 
 import { firstLetterToUpper } from "~/helpers"
+import {
+  XyzProvider,
+  TransactionProvider,
+  TransactionToastProvider,
+} from "~/providers"
 
 enum ProjectType {
   Web3,
@@ -36,10 +41,6 @@ export const loader: LoaderFunction = () => {
       path: "indexing",
       type: ProjectType.Web3,
     },
-    {
-      path: "images",
-      type: ProjectType.Web3,
-    },
   ]
 
   return json<LoaderData>({ projects })
@@ -50,21 +51,29 @@ export default function Index(): ReactElement {
 
   return (
     <>
-      <nav className="min-w-60 border-r-2 border-gray-900 p-4">
-        <ul className="flex flex-col">
-          {projects.map(({ path }) => (
-            <Link
-              key={`project-item-${path}`}
-              className="w-full p-2 rounded transition text-gray-500 hover:bg-gray-700 hover:text-gray-100 dark:text-gray-500 dark:hover:text-gray-100"
-              to={path}
-            >
-              {firstLetterToUpper(path)}
-            </Link>
-          ))}
-        </ul>
-      </nav>
-      <main className="flex items-center justify-center w-full h-full">
-        <Outlet />
+      <section className="flex">
+        <nav className="h-full min-w-60 border-r-2 border-gray-900 p-4">
+          <ul className="flex flex-col">
+            {projects.map(({ path }) => (
+              <Link
+                key={`project-item-${path}`}
+                className="w-full p-2 rounded transition text-gray-500 hover:bg-gray-700 hover:text-gray-100 dark:text-gray-500 dark:hover:text-gray-100"
+                to={path}
+              >
+                {firstLetterToUpper(path)}
+              </Link>
+            ))}
+          </ul>
+        </nav>
+      </section>
+      <main className="flex items-center justify-center w-full flex-1">
+        <XyzProvider>
+          <TransactionProvider>
+            <TransactionToastProvider>
+              <Outlet />
+            </TransactionToastProvider>
+          </TransactionProvider>
+        </XyzProvider>
       </main>
     </>
   )

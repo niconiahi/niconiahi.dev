@@ -3,10 +3,10 @@ import type { Event } from "@ethersproject/contracts"
 import type { BigNumber } from "@ethersproject/bignumber"
 
 import { ETHERSCAN_URL } from "~/constants"
-import { bigNumberToString } from "~/helpers"
-import { ChainId, Transfers as TransfersContract, TransferEvent } from "~/types"
-import { useXyz, useConnectMetamask, useTransfersContract } from "~/hooks"
 import { AddressDisplay } from "~/components"
+import { bigNumberToString } from "~/helpers"
+import { useXyz, useConnectMetamask, useTransfersContract } from "~/hooks"
+import { ChainId, Transfers as TransfersContract, TransferEvent } from "~/types"
 
 export default function TransfersProject(): ReactElement {
   const connectMetamask = useConnectMetamask()
@@ -124,9 +124,9 @@ function Transfers({
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center">
+      <section className="flex flex-col items-center justify-center">
         <p>Gathering information...</p>
-      </div>
+      </section>
     )
   }
 
@@ -137,7 +137,7 @@ function Transfers({
   const totalSupplyLabel = bigNumberToString(totalSupply, decimals)
 
   return (
-    <div className="flex flex-col items-center justify-center space-y-4">
+    <section className="flex flex-col items-center justify-center space-y-4">
       <div className="flex flex-col items-center justify-center">
         <p>
           This token has{" "}
@@ -187,6 +187,6 @@ function Transfers({
             })}
         </ul>
       </div>
-    </div>
+    </section>
   )
 }

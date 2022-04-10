@@ -3,6 +3,7 @@ import type { BigNumber } from "@ethersproject/bignumber"
 
 import { big } from "~/helpers"
 import { ChainId, Mint as MintContract } from "~/types"
+import { AddressDisplay } from "~/components"
 import {
   useXyz,
   useGasPrice,
@@ -10,7 +11,6 @@ import {
   useMintContract,
   useConnectMetamask,
 } from "~/hooks"
-import { AddressDisplay } from "~/components"
 
 export default function MintProject(): ReactElement {
   const mintContract = useMintContract()
@@ -69,7 +69,7 @@ function Mint({
   const [tokensCount, setTokensCount] = useState<number>(0)
 
   const gasPrice = useGasPrice()
-  const { sendTransaction } = useTransaction({ blockNumber })
+  const { send } = useTransaction()
 
   const isDisabled = !isMintable
 
@@ -156,7 +156,7 @@ function Mint({
       gasPrice,
     })
 
-    sendTransaction(() =>
+    send(() =>
       mintContract.mint(account, tokenId, {
         value,
         gasLimit,
@@ -180,7 +180,7 @@ function Mint({
   }
 
   return (
-    <div className="flex flex-col">
+    <section className="flex flex-col">
       <ul>
         {tokenIds.map((tokenId, index) => (
           <li key={`token_id_${tokenId.toNumber()}_${index}`}>
@@ -203,6 +203,6 @@ function Mint({
           Create
         </button>
       </div>
-    </div>
+    </section>
   )
 }

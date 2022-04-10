@@ -5,7 +5,12 @@ import type { BigNumber } from "@ethersproject/bignumber"
 import { AddressDisplay } from "~/components"
 import { getRpcProvider, getCounterContract } from "~/helpers"
 import { ChainId, Counter as CounterContract } from "~/types"
-import { useXyz, useConnectMetamask, useCounterContract } from "~/hooks"
+import {
+  useXyz,
+  useConnectMetamask,
+  useCounterContract,
+  useTransaction,
+} from "~/hooks"
 
 type LoaderData = {
   counterCount: number
@@ -82,6 +87,7 @@ function Counter({
   const [counterCount, setCounterCount] = useState<undefined | number>(
     initialCounterCount,
   )
+  const { send } = useTransaction()
 
   useEffect(
     function handleIncreasedEvent() {
@@ -101,15 +107,15 @@ function Counter({
   )
 
   async function handleIncrease(): Promise<void> {
-    await counterContract.increase()
+    await send(() => counterContract.increase())
   }
 
   return (
-    <div className="flex flex-col items-center space-y-2">
+    <section className="flex flex-col items-center space-y-2">
       <p className="text-gray-500">{counterCount} counts and counting!</p>
       <button className="btn-primary" onClick={handleIncrease}>
         Increase
       </button>
-    </div>
+    </section>
   )
 }

@@ -1,3 +1,4 @@
+import EventEmitter from "events"
 import React, {
   useState,
   ReactNode,
@@ -11,7 +12,6 @@ import {
   JsonRpcSigner,
   JsonRpcProvider,
 } from "@ethersproject/providers"
-import EventEmitter from "events"
 
 import { ChainId } from "~/types"
 import { getRpcProvider } from "~/helpers"

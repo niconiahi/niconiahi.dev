@@ -1,9 +1,9 @@
 import { ChangeEvent, ReactElement, useEffect, useState } from "react"
 import type { BigNumber } from "@ethersproject/bignumber"
 
+import { AddressDisplay } from "~/components"
 import { ChainId, Waver as WaverContract } from "~/types"
 import { useWaverContract, useConnectMetamask, useXyz } from "~/hooks"
-import { AddressDisplay } from "~/components"
 
 export type Wave = {
   waver: string
@@ -130,7 +130,7 @@ function Waver({
   }, [waverContract])
 
   return (
-    <div className="flex w-full flex-col items-center justify-center">
+    <section className="flex w-full flex-col items-center justify-center">
       <h1 className="text-2xl">Wave at me</h1>
       <h3>I have been waved {wavesCount} times</h3>
       <div className="flex w-full flex-col items-stretch space-y-2">
@@ -173,6 +173,6 @@ function Waver({
           ))}
         </section>
       </div>
-    </div>
+    </section>
   )
 }

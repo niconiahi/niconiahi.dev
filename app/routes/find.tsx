@@ -3,7 +3,6 @@ import { Link, Outlet } from "remix"
 
 import { Github } from "~/icons"
 import { IconLink } from "~/components"
-import { XyzProvider } from "~/providers"
 import { EXTERNAL_ROUTES, ROUTES } from "~/constants"
 
 export default function Find(): ReactElement {
@@ -44,11 +43,7 @@ export default function Find(): ReactElement {
           </IconLink>
         </footer>
       </section>
-      <section className="flex bg-gray-100 dark:bg-gray-900 h-screen w-full">
-        <XyzProvider>
-          <Outlet />
-        </XyzProvider>
-      </section>
+      <Outlet />
     </div>
   )
 }

@@ -1,14 +1,14 @@
-# fly.toml file generated for web3 on 2022-02-09T21:14:17-03:00
+# fly.toml file generated for niconiahi on 2022-04-10T14:21:31-03:00
 
-app = "web3"
+app = "niconiahi"
 
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
 [env]
-  PORT = "8080"
   NODE_ENV = "production"
+  PORT = "8080"
 
 [experimental]
   allowed_public_ports = []
