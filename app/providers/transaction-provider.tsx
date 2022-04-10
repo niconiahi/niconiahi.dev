@@ -1,17 +1,16 @@
 import React, {
   FC,
-  createContext,
-  useEffect,
   useState,
   useContext,
+  createContext,
+  useEffect,
 } from "react"
 import { ContractTransaction, ContractReceipt } from "@ethersproject/contracts"
 
 // governance
 
+import { useTransactionToast } from "~/hooks"
 import { TransactionToastMessages } from "~/types"
-import { useTransactionToast, useXyz } from "~/hooks"
-import { DEFAULT_BLOCK_CONFIRMATIONS } from "~/constants"
 
 type TransactionStateIdle = {
   state: TransactionStateType.Idle
@@ -37,12 +36,6 @@ type TransactionStatePending = {
   state: TransactionStateType.Pending
 }
 
-type TransactionStateConfirmed = {
-  state: TransactionStateType.Confirmed
-  receipt: ContractReceipt
-  transaction: ContractTransaction
-}
-
 export type TransactionFunction = () => Promise<ContractTransaction>
 export enum TransactionStateType {
   Idle = "IDLE",
@@ -50,7 +43,6 @@ export enum TransactionStateType {
   Failed = "FAILED",
   Mining = "MINING",
   Pending = "PENDING",
-  Confirmed = "CONFIRMED",
 }
 
 export type TransactionState =
@@ -59,14 +51,12 @@ export type TransactionState =
   | TransactionStateFailed
   | TransactionStateMining
   | TransactionStatePending
-  | TransactionStateConfirmed
 
 export type TransactionOnIdle = (state: TransactionStateIdle) => void
 export type TransactionOnMined = (state: TransactionStateMined) => void
 export type TransactionOnFailed = (state: TransactionStateFailed) => void
 export type TransactionOnMining = (state: TransactionStateMining) => void
 export type TransactionOnPending = (state: TransactionStatePending) => void
-export type TransactionOnConfirmed = (state: TransactionStateConfirmed) => void
 
 export type TransactionOn = Partial<{
   [TransactionStateType.Idle]: TransactionOnIdle
@@ -74,7 +64,6 @@ export type TransactionOn = Partial<{
   [TransactionStateType.Failed]: TransactionOnFailed
   [TransactionStateType.Mining]: TransactionOnMining
   [TransactionStateType.Pending]: TransactionOnPending
-  [TransactionStateType.Confirmed]: TransactionOnConfirmed
 }>
 
 type Value = {
@@ -94,23 +83,14 @@ const DEFAULT_STATUS: TransactionState = {
 export const TransactionProvider: FC = ({ children }) => {
   // states
   const [state, setState] = useState<TransactionState>(DEFAULT_STATUS)
-  const { blockNumber } = useXyz()
 
   useEffect(() => {
-    if (state.state !== TransactionStateType.Mined || !blockNumber) return
+    if (state.state !== TransactionStateType.Mined) return
 
-    const receiptBlockNumber = state.receipt.blockNumber
-    const isConfirmed =
-      receiptBlockNumber + DEFAULT_BLOCK_CONFIRMATIONS < blockNumber
-
-    if (isConfirmed) {
-      setState({
-        state: TransactionStateType.Confirmed,
-        receipt: state.receipt,
-        transaction: state.transaction,
-      })
-    }
-  }, [blockNumber, state])
+    setTimeout(() => {
+      setState({ state: TransactionStateType.Idle })
+    }, 5000)
+  }, [state])
 
   const send = async (
     transactionFunction: TransactionFunction,

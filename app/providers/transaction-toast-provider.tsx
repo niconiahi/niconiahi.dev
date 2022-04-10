@@ -22,7 +22,6 @@ export type TransactionToastMessages = {
     [TransactionStateType.Failed]: string
     [TransactionStateType.Mining]: string
     [TransactionStateType.Pending]: string
-    [TransactionStateType.Confirmed]: string
   }
   descriptions: {
     [TransactionStateType.Idle]: undefined
@@ -30,7 +29,6 @@ export type TransactionToastMessages = {
     [TransactionStateType.Failed]: string
     [TransactionStateType.Mining]: string
     [TransactionStateType.Pending]: string
-    [TransactionStateType.Confirmed]: string
   }
 }
 
@@ -41,7 +39,6 @@ const DEFAULT_OPTIONS = {
     [TransactionStateType.Failed]: "Transaction failed",
     [TransactionStateType.Mining]: "Transaction mining",
     [TransactionStateType.Pending]: "Transaction pending",
-    [TransactionStateType.Confirmed]: "Transaction confirmed",
   },
   descriptions: {
     [TransactionStateType.Idle]: undefined,
@@ -50,8 +47,6 @@ const DEFAULT_OPTIONS = {
     [TransactionStateType.Mining]:
       "Your transaction was sent to the blockchain",
     [TransactionStateType.Pending]: "Your transaction is pending to be signed",
-    [TransactionStateType.Confirmed]:
-      "Your transaction was confirmed after a few blocks",
   },
 }
 
@@ -142,16 +137,6 @@ export const TransactionToastProvider: FC = ({ children }) => {
 
           const onPending = on?.[TransactionStateType.Pending]
           onPending?.(state)
-
-          return
-        case TransactionStateType.Confirmed:
-          invariant(
-            state.state === TransactionStateType.Confirmed,
-            "Transaction provider => state should be confirmed",
-          )
-
-          const onConfirmed = on?.[TransactionStateType.Confirmed]
-          onConfirmed?.(state)
 
           return
         default:
