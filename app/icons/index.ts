@@ -1,4 +1,4 @@
-import Menu from "~/icons/Menu"
-import Github from "~/icons/Github"
+import Menu from "~/icons/menu"
+import Github from "~/icons/github"
 
 export { Menu, Github }
