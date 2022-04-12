@@ -15,21 +15,23 @@ import invariant from "tiny-invariant"
 import { useTransaction } from "~/hooks"
 import { TransactionOn, TransactionStateType, TransactionState } from "~/types"
 
+type Titles = {
+  [TransactionStateType.Idle]: undefined
+  [TransactionStateType.Mined]: string
+  [TransactionStateType.Failed]: string
+  [TransactionStateType.Mining]: string
+  [TransactionStateType.Pending]: string
+}
+type Descriptions = {
+  [TransactionStateType.Idle]: undefined
+  [TransactionStateType.Mined]: string
+  [TransactionStateType.Failed]: string
+  [TransactionStateType.Mining]: string
+  [TransactionStateType.Pending]: string
+}
 export type TransactionToastMessages = {
-  titles: {
-    [TransactionStateType.Idle]: undefined
-    [TransactionStateType.Mined]: string
-    [TransactionStateType.Failed]: string
-    [TransactionStateType.Mining]: string
-    [TransactionStateType.Pending]: string
-  }
-  descriptions: {
-    [TransactionStateType.Idle]: undefined
-    [TransactionStateType.Mined]: string
-    [TransactionStateType.Failed]: string
-    [TransactionStateType.Mining]: string
-    [TransactionStateType.Pending]: string
-  }
+  titles: Titles
+  descriptions: Descriptions
 }
 
 const DEFAULT_OPTIONS = {
@@ -87,7 +89,7 @@ export const TransactionToastProvider: FC = ({ children }) => {
 
   // effects
   useEffect(() => {
-    const handleOn = (state: TransactionState): void => {
+    const handleOn = (state: TransactionState, on?: TransactionOn): void => {
       switch (state.state) {
         case TransactionStateType.Idle:
           invariant(
@@ -144,7 +146,7 @@ export const TransactionToastProvider: FC = ({ children }) => {
       }
     }
 
-    handleOn(state)
+    handleOn(state, on)
   }, [on, state])
 
   return (
@@ -195,22 +197,29 @@ function Toast({
   state: TransactionState
   messages: TransactionToastMessages
 }): ReactElement | null {
+  // const [isOpen, setIsOpen] = useState<boolean>(true)
   const { descriptions, titles } = messages
 
-  function getTitle(type: TransactionStateType): string | undefined {
-    if (type === TransactionStateType.Idle) return undefined
+  function getTitle(
+    { state }: TransactionState,
+    titles: Titles,
+  ): string | undefined {
+    if (state === TransactionStateType.Idle) return undefined
 
-    return titles[type]
+    return titles[state]
   }
 
-  function getDescription(type: TransactionStateType): string | undefined {
-    if (type === TransactionStateType.Idle) return undefined
+  function getDescription(
+    { state }: TransactionState,
+    descriptions: Descriptions,
+  ): string | undefined {
+    if (state === TransactionStateType.Idle) return undefined
 
-    return descriptions[type]
+    return descriptions[state]
   }
 
-  const title = getTitle(state.state)
-  const description = getDescription(state.state)
+  const title = getTitle(state, titles)
+  const description = getDescription(state, descriptions)
 
   if (state.state === TransactionStateType.Idle) return null
 
@@ -218,42 +227,11 @@ function Toast({
     <aside className="flex flex-col absolute bottom-4 right-4 border-2 p-2 border-gray-900 rounded-md space-x-2 items-center justify-center">
       <p>{title}</p>
       <p>{description}</p>
+      {/* <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
+        <Dialog.Overlay />
+        <Dialog.Title>{title}</Dialog.Title>
+        <Dialog.Description>{description}</Dialog.Description>
+      </Dialog> */}
     </aside>
   )
 }
-
-// function MiningToast({
-//   title,
-//   description,
-// }: {
-//   title: string
-//   description: string
-// }): ReactElement {
-//   const [isOpen, setIsOpen] = useState<boolean>(true)
-
-//   return (
-//     <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
-//       <Dialog.Overlay />
-//       <Dialog.Title>{title}</Dialog.Title>
-//       <Dialog.Description>{description}</Dialog.Description>
-//     </Dialog>
-//   )
-// }
-
-// function MinedToast({
-//   title,
-//   description,
-// }: {
-//   title: string
-//   description: string
-// }): ReactElement {
-//   const [isOpen, setIsOpen] = useState<boolean>(true)
-
-//   return (
-//     <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
-//       <Dialog.Overlay />
-//       <Dialog.Title>{title}</Dialog.Title>
-//       <Dialog.Description>{description}</Dialog.Description>
-//     </Dialog>
-//   )
-// }
