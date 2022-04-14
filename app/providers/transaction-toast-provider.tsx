@@ -224,7 +224,7 @@ function Toast({
   if (state.state === TransactionStateType.Idle) return null
 
   return (
-    <aside className="flex flex-col absolute bottom-4 right-4 border-2 p-2 border-gray-900 rounded-md space-x-2 items-center justify-center">
+    <aside className="flex flex-col fixed bottom-4 right-4 bg-gray-50 border-2 p-2 border-gray-900 rounded-md space-x-2 items-center justify-center">
       <p>{title}</p>
       <p>{description}</p>
       {/* <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
