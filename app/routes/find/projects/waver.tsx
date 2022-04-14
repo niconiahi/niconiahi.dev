@@ -41,7 +41,7 @@ export default function WaverProject(): ReactElement {
 
   if (!isRinkeby) {
     return (
-      <div>
+      <div className="flex justify-center items-center h-full">
         <h3>This section works on Rinkeby. Try changing to it from Metamask</h3>
       </div>
     )
@@ -185,7 +185,7 @@ function Waver({
 
 function Address({ children }: { children: React.ReactNode }): ReactElement {
   return (
-    <p className="font-bold underline-offset-2 ml-2 text-gray-500 hover:cursor-pointer hover:underline hover:text-gray-900 transition-colors duration-100">
+    <p className="font-bold ml-2 text-gray-500 hover:cursor-pointer hover:text-gray-900 transition-colors duration-100">
       {children}
     </p>
   )

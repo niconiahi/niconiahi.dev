@@ -4,9 +4,10 @@ import type { BigNumber } from "@ethersproject/bignumber"
 
 import { ETHERSCAN_URL } from "~/constants"
 import { AddressDisplay } from "~/components"
-import { bigNumberToString } from "~/helpers"
+import { bigNumberToString, truncateString } from "~/helpers"
 import { useXyz, useConnectMetamask, useTransfersContract } from "~/hooks"
 import { ChainId, Transfers as TransfersContract, TransferEvent } from "~/types"
+import { ArrowRight } from "~/icons"
 
 export default function TransfersProject(): ReactElement {
   const connectMetamask = useConnectMetamask()
@@ -32,7 +33,7 @@ export default function TransfersProject(): ReactElement {
 
   if (!isMainnet) {
     return (
-      <div>
+      <div className="flex justify-center items-center h-full">
         <p>This section works on Mainnet. Try changing to it from Metamask</p>
       </div>
     )
@@ -137,34 +138,29 @@ function Transfers({
   const totalSupplyLabel = bigNumberToString(totalSupply, decimals)
 
   return (
-    <section className="flex flex-col items-center justify-center space-y-4">
-      <div className="flex flex-col items-center justify-center">
-        <p>
-          This token has{" "}
-          <span className="underline underline-offset-2">{name}</span> as
-          it&apos;s name
-        </p>
-        <p>
-          This token has{" "}
-          <span className="underline underline-offset-2">{symbol}</span> as
-          it&apos;s symbol
-        </p>
-        <p>
-          This token has{" "}
-          <span className="underline underline-offset-2">{decimals}</span>{" "}
-          decimals
-        </p>
-        <p>
-          This token has{" "}
-          <span className="underline underline-offset-2">
-            {totalSupplyLabel}
-          </span>{" "}
-          tokens
-        </p>
-      </div>
-      <div className="flex flex-col items-center justify-center">
-        <h3>Transfers</h3>
-        <ul className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-start justify-center space-y-4">
+      <section className="flex flex-col items-start justify-center">
+        <h3 className="text-gray-500">Token</h3>
+        <div className="bg-gray-200 p-2 rounded-md">
+          <p className="text-gray-500">
+            Name: <span className="font-bold text-gray-900">{name}</span>
+          </p>
+          <p className="text-gray-500">
+            Symbol: <span className="font-bold text-gray-900">{symbol}</span>
+          </p>
+          <p className="text-gray-500">
+            Decimals:{" "}
+            <span className="font-bold text-gray-900">{decimals}</span>
+          </p>
+          <p className="text-gray-500">
+            Amount:{" "}
+            <span className="font-bold text-gray-900">{totalSupplyLabel}</span>
+          </p>
+        </div>
+      </section>
+      <section className="flex flex-col items-start justify-center">
+        <h3 className="text-gray-500">Transfers</h3>
+        <ul className="flex flex-col items-center justify-center space-y-2">
           {transfers
             .filter(byConfirmations)
             .map(({ args, transactionHash }) => {
@@ -176,17 +172,38 @@ function Transfers({
               const key = `${from}_${to}_${amount}_${transactionHash}`
 
               return (
-                <a
-                  key={key}
-                  className="underline-offset-2 hover:underline"
-                  href={url}
-                >
-                  {from} to {to} for {amount} {symbol}
-                </a>
+                <article key={key} className="flex items-center space-x-2">
+                  <Transfer from={from} href={url} to={to} />
+                  <p className="text-gray-500">
+                    {" "}
+                    for {amount} {symbol}
+                  </p>
+                </article>
               )
             })}
         </ul>
-      </div>
-    </section>
+      </section>
+    </div>
+  )
+}
+
+function Transfer({
+  from,
+  to,
+  href,
+}: {
+  from: string
+  to: string
+  href: string
+}): ReactElement {
+  return (
+    <a
+      className="flex items-center bg-gray-200 p-1 space-x-2 rounded-md transition text-gray-500 hover:bg-gray-700 hover:text-gray-100 dark:text-gray-500 dark:hover:text-gray-100"
+      href={href}
+    >
+      <span>{truncateString(from)}</span>
+      <ArrowRight className="h-4 w-4" />
+      <span>{truncateString(to)}</span>
+    </a>
   )
 }

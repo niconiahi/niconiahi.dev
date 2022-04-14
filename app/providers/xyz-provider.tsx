@@ -170,6 +170,12 @@ export function XyzProvider({
         setAccount(undefined)
       }
     })
+
+    return () => {
+      ethereum.off("accountsChanged", () => {
+        console.log('stop listening to "accountsChanged" event')
+      })
+    }
   }, [])
 
   // Listen for changes on chain
@@ -183,6 +189,12 @@ export function XyzProvider({
 
       setChainId(chainId)
     })
+
+    return () => {
+      ethereum.off("chainChanged", () => {
+        console.log('stop listening to "chanChanged" event')
+      })
+    }
   }, [])
 
   function set(nextValue: XyzNextValue) {

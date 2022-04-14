@@ -36,7 +36,7 @@ export default function MintProject(): ReactElement {
 
   if (!isRinkeby) {
     return (
-      <div>
+      <div className="flex justify-center items-center h-full">
         <p>This section works on Rinkeby. Try changing to it from Metamask</p>
       </div>
     )

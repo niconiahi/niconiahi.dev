@@ -1,4 +1,5 @@
-import Menu from "~/icons/menu"
-import Github from "~/icons/github"
+import Menu from "./menu"
+import Github from "./github"
+import ArrowRight from "./arrow-right"
 
-export { Menu, Github }
+export { Menu, Github, ArrowRight }
