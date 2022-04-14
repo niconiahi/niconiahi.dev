@@ -66,7 +66,7 @@ export default function Index(): ReactElement {
           </ul>
         </nav>
       </section>
-      <main className="flex items-center justify-center w-full flex-1">
+      <main className="flex flex-col items-center justify-start w-full flex-1 overflow-y-scroll relative h-screen space-y-4 pb-4">
         <XyzProvider>
           <TransactionProvider>
             <TransactionToastProvider>

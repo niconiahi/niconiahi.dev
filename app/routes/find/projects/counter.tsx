@@ -52,7 +52,7 @@ export default function CounterProject(): ReactElement {
     counterContract === undefined
   ) {
     return (
-      <div className="flex flex-col w-full items-center justify-end space-y-2">
+      <div className="flex flex-col w-full items-center justify-center space-y-2 h-full">
         <p className="text-gray-500">You need to connect your Metamask</p>
         <button className="btn-primary" onClick={handleConnectMetamaskClick}>
           Connect wallet
@@ -111,8 +111,11 @@ function Counter({
   }
 
   return (
-    <section className="flex flex-col items-center space-y-2">
-      <p className="text-gray-500">{counterCount} counts and counting!</p>
+    <section className="flex flex-1 flex-col items-center justify-center space-y-2">
+      <div className="flex align-middle space-x-2">
+        <span className="text-gray-900 font-bold">{counterCount} counts</span>
+        <p className="text-gray-500"> and counting!</p>
+      </div>
       <button className="btn-primary" onClick={handleIncrease}>
         Increase
       </button>

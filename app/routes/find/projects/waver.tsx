@@ -1,9 +1,15 @@
 import { ChangeEvent, ReactElement, useEffect, useState } from "react"
+import { Form } from "remix"
 import type { BigNumber } from "@ethersproject/bignumber"
 
 import { AddressDisplay } from "~/components"
 import { ChainId, Waver as WaverContract } from "~/types"
-import { useWaverContract, useConnectMetamask, useXyz } from "~/hooks"
+import {
+  useWaverContract,
+  useConnectMetamask,
+  useXyz,
+  useTransaction,
+} from "~/hooks"
 
 export type Wave = {
   waver: string
@@ -24,7 +30,7 @@ export default function WaverProject(): ReactElement {
 
   if (!waverContract || !account) {
     return (
-      <div className="flex flex-col w-full items-center justify-end space-y-2">
+      <div className="flex flex-col w-full items-center justify-center space-y-2 h-full">
         <p className="text-gray-500">You need to connect your Metamask</p>
         <button className="btn-primary" onClick={handleConnectMetamaskClick}>
           Connect wallet
@@ -44,22 +50,22 @@ export default function WaverProject(): ReactElement {
   return (
     <>
       <AddressDisplay account={account} />
-      <Waver account={account} waverContract={waverContract} />
+      <Waver waverContract={waverContract} />
     </>
   )
 }
 
 function Waver({
-  account,
   waverContract,
 }: {
-  account: string
   waverContract: WaverContract
 }): ReactElement {
   const [message, setMessage] = useState<string>("")
 
   const [waves, setWaves] = useState<Wave[]>([])
   const [wavesCount, setWavesCount] = useState<number>(0)
+
+  const { send } = useTransaction()
 
   function handleMessageChange(event: ChangeEvent<HTMLInputElement>): void {
     const { value: message } = event.target
@@ -79,13 +85,11 @@ function Waver({
 
   async function handleWave(): Promise<void> {
     try {
-      const waveTxn = await waverContract.wave(message, {
-        gasLimit: 300000,
-      })
-      console.log("Mining =>", waveTxn.hash)
-
-      await waveTxn.wait()
-      console.log("Mined => ", waveTxn.hash)
+      send(() =>
+        waverContract.wave(message, {
+          gasLimit: 300000,
+        }),
+      )
 
       getWavesCount(waverContract).then(setWavesCount)
       getWaves(waverContract).then(setWaves)
@@ -130,49 +134,59 @@ function Waver({
   }, [waverContract])
 
   return (
-    <section className="flex w-full flex-col items-center justify-center">
-      <h1 className="text-2xl">Wave at me</h1>
-      <h3>I have been waved {wavesCount} times</h3>
-      <div className="flex w-full flex-col items-stretch space-y-2">
-        <div className="flex w-full items-center justify-end space-x-2">
-          <h3>
-            Connected with account{" "}
-            <span className="text-indigo-500 underline underline-offset-2">
-              {account}
-            </span>
-          </h3>
-        </div>
-        <div className="flex items-center justify-end space-x-2">
-          <label aria-label="message" htmlFor="message">
+    <section className="flex w-full flex-col items-center justify-center space-y-4">
+      <div className="flex align-middle space-x-2">
+        <p className="text-gray-500">I have been waved </p>
+        <span className="text-gray-900 font-bold">{wavesCount} times</span>
+      </div>
+      <Form className="flex flex-row space-x-4">
+        <p className="flex items-center justify-end space-x-4">
+          <label
+            aria-label="message"
+            className="text-gray-500"
+            htmlFor="message"
+          >
             Add your message:
           </label>
           <input
-            className="h-10 w-72 border-2 border-indigo-500 p-2"
+            className="h-10 w-72 border-2 border-gray-900 p-2"
             id="message"
             value={message}
             onChange={handleMessageChange}
           />
-
-          <button
-            className="rounded-sm bg-indigo-500 p-2 text-white"
-            onClick={handleWave}
-          >
-            Wave
-          </button>
-        </div>
-        <section className="flex w-full flex-col space-y-2">
-          {waves.map(({ message, waver }, index) => (
+        </p>
+        <button className="btn-primary" onClick={handleWave}>
+          Wave
+        </button>
+      </Form>
+      <section className="flex items-center w-full flex-col space-y-2">
+        {waves
+          .slice()
+          .reverse()
+          .map(({ message, waver }, index) => (
             <article
               key={`wave_card_${waver}_${message.slice(0, 10)}_${index}`}
-              className="bg-red-300 p-2"
+              className="flex flex-col bg-gray-100 border-2 border-gray-200 p-2 w-fit rounded-md"
             >
-              <p>
-                Waver {waver} said: {message}
-              </p>
+              <div className="flex flex-row">
+                <p className="text-gray-500">Left by</p>
+                <Address>{waver}</Address>
+                <p className="text-gray-500">, who said:</p>
+              </div>
+              <span className="text-gray-900 font-bold">
+                &quot;{message}&quot;
+              </span>
             </article>
           ))}
-        </section>
-      </div>
+      </section>
     </section>
+  )
+}
+
+function Address({ children }: { children: React.ReactNode }): ReactElement {
+  return (
+    <p className="font-bold underline-offset-2 ml-2 text-gray-500 hover:cursor-pointer hover:underline hover:text-gray-900 transition-colors duration-100">
+      {children}
+    </p>
   )
 }

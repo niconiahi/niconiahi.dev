@@ -25,7 +25,7 @@ export default function MintProject(): ReactElement {
 
   if (!account || !blockNumber || !mintContract) {
     return (
-      <div className="flex flex-col w-full items-center justify-end space-y-2">
+      <div className="flex flex-col w-full items-center justify-center space-y-2 h-full">
         <p className="text-gray-500">You need to connect your Metamask</p>
         <button className="btn-primary" onClick={handleConnectMetamaskClick}>
           Connect wallet
