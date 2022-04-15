@@ -1,4 +1,5 @@
 import { useState, useEffect, ChangeEvent, ReactElement } from "react"
+import { Form } from "remix"
 import type { BigNumber } from "@ethersproject/bignumber"
 
 import { big } from "~/helpers"
@@ -54,6 +55,11 @@ export default function MintProject(): ReactElement {
   )
 }
 
+enum MintErrorType {
+  Positive = "POSITIVE",
+  Minted = "MINTED",
+}
+
 function Mint({
   account,
   blockNumber,
@@ -64,14 +70,13 @@ function Mint({
   mintContract: MintContract
 }) {
   const [tokenId, setTokenId] = useState<number>(0)
+  const [error, setError] = useState<MintErrorType | undefined>(undefined)
   const [tokenIds, setTokenIds] = useState<BigNumber[]>([])
   const [isMintable, setIsMintable] = useState<boolean>(false)
   const [tokensCount, setTokensCount] = useState<number>(0)
 
   const gasPrice = useGasPrice()
   const { send } = useTransaction()
-
-  const isDisabled = !isMintable
 
   useEffect(() => {
     async function getTokensCount(blockNumber: number) {
@@ -168,41 +173,77 @@ function Mint({
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const tokenId = Number(event.target.value)
 
-    if (tokenId) {
-      setTokenId(tokenId)
+    if (!tokenId) {
+      setTokenId(0)
+    }
+
+    setTokenId(tokenId)
+  }
+
+  function getErrorMessage(type: MintErrorType) {
+    switch (type) {
+      case MintErrorType.Minted: {
+        return "Your number was already minted"
+      }
+      case MintErrorType.Positive: {
+        return "Your number needs to be positive"
+      }
     }
   }
 
   async function handleMint() {
-    if (!tokenId || !isMintable) return
+    if (tokenId <= 0) {
+      setError(MintErrorType.Positive)
+
+      return
+    }
+
+    if (!isMintable) {
+      setError(MintErrorType.Minted)
+
+      return
+    }
 
     mint(tokenId)
   }
 
   return (
-    <section className="flex flex-col">
-      <ul>
-        {tokenIds.map((tokenId, index) => (
-          <li key={`token_id_${tokenId.toNumber()}_${index}`}>
-            {tokenId.toNumber()}
-          </li>
-        ))}
-      </ul>
-      <div className="flex items-center space-x-2">
-        <input
-          className="border-2"
-          type="number"
-          value={tokenId}
-          onChange={handleChange}
-        />
-        <button
-          className="rounded-sm bg-slate-400 p-1 hover:cursor-pointer"
-          disabled={isDisabled}
-          onClick={handleMint}
-        >
+    <>
+      <Form className="flex flex-col self-end items-center space-y-4 p-4 bg-gray-200 rounded-md border-2 border-gray-900">
+        <p className="flex flex-col">
+          <label className="text-gray-500" htmlFor="number">
+            Pick a number:
+          </label>
+          <input
+            aria-errormessage="number_error"
+            aria-invalid="false"
+            aria-required="true"
+            className="h-10 w-80 border-2 border-gray-900 p-2 bg-gray-50"
+            id="number"
+            type="number"
+            value={tokenId}
+            onChange={handleChange}
+          />
+          {error ? (
+            <span className="text-red-400" id="number_error">
+              {getErrorMessage(error)}
+            </span>
+          ) : null}
+        </p>
+        <button className="btn-primary w-full" onClick={handleMint}>
           Create
         </button>
-      </div>
-    </section>
+      </Form>
+      <section className="w-full">
+        <h3 className="text-gray-500">NFTs</h3>
+        <ol className="w-full">
+          {tokenIds.map((tokenId, index) => (
+            <li key={`token_id_${tokenId.toNumber()}_${index}`} className="">
+              {tokenId.toNumber()}
+            </li>
+          ))}
+        </ol>
+      </section>
+    </>
   )
 }

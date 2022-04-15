@@ -135,31 +135,32 @@ function Waver({
 
   return (
     <section className="flex w-full flex-col items-center justify-center space-y-4">
-      <div className="flex align-middle space-x-2">
-        <p className="text-gray-500">I have been waved </p>
-        <span className="text-gray-900 font-bold">{wavesCount} times</span>
-      </div>
-      <Form className="flex flex-row space-x-4">
-        <p className="flex items-center justify-end space-x-4">
-          <label
-            aria-label="message"
-            className="text-gray-500"
-            htmlFor="message"
-          >
-            Add your message:
+      <Form className="flex flex-col self-end items-center space-y-4 p-4 bg-gray-200 rounded-md border-2 border-gray-900">
+        <p className="flex flex-col">
+          <label className="text-gray-500" htmlFor="number">
+            Leave a message:
           </label>
           <input
-            className="h-10 w-72 border-2 border-gray-900 p-2"
+            aria-errormessage="number_error"
+            aria-invalid="false"
+            aria-required="true"
+            className="h-10 w-80 border-2 border-gray-900 p-2 bg-gray-50"
             id="message"
             value={message}
             onChange={handleMessageChange}
           />
         </p>
-        <button className="btn-primary" onClick={handleWave}>
+        <button className="btn-primary w-full" onClick={handleWave}>
           Wave
         </button>
       </Form>
-      <section className="flex items-center w-full flex-col space-y-2">
+      <section className="flex items-center w-full flex-col space-y-4">
+        <h3>
+          I have been waved
+          <span className="text-gray-900 font-bold ml-2">
+            {wavesCount} times
+          </span>
+        </h3>
         {waves
           .slice()
           .reverse()

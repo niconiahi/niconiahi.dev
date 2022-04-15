@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useState } from "react"
-import { json, LoaderFunction, useLoaderData } from "remix"
+import { Form, json, LoaderFunction, useLoaderData } from "remix"
 import type { BigNumber } from "@ethersproject/bignumber"
 
 import { AddressDisplay } from "~/components"
@@ -111,14 +111,20 @@ function Counter({
   }
 
   return (
-    <section className="flex flex-1 flex-col items-center justify-center space-y-2">
-      <div className="flex align-middle space-x-2">
-        <span className="text-gray-900 font-bold">{counterCount} counts</span>
-        <p className="text-gray-500"> and counting!</p>
-      </div>
-      <button className="btn-primary" onClick={handleIncrease}>
-        Increase
-      </button>
-    </section>
+    <>
+      <Form className="flex flex-col self-end items-center space-y-4 p-4 bg-gray-200 rounded-md border-2 border-gray-900">
+        <button className="btn-primary" onClick={handleIncrease}>
+          Increase
+        </button>
+      </Form>
+      <section className="flex flex-1 items-center">
+        <p className="text-gray-500 flex align-middle space-x-2">
+          <span className="text-gray-900 font-bold mr-2">
+            {counterCount} counts
+          </span>
+          and counting!
+        </p>
+      </section>
+    </>
   )
 }
