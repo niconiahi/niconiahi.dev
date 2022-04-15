@@ -160,7 +160,7 @@ function Transfers({
       </section>
       <section className="flex flex-col items-start justify-center">
         <h3 className="text-gray-500">Transfers</h3>
-        <ul className="flex flex-col items-center justify-center space-y-2">
+        <ul className="flex flex-col items-start justify-center space-y-2">
           {transfers
             .filter(byConfirmations)
             .map(({ args, transactionHash }) => {
