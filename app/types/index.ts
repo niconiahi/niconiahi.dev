@@ -7,7 +7,12 @@ export type { TransactionToastMessages } from "~/providers/transaction-toast-pro
 export type {
   TransactionOn,
   TransactionState,
+  TransactionOnIdle,
+  TransactionOnMined,
   TransactionFunction,
+  TransactionOnMining,
+  TransactionOnFailed,
+  TransactionOnPending,
 } from "~/providers/transaction-provider"
 
 export { XyzNextValueType } from "~/providers/xyz-provider"

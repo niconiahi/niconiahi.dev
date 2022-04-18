@@ -164,7 +164,8 @@ export const useTransactionToast = ({
   on?: TransactionOn
   messages?: Partial<TransactionToastMessages>
 } = {}): void => {
-  const mounted = useRef<boolean>(false)
+  const hasSetOn = useRef<boolean>(false)
+  const hasSetMessages = useRef<boolean>(false)
   const transactionToastContext = useContext(TransactionToastContext)
 
   if (!transactionToastContext) {
@@ -178,16 +179,20 @@ export const useTransactionToast = ({
   useEffect(() => {
     if (!messages) return
 
-    if (!mounted.current) {
+    if (!hasSetMessages.current) {
       composeMessages(messages)
-
-      if (on) {
-        setOn(on)
-      }
-
-      mounted.current = true
+      hasSetMessages.current = true
     }
-  }, [composeMessages, messages, mounted, on, setOn])
+  }, [composeMessages, messages, on])
+
+  useEffect(() => {
+    if (!on) return
+
+    if (!hasSetOn.current) {
+      setOn(on)
+      hasSetOn.current = true
+    }
+  }, [on, setOn])
 }
 
 function Toast({

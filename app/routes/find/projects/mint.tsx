@@ -1,9 +1,17 @@
-import { useState, useEffect, ChangeEvent, ReactElement } from "react"
-import { Form, json, useLoaderData } from "remix"
+import { ReactElement } from "react"
+import {
+  Form,
+  json,
+  redirect,
+  useNavigate,
+  useActionData,
+  useLoaderData,
+  ActionFunction,
+} from "remix"
 import type { LoaderFunction } from "remix"
 
-import { big, getGasPrice, replace, request } from "~/helpers"
-import { ChainId, Mint as MintContract } from "~/types"
+import { big, replace, request, getGasPrice } from "~/helpers"
+import { ChainId, Mint as MintContract, TransactionStateType } from "~/types"
 import { AddressDisplay } from "~/components"
 import {
   useXyz,
@@ -11,6 +19,7 @@ import {
   useMintContract,
   useConnectMetamask,
 } from "~/hooks"
+import invariant from "tiny-invariant"
 
 type Token = {
   id: number
@@ -26,6 +35,40 @@ type Transfer = {
 
 type TransfersResponse = {
   transfers: Transfer[]
+}
+
+enum MintErrorType {
+  Positive = "positive",
+  Minted = "minted",
+}
+
+type ActionData = {
+  error?: MintErrorType
+}
+
+const invalid = (data: ActionData) => json(data, { status: 400 })
+
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData()
+  const tokenId = formData.get("tokenId")
+  const tokens = await getTokens()
+
+  invariant(
+    typeof tokenId === "string",
+    'Expected "tokenId" to be of type string',
+  )
+
+  const canMint = tokens.every(({ id }) => id !== Number(tokenId))
+
+  if (!canMint) {
+    return invalid({ error: MintErrorType.Minted })
+  }
+
+  if (Number(tokenId) <= 0) {
+    return invalid({ error: MintErrorType.Positive })
+  }
+
+  return redirect(`/find/projects/mint?tokenId=${tokenId}`)
 }
 
 async function getTokens(): Promise<Token[]> {
@@ -64,21 +107,23 @@ async function getTokens(): Promise<Token[]> {
 
 type LoaderData = {
   tokens: Token[]
+  tokenId?: number
   gasPrice: number
 }
 
-export const loader: LoaderFunction = async () => {
-  const gasPrice = await getGasPrice()
-  const tokens = await getTokens()
+export const loader: LoaderFunction = async ({ request }) => {
+  const url = new URL(request.url)
+  const tokenId = url.searchParams.get("tokenId")
 
   return json<LoaderData>({
-    tokens,
-    gasPrice,
+    tokens: await getTokens(),
+    tokenId: tokenId ? Number(tokenId) : undefined,
+    gasPrice: await getGasPrice(),
   })
 }
 
 export default function MintProject(): ReactElement {
-  const { gasPrice, tokens } = useLoaderData<LoaderData>()
+  const { gasPrice, tokens, tokenId } = useLoaderData<LoaderData>()
 
   const mintContract = useMintContract()
   const connectMetamask = useConnectMetamask()
@@ -116,52 +161,40 @@ export default function MintProject(): ReactElement {
         account={account}
         gasPrice={gasPrice}
         mintContract={mintContract}
+        tokenId={tokenId}
         tokens={tokens}
       />
     </>
   )
 }
 
-enum MintErrorType {
-  Positive = "POSITIVE",
-  Minted = "MINTED",
-}
-
 function Mint({
   tokens,
+  tokenId,
   account,
   gasPrice,
   mintContract,
 }: {
   tokens: Token[]
+  tokenId?: number
   account: string
   gasPrice: number
   mintContract: MintContract
 }) {
-  const [error, setError] = useState<MintErrorType | undefined>(undefined)
-  const [tokenId, setTokenId] = useState<number>(0)
-  const [isMintable, setIsMintable] = useState<boolean>(false)
+  const navigate = useNavigate()
+  const actionData = useActionData<ActionData>()
 
-  const { send } = useTransaction()
+  const onMined = () => {
+    navigate("/find/projects/mint", { replace: true })
+  }
+  const { send } = useTransaction({
+    on: {
+      [TransactionStateType.Mined]: onMined,
+    },
+  })
 
-  useEffect(() => {
-    if (!tokenId) return
-
-    async function canMint(tokenId: number) {
-      const doesTokenExist = await mintContract.exists(tokenId)
-
-      return !doesTokenExist
-    }
-
-    canMint(tokenId).then((canMint) => {
-      if (canMint) {
-        setIsMintable(true)
-        setError(undefined)
-      } else {
-        setIsMintable(false)
-      }
-    })
-  }, [mintContract, tokenId])
+  const error = actionData?.error
+  const isMintDisabled = typeof tokenId !== "number"
 
   async function mint(tokenId: number) {
     const value = big(tokenId).mul(1e12)
@@ -179,14 +212,10 @@ function Mint({
     )
   }
 
-  function handleChange(event: ChangeEvent<HTMLInputElement>) {
-    const tokenId = Number(event.target.value)
+  function handleMintClick() {
+    invariant(typeof tokenId === "number", 'Expected "tokenId" to have a value')
 
-    if (!tokenId) {
-      setTokenId(0)
-    }
-
-    setTokenId(tokenId)
+    mint(tokenId)
   }
 
   function getErrorMessage(type: MintErrorType) {
@@ -200,49 +229,41 @@ function Mint({
     }
   }
 
-  async function handleMint() {
-    if (tokenId <= 0) {
-      setError(MintErrorType.Positive)
-
-      return
-    }
-
-    if (!isMintable) {
-      setError(MintErrorType.Minted)
-
-      return
-    }
-
-    mint(tokenId)
-  }
-
   return (
     <>
-      <Form className="flex flex-col self-end items-center space-y-4 p-4 bg-gray-200 rounded-md border-2 border-gray-900">
-        <p className="flex flex-col">
-          <label className="text-gray-500" htmlFor="number">
-            Pick a number:
-          </label>
-          <input
-            aria-errormessage="number_error"
-            aria-invalid="false"
-            aria-required="true"
-            className="h-10 w-80 border-2 border-gray-900 p-2 bg-gray-50"
-            id="number"
-            type="number"
-            value={tokenId}
-            onChange={handleChange}
-          />
-          {error ? (
-            <span className="text-red-400" id="number_error">
-              {getErrorMessage(error)}
-            </span>
-          ) : null}
-        </p>
-        <button className="btn-primary w-full" onClick={handleMint}>
-          Create
+      <section className="flex flex-col self-end items-center space-y-4 p-4 bg-gray-200 rounded-md border-2 border-gray-900">
+        <Form className="flex flex-col items-center space-y-4" method="post">
+          <p className="flex flex-col">
+            <label className="text-gray-500" htmlFor="number">
+              Pick a number:
+            </label>
+            <input
+              aria-errormessage="tokenId_error"
+              aria-invalid="false"
+              aria-required="true"
+              className="h-10 w-80 border-2 border-gray-900 p-2 bg-gray-50"
+              id="tokenId"
+              name="tokenId"
+              type="tokenId"
+            />
+            {error ? (
+              <span className="text-red-400" id="tokenId_error">
+                {getErrorMessage(error)}
+              </span>
+            ) : null}
+          </p>
+          <button className="btn-primary w-full" type="submit">
+            Check availability
+          </button>
+        </Form>
+        <button
+          className="btn-secondary w-full"
+          disabled={isMintDisabled}
+          onClick={handleMintClick}
+        >
+          Mint NFT
         </button>
-      </Form>
+      </section>
       <section className="w-full">
         <h3 className="text-gray-500">NFTs</h3>
         <ol className="w-full">

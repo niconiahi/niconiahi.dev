@@ -525,6 +525,21 @@ Ensure the default browser behavior of the `hidden` attribute.
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
+.btn-secondary {
+    border: 2px solid #171717;
+    color: #171717;
+    padding: 0.5rem;
+    text-transform: uppercase;
+    border-radius: 0.125rem;
+    background: #fafafa;
+    height: 2.5rem
+    
+    @apply transition;
+  }
+.btn-secondary:disabled {
+    background: #a3a3a3;
+    cursor: not-allowed;
+  }
 .sr-only {
   position: absolute;
   width: 1px;
