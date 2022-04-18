@@ -183,7 +183,7 @@ export const useTransactionToast = ({
       composeMessages(messages)
       hasSetMessages.current = true
     }
-  }, [composeMessages, messages, on])
+  }, [composeMessages, messages])
 
   useEffect(() => {
     if (!on) return
