@@ -51,13 +51,13 @@ const invalid = (data: ActionData) => json(data, { status: 400 })
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData()
   const tokenId = formData.get("tokenId")
-  const tokens = await getTokens()
 
   invariant(
     typeof tokenId === "string",
     'Expected "tokenId" to be of type string',
   )
 
+  const tokens = await getTokens()
   const canMint = tokens.every(({ id }) => id !== Number(tokenId))
 
   if (!canMint) {
@@ -71,40 +71,6 @@ export const action: ActionFunction = async ({ request }) => {
   return redirect(`/find/projects/mint?tokenId=${tokenId}`)
 }
 
-async function getTokens(): Promise<Token[]> {
-  async function getTransfers(): Promise<Transfer[]> {
-    const query = `
-    query Transfers {
-      transfers {
-        id
-        to
-        from
-        timestamp
-      }
-    }
-    `
-
-    return request<TransfersResponse>(query).then(({ transfers }) => transfers)
-  }
-
-  const transfers = await getTransfers()
-
-  return transfers.reduce((prevTokens, { to, id }) => {
-    const prevTokenIndex = prevTokens.findIndex(
-      ({ id: prevId }) => prevId === Number(id),
-    )
-    const nextToken = { id: Number(id), owner: to }
-
-    if (prevTokenIndex === -1) {
-      return [...prevTokens, nextToken]
-    } else {
-      const nextTokens = replace(prevTokens, nextToken, prevTokenIndex)
-
-      return nextTokens
-    }
-  }, [] as Token[])
-}
-
 type LoaderData = {
   tokens: Token[]
   tokenId?: number
@@ -115,10 +81,12 @@ export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url)
   const tokenId = url.searchParams.get("tokenId")
 
+  const [tokens, gasPrice] = await Promise.all([getTokens(), getGasPrice()])
+
   return json<LoaderData>({
-    tokens: await getTokens(),
+    tokens,
     tokenId: tokenId ? Number(tokenId) : undefined,
-    gasPrice: await getGasPrice(),
+    gasPrice,
   })
 }
 
@@ -276,4 +244,38 @@ function Mint({
       </section>
     </>
   )
+}
+
+async function getTokens(): Promise<Token[]> {
+  async function getTransfers(): Promise<Transfer[]> {
+    const query = `
+    query Transfers {
+      transfers {
+        id
+        to
+        from
+        timestamp
+      }
+    }
+    `
+
+    return request<TransfersResponse>(query).then(({ transfers }) => transfers)
+  }
+
+  const transfers = await getTransfers()
+
+  return transfers.reduce((prevTokens, { to, id }) => {
+    const prevTokenIndex = prevTokens.findIndex(
+      ({ id: prevId }) => prevId === Number(id),
+    )
+    const nextToken = { id: Number(id), owner: to }
+
+    if (prevTokenIndex === -1) {
+      return [...prevTokens, nextToken]
+    } else {
+      const nextTokens = replace(prevTokens, nextToken, prevTokenIndex)
+
+      return nextTokens
+    }
+  }, [] as Token[])
 }
