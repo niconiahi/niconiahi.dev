@@ -1,6 +1,11 @@
 const ETHERCHAIN_URL = "https://etherchain.org/api/gasPriceOracle"
 
 export function getGasPrice(): Promise<number> {
+  function gweiToWei(gwei: number) {
+    // TODO: investigate if it's safe to convert it like this
+    return gwei * 1e9
+  }
+
   return fetch(ETHERCHAIN_URL, {
     method: "GET",
     headers: {
@@ -8,5 +13,5 @@ export function getGasPrice(): Promise<number> {
     },
   })
     .then((response) => response.json())
-    .then(({ fast }) => fast)
+    .then(({ fast: gwei }) => gweiToWei(gwei))
 }

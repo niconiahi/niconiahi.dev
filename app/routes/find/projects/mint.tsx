@@ -1,19 +1,85 @@
 import { useState, useEffect, ChangeEvent, ReactElement } from "react"
-import { Form } from "remix"
-import type { BigNumber } from "@ethersproject/bignumber"
+import { Form, json, useLoaderData } from "remix"
+import type { LoaderFunction } from "remix"
 
-import { big } from "~/helpers"
+import { big, getGasPrice, replace, request } from "~/helpers"
 import { ChainId, Mint as MintContract } from "~/types"
 import { AddressDisplay } from "~/components"
 import {
   useXyz,
-  useGasPrice,
   useTransaction,
   useMintContract,
   useConnectMetamask,
 } from "~/hooks"
 
+type Token = {
+  id: number
+  owner: string
+}
+
+type Transfer = {
+  id: string
+  to: string
+  from: string
+  timestamp: string
+}
+
+type TransfersResponse = {
+  transfers: Transfer[]
+}
+
+async function getTokens(): Promise<Token[]> {
+  async function getTransfers(): Promise<Transfer[]> {
+    const query = `
+    query Transfers {
+      transfers {
+        id
+        to
+        from
+        timestamp
+      }
+    }
+    `
+
+    return request<TransfersResponse>(query).then(({ transfers }) => transfers)
+  }
+
+  const transfers = await getTransfers()
+
+  return transfers.reduce((prevTokens, { to, id }) => {
+    const prevTokenIndex = prevTokens.findIndex(
+      ({ id: prevId }) => prevId === Number(id),
+    )
+    const nextToken = { id: Number(id), owner: to }
+
+    if (prevTokenIndex === -1) {
+      return [...prevTokens, nextToken]
+    } else {
+      const nextTokens = replace(prevTokens, nextToken, prevTokenIndex)
+
+      return nextTokens
+    }
+  }, [] as Token[])
+}
+
+type LoaderData = {
+  tokens: Token[]
+  gasPrice: number
+}
+
+export const loader: LoaderFunction = async () => {
+  const gasPrice = await getGasPrice()
+  const tokens = await getTokens()
+
+  return json<LoaderData>({
+    tokens,
+    gasPrice,
+  })
+}
+
 export default function MintProject(): ReactElement {
+  const { gasPrice, tokens } = useLoaderData<LoaderData>()
+
   const mintContract = useMintContract()
   const connectMetamask = useConnectMetamask()
   const { chainId, blockNumber, account } = useXyz()
@@ -48,8 +114,9 @@ export default function MintProject(): ReactElement {
       <AddressDisplay account={account} />
       <Mint
         account={account}
-        blockNumber={blockNumber}
+        gasPrice={gasPrice}
         mintContract={mintContract}
+        tokens={tokens}
       />
     </>
   )
@@ -61,52 +128,21 @@ enum MintErrorType {
 }
 
 function Mint({
+  tokens,
   account,
-  blockNumber,
+  gasPrice,
   mintContract,
 }: {
+  tokens: Token[]
   account: string
-  blockNumber: number
+  gasPrice: number
   mintContract: MintContract
 }) {
-  const [tokenId, setTokenId] = useState<number>(0)
   const [error, setError] = useState<MintErrorType | undefined>(undefined)
-  const [tokenIds, setTokenIds] = useState<BigNumber[]>([])
+  const [tokenId, setTokenId] = useState<number>(0)
   const [isMintable, setIsMintable] = useState<boolean>(false)
-  const [tokensCount, setTokensCount] = useState<number>(0)
 
-  const gasPrice = useGasPrice()
   const { send } = useTransaction()
-
-  useEffect(() => {
-    async function getTokensCount(blockNumber: number) {
-      const bigTokensCount = await mintContract.balanceOf(account, {
-        blockTag: blockNumber,
-      })
-      const tokensCount = bigTokensCount.toNumber()
-
-      setTokensCount(tokensCount)
-    }
-
-    getTokensCount(blockNumber)
-  }, [blockNumber, mintContract, account])
-
-  useEffect(() => {
-    if (tokensCount < 1) return
-
-    async function getTokenIds(tokensCount: number) {
-      const tokenIdsPromises = Array.from({ length: tokensCount }, (_, index) =>
-        mintContract.tokenOfOwnerByIndex(account, index, {
-          blockTag: blockNumber,
-        }),
-      )
-      const tokenIds = await Promise.all(tokenIdsPromises)
-
-      setTokenIds(tokenIds)
-    }
-
-    getTokenIds(tokensCount)
-  }, [blockNumber, mintContract, account, tokensCount])
 
   useEffect(() => {
     if (!tokenId) return
@@ -117,44 +153,17 @@ function Mint({
       return !doesTokenExist
     }
 
-    async function checkIsMintable(tokenId: number) {
-      const isMintable = await canMint(tokenId)
-
-      setIsMintable(isMintable)
-    }
-
-    checkIsMintable(tokenId)
+    canMint(tokenId).then((canMint) => {
+      if (canMint) {
+        setIsMintable(true)
+        setError(undefined)
+      } else {
+        setIsMintable(false)
+      }
+    })
   }, [mintContract, tokenId])
 
-  useEffect(() => {
-    if (!mintContract) return
-
-    function handleTransferOff(mintContract: MintContract) {
-      mintContract.off("Transfer", () => {
-        console.warn(`Unsubscribed from "Transfer" Mint contract's event`)
-      })
-    }
-
-    function handleTransferOn(mintContract: MintContract) {
-      mintContract.on("Transfer", (_, __, tokenId) => {
-        setTokenIds((prevTokenIds) => [...prevTokenIds, tokenId])
-      })
-    }
-
-    handleTransferOn(mintContract)
-
-    return () => {
-      handleTransferOff(mintContract)
-    }
-  }, [mintContract])
-
   async function mint(tokenId: number) {
-    if (!gasPrice) {
-      console.warn('You need to know the "gasPrice" to execute this method')
-
-      return
-    }
-
     const value = big(tokenId).mul(1e12)
     const gasLimit = await mintContract.estimateGas.mint(account, tokenId, {
       value,
@@ -237,9 +246,9 @@ function Mint({
       <section className="w-full">
         <h3 className="text-gray-500">NFTs</h3>
         <ol className="w-full">
-          {tokenIds.map((tokenId, index) => (
-            <li key={`token_id_${tokenId.toNumber()}_${index}`} className="">
-              {tokenId.toNumber()}
+          {tokens.map(({ id, owner }, index) => (
+            <li key={`token_id_${id}_${index}`} className="">
+              Token {id}, owned by: {owner}
             </li>
           ))}
         </ol>

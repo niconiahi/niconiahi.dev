@@ -1,3 +1,4 @@
+export * from "./gas"
 export * from "./array"
 export * from "./block"
 export * from "./error"
@@ -8,5 +9,6 @@ export * from "./big-number"
 export * from "./contracts"
 
 export * from "./db.server"
+export * from "./fetching.server"
 
 export * from "./contracts/counter-contract.server"
