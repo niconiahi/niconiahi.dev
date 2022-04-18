@@ -172,7 +172,7 @@ export function XyzProvider({
     })
 
     return () => {
-      ethereum.off("accountsChanged", () => {
+      ethereum.removeListener("accountsChanged", () => {
         console.log('stop listening to "accountsChanged" event')
       })
     }
@@ -191,7 +191,7 @@ export function XyzProvider({
     })
 
     return () => {
-      ethereum.off("chainChanged", () => {
+      ethereum.removeListener("chainChanged", () => {
         console.log('stop listening to "chanChanged" event')
       })
     }
