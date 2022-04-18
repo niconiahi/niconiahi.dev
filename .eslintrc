@@ -44,6 +44,7 @@
       }
     }
   ],
+  "ignorePatterns": ["subgraphs/**/generated"],
   "rules": {
     // react
     "react/prop-types": "off",
