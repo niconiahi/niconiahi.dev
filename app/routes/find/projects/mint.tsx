@@ -1,4 +1,5 @@
 import { ReactElement } from "react"
+import invariant from "tiny-invariant"
 import {
   Form,
   json,
@@ -11,7 +12,12 @@ import {
 import type { LoaderFunction } from "remix"
 
 import { big, replace, request, getGasPrice } from "~/helpers"
-import { ChainId, Mint as MintContract, TransactionStateType } from "~/types"
+import {
+  ChainId,
+  Project,
+  Mint as MintContract,
+  TransactionStateType,
+} from "~/types"
 import { AddressDisplay } from "~/components"
 import {
   useXyz,
@@ -19,7 +25,6 @@ import {
   useMintContract,
   useConnectMetamask,
 } from "~/hooks"
-import invariant from "tiny-invariant"
 
 type Token = {
   id: number
@@ -259,7 +264,9 @@ async function getTokens(): Promise<Token[]> {
     }
     `
 
-    return request<TransfersResponse>(query).then(({ transfers }) => transfers)
+    return request<TransfersResponse>(query, Project.Mint).then(
+      ({ transfers }) => transfers,
+    )
   }
 
   const transfers = await getTransfers()

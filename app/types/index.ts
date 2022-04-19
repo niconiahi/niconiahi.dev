@@ -15,6 +15,7 @@ export type {
   TransactionOnPending,
 } from "~/providers/transaction-provider"
 
+export { Project } from "~/helpers/fetching.server"
 export { XyzNextValueType } from "~/providers/xyz-provider"
 
 export type { TransferEvent } from "../../typechain-types/ERC20"

@@ -1,10 +1,14 @@
-import { ReactElement, useEffect, useState } from "react"
-import { Form, json, LoaderFunction, useLoaderData } from "remix"
-import type { BigNumber } from "@ethersproject/bignumber"
+import { ReactElement } from "react"
+import { Form, json, LoaderFunction, useLoaderData, useNavigate } from "remix"
 
 import { AddressDisplay } from "~/components"
-import { getRpcProvider, getCounterContract } from "~/helpers"
-import { ChainId, Counter as CounterContract } from "~/types"
+import { request } from "~/helpers"
+import {
+  ChainId,
+  Project,
+  TransactionStateType,
+  Counter as CounterContract,
+} from "~/types"
 import {
   useXyz,
   useConnectMetamask,
@@ -16,19 +20,39 @@ type LoaderData = {
   counterCount: number
 }
 
+type Increment = {
+  count: string
+}
+
+type IncrementsResponse = {
+  increments: Increment[]
+}
+
 export const loader: LoaderFunction = async () => {
-  const chainId = ChainId.Rinkeby
-  const provider = getRpcProvider({ chainId })
-  const counterContract = getCounterContract({ provider })
+  async function getCounterCount() {
+    async function getLastIncrement(): Promise<Increment> {
+      const query = `
+    query LastIncrement{
+      increments(
+        orderBy: count, 
+        orderDirection: desc, 
+        first: 1
+      ) {
+      id
+      count
+      }
+    }`
 
-  async function getCounterCount(counterContract: CounterContract) {
-    const currentCount = await counterContract.value()
-    const counterCount = currentCount.toNumber()
+      return request<IncrementsResponse>(query, Project.Counter)
+        .then(({ increments }) => increments)
+        .then((increments) => increments[0])
+    }
+    const { count: counterCount } = await getLastIncrement()
 
-    return counterCount
+    return Number(counterCount)
   }
 
-  const counterCount = await getCounterCount(counterContract)
+  const counterCount = await getCounterCount()
 
   return json<LoaderData>({ counterCount })
 }
@@ -78,36 +102,25 @@ export default function CounterProject(): ReactElement {
 }
 
 function Counter({
-  counterCount: initialCounterCount,
+  counterCount,
   counterContract,
 }: {
   counterCount: number
   counterContract: CounterContract
 }): ReactElement {
-  const [counterCount, setCounterCount] = useState<undefined | number>(
-    initialCounterCount,
-  )
-  const { send } = useTransaction()
+  const navigate = useNavigate()
 
-  useEffect(
-    function handleIncreasedEvent() {
-      counterContract.on("Increased", (bigNextCounter: BigNumber) => {
-        const nextCounter = bigNextCounter.toNumber()
-
-        setCounterCount(nextCounter)
-      })
-
-      return () => {
-        counterContract.off("Increased", () => {
-          console.warn(`Unsubscribed from "Increased" Counter contract's event`)
-        })
-      }
+  const onMined = () => {
+    navigate("/find/projects/counter", { replace: true })
+  }
+  const { send } = useTransaction({
+    on: {
+      [TransactionStateType.Mined]: onMined,
     },
-    [counterContract],
-  )
+  })
 
-  async function handleIncrease(): Promise<void> {
-    await send(() => counterContract.increase())
+  function handleIncrease(): void {
+    send(() => counterContract.increase())
   }
 
   return (
