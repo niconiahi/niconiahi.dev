@@ -1,5 +1,4 @@
-// TODO: integrate headless ui dialog as Toast
-// import { Dialog } from "@headlessui/react"
+import { Dialog, Transition } from "@headlessui/react"
 import React, {
   FC,
   useRef,
@@ -11,7 +10,8 @@ import React, {
 } from "react"
 import invariant from "tiny-invariant"
 
-// web3
+import { X } from "~/icons"
+import { IconButton } from "~/components"
 import { useTransaction } from "~/hooks"
 import { TransactionOn, TransactionStateType, TransactionState } from "~/types"
 
@@ -202,7 +202,7 @@ function Toast({
   state: TransactionState
   messages: TransactionToastMessages
 }): ReactElement | null {
-  // const [isOpen, setIsOpen] = useState<boolean>(true)
+  const [isOpen, setIsOpen] = useState<boolean>(true)
   const { descriptions, titles } = messages
 
   function getTitle(
@@ -229,14 +229,32 @@ function Toast({
   if (state.state === TransactionStateType.Idle) return null
 
   return (
-    <aside className="flex flex-col fixed bottom-4 right-4 bg-gray-50 border-2 p-2 border-gray-900 rounded-md space-x-2 items-center justify-center">
-      <p>{title}</p>
-      <p>{description}</p>
-      {/* <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
-        <Dialog.Overlay />
-        <Dialog.Title>{title}</Dialog.Title>
-        <Dialog.Description>{description}</Dialog.Description>
-      </Dialog> */}
-    </aside>
+    <Transition
+      enter="transition duration-100 ease-out"
+      enterFrom="transform scale-95 opacity-0"
+      enterTo="transform scale-100 opacity-100"
+      leave="transition duration-75 ease-out"
+      leaveFrom="transform scale-100 opacity-100"
+      leaveTo="transform scale-95 opacity-0"
+      show={isOpen}
+    >
+      <Dialog
+        className="bg-gray-50 fixed bottom-4 right-4 border-2 border-gray-900 rounded-md p-2"
+        onClose={() => setIsOpen(false)}
+      >
+        <div className="relative w-full h-full">
+          <Dialog.Overlay />
+
+          <Dialog.Title>{title}</Dialog.Title>
+          <Dialog.Description>{description}</Dialog.Description>
+          <IconButton
+            className="absolute top-0 right-0 p-0"
+            onClick={() => setIsOpen(false)}
+          >
+            <X className="h-5 w-5" />
+          </IconButton>
+        </div>
+      </Dialog>
+    </Transition>
   )
 }

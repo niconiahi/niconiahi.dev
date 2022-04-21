@@ -1,5 +1,6 @@
+import X from "./x"
 import Menu from "./menu"
 import Github from "./github"
 import ArrowRight from "./arrow-right"
 
-export { Menu, Github, ArrowRight }
+export { X, Menu, Github, ArrowRight }

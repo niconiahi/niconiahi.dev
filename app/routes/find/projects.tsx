@@ -66,15 +66,15 @@ export default function Index(): ReactElement {
           </ul>
         </nav>
       </section>
-      <main className="flex flex-col items-center justify-start w-full flex-1 overflow-y-scroll relative h-screen space-y-4 p-4">
-        <XyzProvider>
-          <TransactionProvider>
-            <TransactionToastProvider>
+      <XyzProvider>
+        <TransactionProvider>
+          <TransactionToastProvider>
+            <main className="flex flex-col items-center justify-start w-full flex-1 overflow-y-scroll relative h-screen space-y-4 p-4">
               <Outlet />
-            </TransactionToastProvider>
-          </TransactionProvider>
-        </XyzProvider>
-      </main>
+            </main>
+          </TransactionToastProvider>
+        </TransactionProvider>
+      </XyzProvider>
     </>
   )
 }

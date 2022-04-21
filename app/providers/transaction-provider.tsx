@@ -92,6 +92,14 @@ export const TransactionProvider: FC = ({ children }) => {
     }, 5000)
   }, [state])
 
+  useEffect(() => {
+    if (state.state !== TransactionStateType.Failed) return
+
+    setTimeout(() => {
+      setState({ state: TransactionStateType.Idle })
+    }, 5000)
+  }, [state])
+
   const send = async (
     transactionFunction: TransactionFunction,
   ): Promise<void> => {

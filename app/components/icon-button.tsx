@@ -26,7 +26,7 @@ export default IconButton
 
 function getClassName(className?: string) {
   return clsx(
-    "p-2 hover:bg-gray-700 rounded transition duration-200 ease-in-out focus:outline-none focus:ring-2 text-black dark:text-white",
+    "p-2 hover:bg-gray-200 rounded transition duration-200 ease-in-out focus:outline-none focus:ring-2 text-black dark:text-white",
     className,
   )
 }
