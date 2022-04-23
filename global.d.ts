@@ -5,6 +5,7 @@ declare namespace NodeJS {
     NODE_ENV: "production" | "development"
     PRIVATE_KEY: string
     SUBGRAPH_MINT: string
+    SUBGRAPH_WAVER: string
     SUBGRAPH_COUNTER: string
   }
 }

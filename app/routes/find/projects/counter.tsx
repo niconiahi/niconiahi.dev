@@ -2,7 +2,7 @@ import { ReactElement } from "react"
 import { Form, json, LoaderFunction, useLoaderData, useNavigate } from "remix"
 
 import { AddressDisplay } from "~/components"
-import { request } from "~/helpers"
+import { subgraph } from "~/helpers"
 import {
   ChainId,
   Project,
@@ -38,12 +38,11 @@ export const loader: LoaderFunction = async () => {
         orderDirection: desc, 
         first: 1
       ) {
-      id
       count
       }
     }`
 
-      return request<IncrementsResponse>(query, Project.Counter)
+      return subgraph<IncrementsResponse>(query, Project.Counter)
         .then(({ increments }) => increments)
         .then((increments) => increments[0])
     }

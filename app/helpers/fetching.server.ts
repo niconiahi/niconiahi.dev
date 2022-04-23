@@ -1,9 +1,10 @@
 export enum Project {
   Mint = "MINT",
+  Waver = "WAVER",
   Counter = "COUNTER",
 }
 
-export async function request<T>(
+export async function subgraph<T>(
   query: string,
   project: Project,
   variables?: { [key: string]: any },
@@ -12,6 +13,9 @@ export async function request<T>(
     switch (project) {
       case Project.Mint: {
         return process.env.SUBGRAPH_MINT
+      }
+      case Project.Waver: {
+        return process.env.SUBGRAPH_WAVER
       }
       case Project.Counter: {
         return process.env.SUBGRAPH_COUNTER

@@ -11,7 +11,7 @@ import {
 } from "remix"
 import type { LoaderFunction } from "remix"
 
-import { big, replace, request, getGasPrice } from "~/helpers"
+import { big, replace, subgraph, getGasPrice } from "~/helpers"
 import {
   ChainId,
   Project,
@@ -230,7 +230,7 @@ function Mint({
           </button>
         </Form>
         <button
-          className="btn-secondary w-full"
+          className="btn-secondary w-full h-10"
           disabled={isMintDisabled}
           onClick={handleMintClick}
         >
@@ -264,7 +264,7 @@ async function getTokens(): Promise<Token[]> {
     }
     `
 
-    return request<TransfersResponse>(query, Project.Mint).then(
+    return subgraph<TransfersResponse>(query, Project.Mint).then(
       ({ transfers }) => transfers,
     )
   }

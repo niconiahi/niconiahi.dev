@@ -1,23 +1,112 @@
-import { ChangeEvent, ReactElement, useEffect, useState } from "react"
-import { Form } from "remix"
+import { ReactElement } from "react"
+import { Form, json, redirect, useActionData, useLoaderData } from "remix"
+import type { ActionFunction, LoaderFunction } from "remix"
 import type { BigNumber } from "@ethersproject/bignumber"
 
+import { getRpcProvider, getWaverContract, subgraph } from "~/helpers"
 import { AddressDisplay } from "~/components"
-import { ChainId, Waver as WaverContract } from "~/types"
+import { ChainId, Waver as WaverContract, Project } from "~/types"
 import {
-  useWaverContract,
-  useConnectMetamask,
   useXyz,
   useTransaction,
+  useWaverContract,
+  useConnectMetamask,
 } from "~/hooks"
+import invariant from "tiny-invariant"
 
 export type Wave = {
   waver: string
   message: string
-  timestamp: BigNumber
+}
+
+type WaveResponse = {
+  from: string
+  message: string
+}
+
+type WavesResponse = {
+  waves: WaveResponse[]
+}
+
+enum WaverErrorType {
+  Empty = "EMPTY",
+}
+
+const invalid = (data: ActionData) => json(data, { status: 400 })
+
+type ActionData = {
+  error: WaverErrorType.Empty
+}
+
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData()
+  const message = formData.get("message")
+
+  invariant(
+    typeof message === "string",
+    'Expected "message" to be of type string',
+  )
+
+  if (message.length < 1) {
+    return invalid({ error: WaverErrorType.Empty })
+  }
+
+  return redirect(`/find/projects/waver?message=${encodeURI(message)}`)
+}
+
+type LoaderData = {
+  waves: Wave[]
+  message?: string
+  wavesCount: number
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+  async function getWaves(): Promise<Wave[]> {
+    const query = `
+      query Waves {
+        waves {
+          from
+          message
+        }
+      }`
+
+    return subgraph<WavesResponse>(query, Project.Waver)
+      .then(({ waves }) => waves)
+      .then((waves) =>
+        waves.map(({ message, from }) => ({
+          waver: from,
+          message,
+        })),
+      )
+  }
+
+  const provider = getRpcProvider({ chainId: ChainId.Rinkeby })
+  const waverContract = getWaverContract({ provider })
+
+  async function getWavesCount(waverContract: WaverContract): Promise<number> {
+    return waverContract
+      .getWavesCount()
+      .then((bigWavesCount: BigNumber) => bigWavesCount.toNumber())
+  }
+
+  const [waves, wavesCount] = await Promise.all([
+    getWaves(),
+    getWavesCount(waverContract),
+  ])
+
+  const url = new URL(request.url)
+  const message = url.searchParams.get("message")
+
+  return json<LoaderData>({
+    waves,
+    message: message ?? undefined,
+    wavesCount,
+  })
 }
 
 export default function WaverProject(): ReactElement {
+  const { waves, wavesCount, message } = useLoaderData<LoaderData>()
+
   const waverContract = useWaverContract()
   const connectMetamask = useConnectMetamask()
   const { chainId, account } = useXyz()
@@ -50,110 +139,88 @@ export default function WaverProject(): ReactElement {
   return (
     <>
       <AddressDisplay account={account} />
-      <Waver waverContract={waverContract} />
+      <Waver
+        message={message}
+        waverContract={waverContract}
+        waves={waves}
+        wavesCount={wavesCount}
+      />
     </>
   )
 }
 
 function Waver({
+  waves,
+  message,
+  wavesCount,
   waverContract,
 }: {
+  waves: Wave[]
+  message?: string
+  wavesCount: number
   waverContract: WaverContract
 }): ReactElement {
-  const [message, setMessage] = useState<string>("")
+  const isWaveDisabled = !message
 
-  const [waves, setWaves] = useState<Wave[]>([])
-  const [wavesCount, setWavesCount] = useState<number>(0)
+  const actionData = useActionData<ActionData>()
+  const error = actionData?.error
 
   const { send } = useTransaction()
 
-  function handleMessageChange(event: ChangeEvent<HTMLInputElement>): void {
-    const { value: message } = event.target
-
-    setMessage(message)
-  }
-
-  async function getWavesCount(waverContract: WaverContract): Promise<number> {
-    return waverContract
-      .getWavesCount()
-      .then((bigWavesCount: BigNumber) => bigWavesCount.toNumber())
-  }
-
-  async function getWaves(waverContract: WaverContract): Promise<Wave[]> {
-    return waverContract.getWaves()
-  }
-
   async function handleWave(): Promise<void> {
-    try {
-      send(() =>
-        waverContract.wave(message, {
-          gasLimit: 300000,
-        }),
-      )
+    console.log("waving")
+    invariant(typeof message === "string", 'Expected "message" to have a value')
+    console.log("handleWave ~ message", message)
 
-      getWavesCount(waverContract).then(setWavesCount)
-      getWaves(waverContract).then(setWaves)
-    } catch (error) {
-      console.log(error)
-    }
+    send(() =>
+      waverContract.wave(message, {
+        gasLimit: 300000,
+      }),
+    )
   }
 
-  useEffect(
-    function getInitialWaves() {
-      getWaves(waverContract).then(setWaves)
-    },
-    [waverContract],
-  )
-
-  useEffect(
-    function getInitialWavesCount() {
-      getWavesCount(waverContract).then(setWavesCount)
-    },
-    [waverContract],
-  )
-
-  useEffect(() => {
-    function handleNewWave(
-      from: string,
-      timestamp: BigNumber,
-      message: string,
-    ) {
-      setWaves((prevWaves) => [
-        ...prevWaves,
-        { waver: from, timestamp, message },
-      ])
+  function getErrorMessage(type: WaverErrorType) {
+    switch (type) {
+      case WaverErrorType.Empty: {
+        return "Your message can't be empty"
+      }
     }
-
-    waverContract.on("NewWave", handleNewWave)
-
-    return () => {
-      waverContract.off("NewWave", () => {
-        console.warn(`Unsubscribed from "Increased" Counter contract's event`)
-      })
-    }
-  }, [waverContract])
+  }
 
   return (
-    <section className="flex w-full flex-col items-center justify-center space-y-4">
-      <Form className="flex flex-col self-end items-center space-y-4 p-4 bg-gray-200 rounded-md border-2 border-gray-900">
-        <p className="flex flex-col">
-          <label className="text-gray-500" htmlFor="number">
-            Leave a message:
-          </label>
-          <input
-            aria-errormessage="number_error"
-            aria-invalid="false"
-            aria-required="true"
-            className="h-10 w-80 border-2 border-gray-900 p-2 bg-gray-50"
-            id="message"
-            value={message}
-            onChange={handleMessageChange}
-          />
-        </p>
-        <button className="btn-primary w-full" onClick={handleWave}>
+    <>
+      <section className="flex flex-col self-end items-center space-y-4 p-4 bg-gray-200 rounded-md border-2 border-gray-900">
+        <Form className="flex flex-col items-center space-y-4" method="post">
+          <p className="flex flex-col">
+            <label className="text-gray-500" htmlFor="number">
+              Leave a message:
+            </label>
+            <input
+              aria-errormessage="message_error"
+              aria-invalid="false"
+              aria-required="true"
+              className="h-10 w-80 border-2 border-gray-900 p-2 bg-gray-50"
+              id="message"
+              name="message"
+            />
+            {error ? (
+              <span className="text-red-400" id="message_error">
+                {getErrorMessage(error)}
+              </span>
+            ) : null}
+          </p>
+          <button className="btn-primary w-full" type="submit">
+            Validate message
+          </button>
+        </Form>
+        <button
+          className="btn-secondary w-full h-10"
+          disabled={isWaveDisabled}
+          onClick={handleWave}
+        >
           Wave
         </button>
-      </Form>
+      </section>
       <section className="flex items-center w-full flex-col space-y-4">
         <h3>
           I have been waved
@@ -161,26 +228,23 @@ function Waver({
             {wavesCount} times
           </span>
         </h3>
-        {waves
-          .slice()
-          .reverse()
-          .map(({ message, waver }, index) => (
-            <article
-              key={`wave_card_${waver}_${message.slice(0, 10)}_${index}`}
-              className="flex flex-col bg-gray-100 border-2 border-gray-200 p-2 w-fit rounded-md"
-            >
-              <div className="flex flex-row">
-                <p className="text-gray-500">Left by</p>
-                <Address>{waver}</Address>
-                <p className="text-gray-500">, who said:</p>
-              </div>
-              <span className="text-gray-900 font-bold">
-                &quot;{message}&quot;
-              </span>
-            </article>
-          ))}
+        {waves.map(({ message, waver }, index) => (
+          <article
+            key={`wave_card_${waver}_${message.slice(0, 10)}_${index}`}
+            className="flex flex-col bg-gray-100 border-2 border-gray-200 p-2 w-fit rounded-md"
+          >
+            <div className="flex flex-row">
+              <p className="text-gray-500">Left by</p>
+              <Address>{waver}</Address>
+              <p className="text-gray-500">, who said:</p>
+            </div>
+            <span className="text-gray-900 font-bold">
+              &quot;{message}&quot;
+            </span>
+          </article>
+        ))}
       </section>
-    </section>
+    </>
   )
 }
 

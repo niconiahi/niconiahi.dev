@@ -12,4 +12,5 @@ export * from "./db.server"
 export * from "./fetching.server"
 
 export * from "./contracts/mint-contract.server"
+export * from "./contracts/waver-contract.server"
 export * from "./contracts/counter-contract.server"
