@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 module.exports = {
   apps: [
     {
@@ -13,4 +14,4 @@ module.exports = {
       env: { NODE_ENV: "development" },
     },
   ],
-};
+}

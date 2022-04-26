@@ -1,0 +1,24 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Waver
+    network: rinkeby
+    source:
+      address: "0x0e41b2E16036632F2Eb7d7C6B920887B11f087e3"
+      abi: Waver
+      startBlock: 10039325
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Wave
+      abis:
+        - name: Waver
+          file: ./abis/Waver.json
+      eventHandlers:
+        - event: NewWave(indexed address,uint256,string)
+          handler: handleNewWave
+      file: ./src/mapping.ts

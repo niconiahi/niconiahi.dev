@@ -17,6 +17,8 @@ export class Increment extends Entity {
     this.set("id", Value.fromString(id));
 
     this.set("count", Value.fromBigInt(BigInt.zero()));
+    this.set("blockHash", Value.fromBytes(Bytes.empty()));
+    this.set("blockNumber", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -51,5 +53,23 @@ export class Increment extends Entity {
 
   set count(value: BigInt) {
     this.set("count", Value.fromBigInt(value));
+  }
+
+  get blockHash(): Bytes {
+    let value = this.get("blockHash");
+    return value!.toBytes();
+  }
+
+  set blockHash(value: Bytes) {
+    this.set("blockHash", Value.fromBytes(value));
+  }
+
+  get blockNumber(): BigInt {
+    let value = this.get("blockNumber");
+    return value!.toBigInt();
+  }
+
+  set blockNumber(value: BigInt) {
+    this.set("blockNumber", Value.fromBigInt(value));
   }
 }

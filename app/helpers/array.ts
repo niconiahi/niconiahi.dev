@@ -1,4 +1,4 @@
-export function generateArrayOfNumbers(length: number): number[] {
+export function numbers(length: number): number[] {
   return [...Array(length).keys()]
 }
 

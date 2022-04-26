@@ -1,4 +1,6 @@
 type Increment @entity {
   id: ID!
   count: BigInt!
+  blockHash: Bytes!
+  blockNumber: BigInt!
 }

@@ -1,0 +1,6 @@
+type Transfer @entity {
+  id: ID!
+  to: Bytes!
+  from: Bytes!
+  timestamp: BigInt!
+}

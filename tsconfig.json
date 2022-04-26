@@ -3,11 +3,12 @@
     "lib": ["DOM", "DOM.Iterable", "ES2019"],
     "isolatedModules": true,
     "esModuleInterop": true,
+    "module": "esnext",
+    "target": "es2019",
     "jsx": "react-jsx",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "target": "ES2019",
     "strict": true,
     "baseUrl": ".",
     "paths": {
@@ -19,5 +20,8 @@
     "remix.env.d.ts", 
     "**/*.ts", 
     "**/*.tsx", 
+  ],
+  "exclude": [
+    "indexers/**"
   ]
 }

@@ -11,7 +11,15 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
-model Balance {
-  address String @unique
-  weight  String
+model Increment {
+  id      String @id @default(uuid())
+  count   Int
+  block   Block  @relation(fields: [blockId], references: [id])
+  blockId String
+}
+
+model Block {
+  id        String      @id @default(uuid())
+  number    Int
+  increment Increment[]
 }

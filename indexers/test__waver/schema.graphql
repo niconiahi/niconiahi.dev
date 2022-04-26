@@ -1,0 +1,6 @@
+type Wave @entity {
+  id: ID!
+  from: Bytes!
+  message: String!
+  timestamp: BigInt!
+}

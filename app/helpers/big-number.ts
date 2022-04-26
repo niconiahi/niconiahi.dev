@@ -1,13 +1,13 @@
 import { BigNumber } from "@ethersproject/bignumber"
 
-import { generateArrayOfNumbers } from "~/helpers"
+import { numbers } from "~/helpers"
 
 export function bigNumberToString(
   bigNumber: BigNumber,
   decimals: number,
 ): string {
   function getDivisor(decimals: number) {
-    const zeros = generateArrayOfNumbers(decimals)
+    const zeros = numbers(decimals)
       .map(() => "0")
       .join("")
 

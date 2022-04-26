@@ -12,7 +12,7 @@ import {
   unstable_createFileUploadHandler,
 } from "remix"
 
-import { getUrl, getIpfs, setFile } from "~/helpers"
+import { getUrl, getIpfs, setFile } from "../helpers/ipfs.server"
 
 type ActionData = {
   src?: string

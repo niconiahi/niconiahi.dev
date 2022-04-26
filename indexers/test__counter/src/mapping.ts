@@ -6,6 +6,8 @@ export function handleIncreased(event: Increased): void {
   let increment = new Increment(event.params.newValue.toString())
 
   increment.count = event.params.newValue
+  increment.blockNumber = event.block.number
+  increment.blockHash = event.block.hash
 
   increment.save()
 }
