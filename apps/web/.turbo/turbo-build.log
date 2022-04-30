@@ -1,0 +1,9 @@
+[34mniconiahi.dev:build: [0mcache hit, replaying output [2m8d5a55deff008518[0m
+[34mniconiahi.dev:build: [0m$ yarn run build:css && yarn run build:app
+[34mniconiahi.dev:build: [0m$ postcss styles --base styles --dir app/styles --env production
+[34mniconiahi.dev:build: [0m$ remix build
+[34mniconiahi.dev:build: [0mBuilding Remix app in production mode...
+[34mniconiahi.dev:build: [0mThe path "@ethersproject/bignumber" is imported in app/routes/find/projects/indexing.tsx but @ethersproject/bignumber is not listed in your package.json dependencies. Did you forget to install it?
+[34mniconiahi.dev:build: [0mThe path "@ethersproject/providers" is imported in app/providers/xyz-provider.tsx but @ethersproject/providers is not listed in your package.json dependencies. Did you forget to install it?
+[34mniconiahi.dev:build: [0mThe path "@niconiahi/web3" is imported in app/hooks/contracts/use-transfers-contract.ts but @niconiahi/web3 is not listed in your package.json dependencies. Did you forget to install it?
+[34mniconiahi.dev:build: [0mBuilt in 464ms

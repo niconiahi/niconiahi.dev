@@ -1,0 +1,27 @@
+{
+  "name": "@niconiahi/etl",
+  "version": "1.0.0",
+  "description": "The transforming layer for supported contract's events",
+  "main": "index.ts",
+  "author": "Nicolas Accetta",
+  "license": "MIT",
+  "scripts": {
+    "start": "pm2 start ecosystem.config.js",
+    "stop": "pm2 stop all & pm2 delete all",
+    "status": "pm2 status",
+    "logs": "pm2 logs index",
+    "dev": "node index.js",
+    "submissions": "node utils/toggle_cron_job_state.js shopify_to_dotfoods",
+    "fulfillments": "node utils/toggle_cron_job_state.js dotfoods_to_shopify",
+    "cron_status": "node utils/cron_status.js",
+    "db:makemigrations": "node ./node_modules/sequelize-auto-migrations/bin/makemigration.js",
+    "db:runmigrations": "node ./node_modules/sequelize-auto-migrations/bin/runmigration.js"
+  },
+  "dependencies": {
+    "pm2": "^4.5.1",
+    "node-cron": "^2.0.3"
+  },
+  "devDependencies": {
+    "@types/node-cron": "^3.0.1"
+  }
+}
