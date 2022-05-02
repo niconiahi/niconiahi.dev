@@ -1,1 +1,0 @@
-import{l as e,m as t}from"/build/_shared/chunk-OQQ3APFJ.js";t();t();function n(){return e.createElement("section",{className:"flex flex-1 items-center"},e.createElement("span",{className:"text-gray-500"},"Pick a project from the list"))}export{n as default};
