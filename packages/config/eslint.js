@@ -1,6 +1,10 @@
 module.exports = {
-  "root": true,
   "parser": "@typescript-eslint/parser",
+  "env": {
+    "es6": true,
+    "node": true,
+    "browser": true
+  },
   "plugins": [
     "@typescript-eslint"
   ],
@@ -22,29 +26,11 @@ module.exports = {
     "plugin:prettier/recommended"
   ],
   "settings": {
+    rootDir: ["apps/*/", "packages/*/"],
     "react": {
       "version": "detect"
     }
   },
-  "env": {
-    "es6": true,
-    "browser": true,
-    "node": true
-  },
-  "overrides": [
-    {
-      "files": [
-        "*.ts",
-        "*.tsx"
-      ],
-      "parserOptions": {
-        "project": [
-          "tsconfig.json"
-        ]
-      }
-    }
-  ],
-  "ignorePatterns": ["indexers/**/generated"],
   "rules": {
     // react
     "react/prop-types": "off",

@@ -9,15 +9,16 @@
   "scripts": {
     "commit": "npx cz",
     "build": "turbo run build",
+    "clean": "turbo run clean",
     "dev": "turbo run dev --parallel",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "lint": "turbo run lint"
   },
   "devDependencies": {
     "turbo": "latest",
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
     "commitizen": "^4.2.4",
+    "prettier": "^2.6.2",
     "cz-conventional-changelog": "^3.3.0"
   },
   "engines": {
