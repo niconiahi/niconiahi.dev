@@ -6,14 +6,13 @@
   "license": "MIT",
   "author": "Nicolas Accetta",
   "sideEffects": false,
-  "main": "dist/worker.js",
   "engines": {
     "node": ">=14"
   },
   "scripts": {
     "start": "cross-env NODE_ENV=production remix-serve build",
+    "clean": "rm -rf .turbo && rm -rf node_modules",
     "deploy": "fly deploy --remote-only",
-    "reinstall": "rm -rf node_modules package-lock.json && npm i",
     "postinstall": "remix setup node",
     "build": "yarn run build:css && yarn run build:app",
     "build:css": "postcss styles --base styles --dir app/styles --env production",
@@ -44,6 +43,7 @@
     "@types/react-dom": "^17.0.14",
     "autoprefixer": "^10.4.4",
     "dotenv": "^16.0.0",
+    "eslint": "^8.14.0",
     "esbuild": "0.14.32",
     "pm2": "^5.2.0",
     "postcss": "^8.4.12",
