@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "@niconiahi/tsconfig/remix.json",
-  "include": ["**/*.ts", "**/*.tsx", "**.d.ts"],
+  "include": ["**.ts", "**.tsx", "**.d.ts", "**.js"],
   "files": ["./hardhat.config.ts"]
 }

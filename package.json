@@ -1,5 +1,5 @@
 {
-  "name": "turborepo-basic-shared",
+  "name": "niconiahi.dev",
   "version": "0.0.0",
   "private": true,
   "workspaces": [
@@ -9,7 +9,8 @@
   "scripts": {
     "commit": "npx cz",
     "build": "turbo run build",
-    "clean": "turbo run clean",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "clean:deep": "turbo run clean && rm -rf node_modules && rm yarn.lock",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint"
   },
