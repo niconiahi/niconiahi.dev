@@ -1,16 +1,18 @@
 {
-  "name": "@niconiahi/config",
+  "name": "@niconiahi/eslint-config",
   "version": "0.0.1",
   "license": "MIT",
-  "main": "index.js",
   "files": [
-    "eslint.js"
+    "remix.js"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "clean": "rm -rf .turbo && rm -rf node_modules"
   },
   "dependencies": {
-    "babel-eslint": "^10.1.0",
+    "eslint": "^8.14.0",
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
     "eslint-config-prettier": "^8.5.0",
