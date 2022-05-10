@@ -19,7 +19,9 @@
     "build:app": "remix build",
     "dev": "pm2-dev pm2.config.js",
     "dev:css": "postcss styles --base styles --dir app/styles -w",
-    "dev:app": "remix dev"
+    "dev:app": "remix dev",
+    "lint": "eslint . -c .eslintrc.js --ext ts,tsx",
+    "format": "yarn lint --fix"
   },
   "dependencies": {
     "@headlessui/react": "^1.5.0",
