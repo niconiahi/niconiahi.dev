@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ["@niconiahi/eslint-config/remix"],
+  extends: ["@niconiahi/eslint-config/web"],
   root: true,
   parserOptions: {
     tsconfigRootDir: __dirname,
