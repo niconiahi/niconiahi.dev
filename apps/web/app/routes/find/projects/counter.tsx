@@ -1,14 +1,11 @@
-import { ReactElement } from "react"
-import { Form, json, LoaderFunction, useLoaderData, useNavigate } from "remix"
+import type { ReactElement } from "react"
+import type { LoaderFunction } from "remix"
+import { Form, json, useLoaderData, useNavigate } from "remix"
 
 import { AddressDisplay } from "~/components"
 import { subgraph } from "~/helpers"
-import {
-  ChainId,
-  Project,
-  TransactionStateType,
-  Counter as CounterContract,
-} from "~/types"
+import type { Counter as CounterContract } from "~/types"
+import { ChainId, Project, TransactionStateType } from "~/types"
 import {
   useXyz,
   useConnectMetamask,

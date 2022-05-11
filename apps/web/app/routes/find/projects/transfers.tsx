@@ -1,4 +1,5 @@
-import { useState, ReactElement, useEffect } from "react"
+import type { ReactElement } from "react"
+import { useState, useEffect } from "react"
 import type { Event } from "@ethersproject/contracts"
 import type { BigNumber } from "@ethersproject/bignumber"
 
@@ -6,7 +7,8 @@ import { ETHERSCAN_URL } from "~/constants"
 import { AddressDisplay } from "~/components"
 import { bigNumberToString, truncateString } from "~/helpers"
 import { useXyz, useConnectMetamask, useTransfersContract } from "~/hooks"
-import { ChainId, Transfers as TransfersContract, TransferEvent } from "~/types"
+import type { Transfers as TransfersContract, TransferEvent } from "~/types"
+import { ChainId } from "~/types"
 import { ArrowRight } from "~/icons"
 
 export default function TransfersProject(): ReactElement {

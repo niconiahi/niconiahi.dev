@@ -1,19 +1,19 @@
 import { Dialog, Transition } from "@headlessui/react"
+import type { FC, ReactElement } from "react"
 import React, {
-  FC,
   useRef,
   useState,
   useEffect,
   useContext,
   createContext,
-  ReactElement,
 } from "react"
 import invariant from "tiny-invariant"
 
 import { X } from "~/icons"
 import { IconButton } from "~/components"
 import { useTransaction } from "~/hooks"
-import { TransactionOn, TransactionStateType, TransactionState } from "~/types"
+import type { TransactionOn, TransactionState } from "~/types"
+import { TransactionStateType } from "~/types"
 
 type Titles = {
   [TransactionStateType.Idle]: undefined

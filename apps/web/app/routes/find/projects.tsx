@@ -1,5 +1,6 @@
-import { ReactElement } from "react"
-import { json, Link, Outlet, useLoaderData, LoaderFunction } from "remix"
+import type { ReactElement } from "react"
+import type { LoaderFunction } from "remix"
+import { json, Link, Outlet, useLoaderData } from "remix"
 
 import { firstLetterToUpper } from "~/helpers"
 import {

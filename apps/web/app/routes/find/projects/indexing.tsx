@@ -1,7 +1,9 @@
-import { ReactElement, useState, useEffect } from "react"
+import type { ReactElement } from "react"
+import { useState, useEffect } from "react"
 import { BigNumber } from "@ethersproject/bignumber"
 
-import { ChainId, Erc20, TransferEvent } from "~/types"
+import type { Erc20, TransferEvent } from "~/types"
+import { ChainId } from "~/types"
 import { getBlockNumber, getErc20Contract } from "~/helpers"
 
 const COMPOUND_ADDRESS = "0xc00e94cb662c3520282e6f5717214004a7f26888"

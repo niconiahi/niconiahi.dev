@@ -1,19 +1,14 @@
-import EventEmitter from "events"
-import {
-  useState,
-  ReactNode,
-  useEffect,
-  useContext,
-  createContext,
-} from "react"
-import {
+import type EventEmitter from "events"
+import type { ReactNode } from "react"
+import { useState, useEffect, useContext, createContext } from "react"
+import type {
   Block,
-  Web3Provider,
   JsonRpcSigner,
   JsonRpcProvider,
 } from "@ethersproject/providers"
+import { Web3Provider } from "@ethersproject/providers"
 
-import { ChainId } from "~/types"
+import type { ChainId } from "~/types"
 import { getRpcProvider } from "~/helpers"
 
 export enum XyzNextValueType {
@@ -31,22 +26,22 @@ type XyzContextValues = {
   signer?: JsonRpcSigner
   chainId?: ChainId
   account?: string
-  provider?: XyzProvider
+  provider?: Provider
   blockNumber?: number
 }
 
-enum XyzProviderType {
+enum ProviderType {
   Rpc = "RPC",
   Metamask = "METAMASK",
 }
 
-type XyzProvider =
+type Provider =
   | {
-      type: XyzProviderType.Metamask
+      type: ProviderType.Metamask
       provider: Web3Provider
     }
   | {
-      type: XyzProviderType.Rpc
+      type: ProviderType.Rpc
       provider: JsonRpcProvider
     }
 
@@ -62,16 +57,16 @@ export function XyzProvider({
   const [signer, setSigner] = useState<JsonRpcSigner | undefined>(undefined)
   const [chainId, setChainId] = useState<ChainId | undefined>(undefined)
   const [account, setAccount] = useState<string | undefined>(undefined)
-  const [provider, setProvider] = useState<XyzProvider | undefined>(undefined)
+  const [provider, setProvider] = useState<Provider | undefined>(undefined)
   const [blockNumber, setBlockNumber] = useState<number | undefined>(undefined)
 
   // Set Metamask if window available
   useEffect(() => {
-    if (!window || provider?.type === XyzProviderType.Metamask) return
+    if (!window || provider?.type === ProviderType.Metamask) return
 
     setProvider({
       provider: new Web3Provider((window as any).ethereum),
-      type: XyzProviderType.Metamask,
+      type: ProviderType.Metamask,
     })
   }, [provider])
 
@@ -81,7 +76,7 @@ export function XyzProvider({
 
     setProvider({
       provider: getRpcProvider({ chainId }),
-      type: XyzProviderType.Rpc,
+      type: ProviderType.Rpc,
     })
   }, [chainId, provider])
 
@@ -89,7 +84,7 @@ export function XyzProvider({
   useEffect(() => {
     if (!provider) return
 
-    async function getAccount({ provider }: XyzProvider) {
+    async function getAccount({ provider }: Provider) {
       const accounts = await provider.send("eth_accounts", [])
 
       setAccount(accounts[0])
@@ -102,7 +97,7 @@ export function XyzProvider({
   useEffect(() => {
     if (!provider) return
 
-    async function getChainId({ provider }: XyzProvider) {
+    async function getChainId({ provider }: Provider) {
       const hexChainId = await provider.send("eth_chainId", [])
       const chainId = hexToNumber(hexChainId)
 
@@ -118,7 +113,7 @@ export function XyzProvider({
 
     const blockIntervalId = setInterval(() => getBlockNumber(provider), 5000)
 
-    async function getBlockNumber({ provider }: XyzProvider) {
+    async function getBlockNumber({ provider }: Provider) {
       const blockNumber = await provider.getBlockNumber()
 
       setBlockNumber(blockNumber)
@@ -135,7 +130,7 @@ export function XyzProvider({
   useEffect(() => {
     if (!provider || !blockNumber) return
 
-    async function getBlock({ provider }: XyzProvider, blockNumber: number) {
+    async function getBlock({ provider }: Provider, blockNumber: number) {
       const block = await provider.getBlock(blockNumber)
 
       setBlock(block)
@@ -148,7 +143,7 @@ export function XyzProvider({
   useEffect(() => {
     if (!provider) return
 
-    function getSigner({ provider }: XyzProvider) {
+    function getSigner({ provider }: Provider) {
       setSigner(provider.getSigner())
     }
 

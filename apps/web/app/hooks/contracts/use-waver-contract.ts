@@ -1,6 +1,6 @@
 import { Waver__factory as waveFactory } from "@niconiahi/web3"
 
-import { Waver } from "~/types"
+import type { Waver } from "~/types"
 import { useXyz } from "~/hooks"
 import { RIKEBY_CONTRACT_ADDRESSES } from "~/constants"
 

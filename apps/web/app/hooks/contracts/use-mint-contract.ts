@@ -1,6 +1,6 @@
 import { Mint__factory as mintFactory } from "@niconiahi/web3"
 
-import { Mint } from "~/types"
+import type { Mint } from "~/types"
 import { useXyz } from "~/hooks"
 import { RIKEBY_CONTRACT_ADDRESSES } from "~/constants"
 
