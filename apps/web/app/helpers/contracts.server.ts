@@ -1,6 +1,6 @@
 import { ERC20__factory as erc20Factory } from "@niconiahi/web3"
 
-import { ChainId, Erc20 } from "~/types"
+import type { ChainId, Erc20 } from "~/types"
 import { getRpcProvider } from "~/helpers"
 
 export function getErc20Contract({

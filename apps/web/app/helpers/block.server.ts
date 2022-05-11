@@ -1,6 +1,6 @@
-import { Block } from "@ethersproject/providers"
+import type { Block } from "@ethersproject/providers"
 
-import { ChainId } from "~/types"
+import type { ChainId } from "~/types"
 import { getRpcProvider } from "~/helpers"
 
 export async function getBlockNumber({

@@ -1,7 +1,7 @@
 import { Mint__factory as mintFactory } from "@niconiahi/web3"
-import { JsonRpcProvider } from "@ethersproject/providers"
+import type { JsonRpcProvider } from "@ethersproject/providers"
 
-import { Mint } from "~/types"
+import type { Mint } from "~/types"
 import { RIKEBY_CONTRACT_ADDRESSES } from "~/constants"
 
 export function getMintContract({

@@ -1,4 +1,4 @@
-import { ReactElement } from "react"
+import type { ReactElement } from "react"
 import invariant from "tiny-invariant"
 import {
   Form,
@@ -7,17 +7,12 @@ import {
   useNavigate,
   useActionData,
   useLoaderData,
-  ActionFunction,
 } from "remix"
-import type { LoaderFunction } from "remix"
+import type { LoaderFunction, ActionFunction } from "remix"
 
 import { big, replace, subgraph, getGasPrice } from "~/helpers"
-import {
-  ChainId,
-  Project,
-  Mint as MintContract,
-  TransactionStateType,
-} from "~/types"
+import type { Mint as MintContract } from "~/types"
+import { ChainId, Project, TransactionStateType } from "~/types"
 import { AddressDisplay } from "~/components"
 import {
   useXyz,

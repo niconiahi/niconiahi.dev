@@ -1,7 +1,7 @@
 import { Counter__factory as counterFactory } from "@niconiahi/web3"
-import { JsonRpcProvider } from "@ethersproject/providers"
+import type { JsonRpcProvider } from "@ethersproject/providers"
 
-import { Counter } from "~/types"
+import type { Counter } from "~/types"
 import { RIKEBY_CONTRACT_ADDRESSES } from "~/constants"
 
 export function getCounterContract({

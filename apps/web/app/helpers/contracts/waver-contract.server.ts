@@ -1,7 +1,7 @@
 import { Waver__factory as waverFactory } from "@niconiahi/web3"
-import { JsonRpcProvider } from "@ethersproject/providers"
+import type { JsonRpcProvider } from "@ethersproject/providers"
 
-import { Waver } from "~/types"
+import type { Waver } from "~/types"
 import { RIKEBY_CONTRACT_ADDRESSES } from "~/constants"
 
 export function getWaverContract({

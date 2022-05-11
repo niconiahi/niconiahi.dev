@@ -1,11 +1,12 @@
-import { ReactElement } from "react"
+import type { ReactElement } from "react"
 import { Form, json, redirect, useActionData, useLoaderData } from "remix"
 import type { ActionFunction, LoaderFunction } from "remix"
 import type { BigNumber } from "@ethersproject/bignumber"
 
 import { getRpcProvider, getWaverContract, subgraph } from "~/helpers"
 import { AddressDisplay } from "~/components"
-import { ChainId, Waver as WaverContract, Project } from "~/types"
+import type { Waver as WaverContract } from "~/types"
+import { ChainId, Project } from "~/types"
 import {
   useXyz,
   useTransaction,

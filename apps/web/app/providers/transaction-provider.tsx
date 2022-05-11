@@ -1,16 +1,14 @@
-import React, {
-  FC,
-  useState,
-  useContext,
-  createContext,
-  useEffect,
-} from "react"
-import { ContractTransaction, ContractReceipt } from "@ethersproject/contracts"
+import type { FC } from "react"
+import React, { useState, useContext, createContext, useEffect } from "react"
+import type {
+  ContractTransaction,
+  ContractReceipt,
+} from "@ethersproject/contracts"
 
 // governance
 
 import { useTransactionToast } from "~/hooks"
-import { TransactionToastMessages } from "~/types"
+import type { TransactionToastMessages } from "~/types"
 
 type TransactionStateIdle = {
   state: TransactionStateType.Idle
