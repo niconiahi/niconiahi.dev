@@ -1,4 +1,5 @@
 .cache
+.env
 .turbo
 build
 public/build
