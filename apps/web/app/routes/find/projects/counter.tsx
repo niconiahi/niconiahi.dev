@@ -98,11 +98,6 @@ export default function CounterProject(): ReactElement {
   )
 }
 
-type Metadata = {
-  name: string
-  price: number
-}
-
 function Counter({
   counterCount,
   counterContract,
@@ -111,11 +106,8 @@ function Counter({
   counterContract: CounterContract
 }): ReactElement {
   const navigate = useNavigate()
-  const [metadata, setMetadata] = useState<Metadata | undefined>(undefined)
 
   const onMined = () => {
-    console.log("metadata", metadata)
-
     setTimeout(() => {
       navigate("/find/projects/counter", { replace: true })
     }, 1000)
@@ -128,9 +120,6 @@ function Counter({
   })
 
   function handleIncrease(): void {
-    const metadata: Metadata = { price: 1000, name: "nico" }
-    setMetadata(metadata)
-
     send(() => counterContract.increase())
   }
 
