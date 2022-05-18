@@ -1,7 +1,7 @@
 import { useTransition } from "@remix-run/react"
-import type { ReactNode } from "react"
+import type { ReactElement } from "react"
 
-export default function RouteTransition(): ReactNode {
+export default function RouteTransition(): ReactElement | null {
   const transition = useTransition()
 
   if (transition.state === "loading")
