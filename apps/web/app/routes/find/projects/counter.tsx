@@ -1,4 +1,5 @@
 import type { ReactElement } from "react"
+import { useState } from "react"
 import type { LoaderFunction } from "remix"
 import { Form, json, useLoaderData, useNavigate } from "remix"
 
@@ -97,6 +98,11 @@ export default function CounterProject(): ReactElement {
   )
 }
 
+type Metadata = {
+  name: string
+  price: number
+}
+
 function Counter({
   counterCount,
   counterContract,
@@ -105,10 +111,16 @@ function Counter({
   counterContract: CounterContract
 }): ReactElement {
   const navigate = useNavigate()
+  const [metadata, setMetadata] = useState<Metadata | undefined>(undefined)
 
   const onMined = () => {
-    navigate("/find/projects/counter", { replace: true })
+    console.log("metadata", metadata)
+
+    setTimeout(() => {
+      navigate("/find/projects/counter", { replace: true })
+    }, 1000)
   }
+
   const { send } = useTransaction({
     on: {
       [TransactionStateType.Mined]: onMined,
@@ -116,6 +128,9 @@ function Counter({
   })
 
   function handleIncrease(): void {
+    const metadata: Metadata = { price: 1000, name: "nico" }
+    setMetadata(metadata)
+
     send(() => counterContract.increase())
   }
 

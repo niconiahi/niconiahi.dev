@@ -1,13 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react"
 import type { FC, ReactElement } from "react"
-import React, {
-  useRef,
-  useState,
-  useEffect,
-  useContext,
-  createContext,
-} from "react"
-import invariant from "tiny-invariant"
+import { useRef, useState, useEffect, useContext, createContext } from "react"
 
 import { X } from "~/icons"
 import { IconButton } from "~/components"
@@ -53,7 +46,6 @@ const DEFAULT_OPTIONS = {
 }
 
 type Value = {
-  setOn: React.Dispatch<React.SetStateAction<TransactionOn | undefined>>
   composeMessages: (userOptions: Partial<TransactionToastMessages>) => void
 }
 
@@ -63,7 +55,6 @@ export const TransactionToastContext = createContext<Value>(
 )
 
 export const TransactionToastProvider: FC = ({ children }) => {
-  const [on, setOn] = useState<TransactionOn | undefined>(undefined)
   const [messages, setMessages] =
     useState<TransactionToastMessages>(DEFAULT_OPTIONS)
 
@@ -87,70 +78,8 @@ export const TransactionToastProvider: FC = ({ children }) => {
     setMessages(messages)
   }
 
-  // effects
-  useEffect(() => {
-    const handleOn = (state: TransactionState, on?: TransactionOn): void => {
-      switch (state.state) {
-        case TransactionStateType.Idle:
-          invariant(
-            state.state === TransactionStateType.Idle,
-            "Transaction provider => state should be idle",
-          )
-
-          const onIdle = on?.[TransactionStateType.Idle]
-          onIdle?.(state)
-
-          return
-        case TransactionStateType.Mined:
-          invariant(
-            state.state === TransactionStateType.Mined,
-            "Transaction provider => state should be success",
-          )
-
-          const onMined = on?.[TransactionStateType.Mined]
-          onMined?.(state)
-
-          return
-        case TransactionStateType.Failed:
-          invariant(
-            state.state === TransactionStateType.Failed,
-            "Transaction provider => state should be failed",
-          )
-
-          const onFailed = on?.[TransactionStateType.Failed]
-          onFailed?.(state)
-
-          return
-        case TransactionStateType.Mining:
-          invariant(
-            state.state === TransactionStateType.Mining,
-            "Transaction provider => state should be mining",
-          )
-
-          const onMining = on?.[TransactionStateType.Mining]
-          onMining?.(state)
-
-          return
-        case TransactionStateType.Pending:
-          invariant(
-            state.state === TransactionStateType.Pending,
-            "Transaction provider => state should be pending",
-          )
-
-          const onPending = on?.[TransactionStateType.Pending]
-          onPending?.(state)
-
-          return
-        default:
-          break
-      }
-    }
-
-    handleOn(state, on)
-  }, [on, state])
-
   return (
-    <TransactionToastContext.Provider value={{ composeMessages, setOn }}>
+    <TransactionToastContext.Provider value={{ composeMessages }}>
       {children}
       <Toast key={state.state} messages={messages} state={state} />
     </TransactionToastContext.Provider>
@@ -164,7 +93,6 @@ export const useTransactionToast = ({
   on?: TransactionOn
   messages?: Partial<TransactionToastMessages>
 } = {}): void => {
-  const hasSetOn = useRef<boolean>(false)
   const hasSetMessages = useRef<boolean>(false)
   const transactionToastContext = useContext(TransactionToastContext)
 
@@ -174,7 +102,7 @@ export const useTransactionToast = ({
     )
   }
 
-  const { composeMessages, setOn } = transactionToastContext
+  const { composeMessages } = transactionToastContext
 
   useEffect(() => {
     if (!messages) return
@@ -184,15 +112,6 @@ export const useTransactionToast = ({
       hasSetMessages.current = true
     }
   }, [composeMessages, messages])
-
-  useEffect(() => {
-    if (!on) return
-
-    if (!hasSetOn.current) {
-      setOn(on)
-      hasSetOn.current = true
-    }
-  }, [on, setOn])
 }
 
 function Toast({

@@ -1,5 +1,7 @@
 import type { FC } from "react"
-import React, { useState, useContext, createContext, useEffect } from "react"
+import { useRef } from "react"
+import invariant from "tiny-invariant"
+import { useState, useContext, createContext, useEffect } from "react"
 import type {
   ContractTransaction,
   ContractReceipt,
@@ -67,6 +69,7 @@ export type TransactionOn = Partial<{
 type Value = {
   send: (transactionFunction: TransactionFunction) => Promise<void>
   state: TransactionState
+  setOn: React.Dispatch<React.SetStateAction<TransactionOn | undefined>>
 }
 
 export const TransactionContext = createContext<Value>(
@@ -80,6 +83,7 @@ const DEFAULT_STATUS: TransactionState = {
 
 export const TransactionProvider: FC = ({ children }) => {
   // states
+  const [on, setOn] = useState<TransactionOn | undefined>(undefined)
   const [state, setState] = useState<TransactionState>(DEFAULT_STATUS)
 
   useEffect(() => {
@@ -97,6 +101,67 @@ export const TransactionProvider: FC = ({ children }) => {
       setState({ state: TransactionStateType.Idle })
     }, 5000)
   }, [state])
+
+  useEffect(() => {
+    const handleOn = (state: TransactionState, on?: TransactionOn): void => {
+      switch (state.state) {
+        case TransactionStateType.Idle:
+          invariant(
+            state.state === TransactionStateType.Idle,
+            "Transaction provider => state should be idle",
+          )
+
+          const onIdle = on?.[TransactionStateType.Idle]
+          onIdle?.(state)
+
+          return
+        case TransactionStateType.Mined:
+          invariant(
+            state.state === TransactionStateType.Mined,
+            "Transaction provider => state should be success",
+          )
+
+          const onMined = on?.[TransactionStateType.Mined]
+          onMined?.(state)
+
+          return
+        case TransactionStateType.Failed:
+          invariant(
+            state.state === TransactionStateType.Failed,
+            "Transaction provider => state should be failed",
+          )
+
+          const onFailed = on?.[TransactionStateType.Failed]
+          onFailed?.(state)
+
+          return
+        case TransactionStateType.Mining:
+          invariant(
+            state.state === TransactionStateType.Mining,
+            "Transaction provider => state should be mining",
+          )
+
+          const onMining = on?.[TransactionStateType.Mining]
+          onMining?.(state)
+
+          return
+        case TransactionStateType.Pending:
+          invariant(
+            state.state === TransactionStateType.Pending,
+            "Transaction provider => state should be pending",
+          )
+
+          const onPending = on?.[TransactionStateType.Pending]
+          onPending?.(state)
+
+          return
+        default:
+          break
+      }
+    }
+
+    handleOn(state, on)
+  }, [on, state])
 
   const send = async (
     transactionFunction: TransactionFunction,
@@ -124,7 +189,7 @@ export const TransactionProvider: FC = ({ children }) => {
   }
 
   return (
-    <TransactionContext.Provider value={{ state, send }}>
+    <TransactionContext.Provider value={{ state, send, setOn }}>
       {children}
     </TransactionContext.Provider>
   )
@@ -140,6 +205,7 @@ export function useTransaction({
   send: (transactionFunction: TransactionFunction) => Promise<void>
   state: TransactionState
 } {
+  const hasSetOn = useRef<boolean>(false)
   const transactionContext = useContext(TransactionContext)
 
   if (!transactionContext) {
@@ -148,9 +214,18 @@ export function useTransaction({
     )
   }
 
-  const { send, state } = transactionContext
+  const { send, state, setOn } = transactionContext
 
-  useTransactionToast({ messages, on })
+  useEffect(() => {
+    if (!on) return
+
+    if (!hasSetOn.current) {
+      setOn(on)
+      hasSetOn.current = true
+    }
+  }, [on, setOn])
+
+  useTransactionToast({ messages })
 
   return {
     send,
