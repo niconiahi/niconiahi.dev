@@ -1,1 +1,3 @@
-export * from './typechain-types'
+export * from "./typechain"
+
+export type { TransferEvent } from "./typechain/ERC20"

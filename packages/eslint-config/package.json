@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "license": "MIT",
   "files": [
-    "web.js"
+    "etl.js",
+    "web.js",
+    "web3.js"
   ],
   "publishConfig": {
     "access": "public"
@@ -14,6 +16,7 @@
   "dependencies": {
     "eslint": "^8.14.0",
     "@remix-run/eslint-config": "^1.4.3",
+    "eslint-plugin-node": "^11.1.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0"
   }

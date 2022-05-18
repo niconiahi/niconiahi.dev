@@ -17,5 +17,3 @@ export type {
 
 export { Project } from "~/helpers/fetching.server"
 export { XyzNextValueType } from "~/providers/xyz-provider"
-
-export type { TransferEvent } from "../../typechain-types/ERC20"
