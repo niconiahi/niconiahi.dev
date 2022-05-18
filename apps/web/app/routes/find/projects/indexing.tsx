@@ -1,8 +1,9 @@
 import type { ReactElement } from "react"
 import { useState, useEffect } from "react"
 import { BigNumber } from "@ethersproject/bignumber"
+import type { TransferEvent } from "@niconiahi/web3"
 
-import type { Erc20, TransferEvent } from "~/types"
+import type { Erc20 } from "~/types"
 import { ChainId } from "~/types"
 import { getBlockNumber, getErc20Contract } from "~/helpers"
 

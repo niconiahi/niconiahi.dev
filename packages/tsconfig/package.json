@@ -1,13 +1,10 @@
 {
   "name": "@niconiahi/tsconfig",
-  "extends": "./base.json",
-  "display": "Hardhat",
-  "version": "0.0.0",
-  "private": true,
-  "main": "index.js",
+  "version": "0.0.1",
+  "license": "MIT",
   "files": [
-    "base.json",
-    "remix.json",
-    "hardhat.json"
+    "etl.json",
+    "web.json",
+    "web3.json"
   ]
 }

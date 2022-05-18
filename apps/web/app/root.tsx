@@ -1,5 +1,5 @@
 import type { ReactElement } from "react"
-import type { MetaFunction, LinksFunction } from "remix"
+import type { MetaFunction, LinksFunction } from "@remix-run/node"
 import {
   Meta,
   Links,
@@ -8,9 +8,10 @@ import {
   useCatch,
   LiveReload,
   ScrollRestoration,
-} from "remix"
+} from "@remix-run/react"
 
 import appStyles from "~/styles/app.css"
+import { RouteTransition } from "~/components"
 
 export const meta: MetaFunction = () => {
   return { title: "niconiahi.dev" }
@@ -50,6 +51,7 @@ export default function App(): ReactElement {
   return (
     <Document>
       <Outlet />
+      <RouteTransition />
     </Document>
   )
 }
