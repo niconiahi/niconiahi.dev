@@ -9,6 +9,7 @@
   "scripts": {
     "commit": "npx cz",
     "build": "turbo run build",
+    "deploy": "turbo run deploy",
     "clean": "turbo run clean && rm -rf node_modules",
     "clean:deep": "turbo run clean && rm -rf node_modules && rm yarn.lock",
     "dev": "turbo run dev --parallel",
