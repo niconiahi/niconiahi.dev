@@ -1,9 +1,15 @@
-import { useFetcher } from "@remix-run/react"
-import type { ReactElement } from "react"
+import { useTransition } from "@remix-run/react"
+import type { ReactNode } from "react"
 
-export default function RouteTransition(): ReactElement {
-  const fetcher = useFetcher()
-  console.log("PageTransition ~ fetcher", fetcher)
+export default function RouteTransition(): ReactNode {
+  const transition = useTransition()
 
-  return <p>transition</p>
+  if (transition.state === "loading")
+    return (
+      <div className="fixed bottom-4 right-4 bg-gray-700 text-gray-50 p-2 rounded-md">
+        <p>Loading route</p>
+      </div>
+    )
+
+  return null
 }
