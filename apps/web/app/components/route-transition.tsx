@@ -7,17 +7,13 @@ export default function RouteTransition(): ReactElement {
 
   return (
     <Transition
-      enter="transition-opacity duration-150"
-      enterFrom="opacity-0"
-      enterTo="opacity-100"
-      leave="transition-opacity duration-150"
-      leaveFrom="opacity-100"
-      leaveTo="opacity-0"
+      enter="transition-all duration-15000"
+      enterFrom="w-0"
+      enterTo="w-screen"
       show={transition.state === "loading"}
+      role="progressbar"
     >
-      <div className="fixed bottom-4 right-4 bg-gray-700 text-gray-50 p-2 rounded-md">
-        <p>Loading route</p>
-      </div>
+      <div className="fixed top-0 left-0 bg-gray-700 w-full h-2" />
     </Transition>
   )
 }

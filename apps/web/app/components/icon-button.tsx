@@ -13,10 +13,8 @@ function IconButton({
   className: classNameProp,
   ...buttonProps
 }: Props): ReactElement {
-  const className = getClassName(classNameProp)
-
   return (
-    <button className={className} {...buttonProps}>
+    <button className={composeClassName(classNameProp)} {...buttonProps}>
       {children}
     </button>
   )
@@ -24,7 +22,7 @@ function IconButton({
 
 export default IconButton
 
-function getClassName(className?: string) {
+function composeClassName(className?: string) {
   return clsx(
     "p-2 hover:bg-gray-200 rounded transition duration-200 ease-in-out focus:outline-none focus:ring-2 text-black dark:text-white",
     className,
