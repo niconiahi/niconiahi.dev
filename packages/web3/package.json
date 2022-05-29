@@ -47,6 +47,8 @@
     "typescript": "^4.6.4"
   },
   "devDependencies": {
-    "tsup": "^5.12.8"
+    "tsup": "^5.12.8",
+    "@niconiahi/tsconfig": "*",
+    "@niconiahi/eslint-config": "*"
   }
 }

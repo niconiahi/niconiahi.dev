@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "license": "MIT",
   "files": [
-    "etl.js",
     "web.js",
-    "web3.js"
+    "web3.js",
+    "node.js"
   ],
   "publishConfig": {
     "access": "public"
