@@ -1,8 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Hardhat",
-  "include": ["./scripts", "./test", "./typechain"],
-  "files": ["./hardhat.config.ts"],
   "compilerOptions": {
     "target": "es2018",
     "module": "commonjs",

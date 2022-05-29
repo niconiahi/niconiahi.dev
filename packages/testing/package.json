@@ -1,0 +1,25 @@
+{
+  "name": "@niconiahi/testing",
+  "author": "Nicolas Accetta",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "clean": "rm -rf .turbo && rm -rf node_modules",
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@ethersproject/contracts": "^5.6.2",
+    "@ethersproject/providers": "^5.6.8"
+  },
+  "devDependencies": {
+    "tsup": "^5.12.8",
+    "@niconiahi/tsconfig": "*",
+    "@niconiahi/eslint-config": "*"
+  }
+}

@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "license": "MIT",
   "files": [
-    "etl.json",
     "web.json",
-    "web3.json"
+    "web3.json",
+    "node.json"
   ]
 }

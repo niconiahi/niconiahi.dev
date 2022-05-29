@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "@niconiahi/tsconfig/web3.json",
+  "extends": "@niconiahi/tsconfig/node.json",
   "include": ["**.ts", "**.tsx", "**.d.ts", "**.js"],
   "exclude": ["dist", "build", "node_modules"]
 }
