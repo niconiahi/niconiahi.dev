@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "@niconiahi/tsconfig/etl.json",
+  "extends": "@niconiahi/tsconfig/node.json",
   "include": ["**.ts", "**.tsx", "**.d.ts", "**.js"],
   "compilerOptions": {
     "baseUrl": "."

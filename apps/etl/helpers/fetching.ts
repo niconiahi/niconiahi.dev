@@ -9,7 +9,7 @@ export async function subgraph<T>(
   project: Project,
   variables?: { [key: string]: any },
 ): Promise<T> {
-  function getEndpoint(project: Project) {
+  function getEndpoint(project: Project): string {
     switch (project) {
       case Project.Mint: {
         return process.env.SUBGRAPH_MINT
