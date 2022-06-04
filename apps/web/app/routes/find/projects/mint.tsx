@@ -1,4 +1,6 @@
 import type { ReactElement } from "react"
+import { useEffect } from "react"
+import { useActor } from "@xstate/react"
 import invariant from "tiny-invariant"
 import {
   Form,
@@ -152,14 +154,20 @@ function Mint({
   const navigate = useNavigate()
   const actionData = useActionData<ActionData>()
 
-  const onMined = () => {
-    navigate("/find/projects/mint", { replace: true })
-  }
-  const { send } = useTransaction({
-    on: {
+  const { transactionService, sendTransaction } = useTransaction()
+  const [, send] = useActor(transactionService)
+
+  useEffect(() => {
+    const onMined = () => {
+      navigate("/find/projects/mint", { replace: true })
+    }
+
+    const on = {
       [TransactionStateType.Mined]: onMined,
-    },
-  })
+    }
+
+    send({ type: "SET_ON", on })
+  }, [navigate, send])
 
   const error = actionData?.error
   const isMintDisabled = typeof tokenId !== "number"
@@ -171,7 +179,7 @@ function Mint({
       gasPrice,
     })
 
-    send(() =>
+    sendTransaction(() =>
       mintContract.mint(account, tokenId, {
         value,
         gasLimit,

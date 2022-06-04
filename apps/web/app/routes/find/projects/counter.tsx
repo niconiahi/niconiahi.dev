@@ -1,5 +1,6 @@
 import type { ReactElement } from "react"
-import { useState } from "react"
+import { useActor } from "@xstate/react"
+import { useEffect } from "react"
 import type { LoaderFunction } from "remix"
 import { Form, json, useLoaderData, useNavigate } from "remix"
 
@@ -107,20 +108,35 @@ function Counter({
 }): ReactElement {
   const navigate = useNavigate()
 
-  const onMined = () => {
-    setTimeout(() => {
-      navigate("/find/projects/counter", { replace: true })
-    }, 1000)
-  }
+  const { transactionService, sendTransaction } = useTransaction()
+  const [, send] = useActor(transactionService)
 
-  const { send } = useTransaction({
-    on: {
+  useEffect(() => {
+    const onMined = () => {
+      setTimeout(() => {
+        navigate("/find/projects/counter", { replace: true })
+      }, 1000)
+    }
+
+    const onIdle = () => {
+      console.log("executing onIdle")
+    }
+
+    const onMining = () => {
+      console.log("executing onMining")
+    }
+
+    const on = {
+      [TransactionStateType.Idle]: onIdle,
       [TransactionStateType.Mined]: onMined,
-    },
-  })
+      [TransactionStateType.Mining]: onMining,
+    }
+
+    send({ type: "SET_ON", on })
+  }, [navigate, send])
 
   function handleIncrease(): void {
-    send(() => counterContract.increase())
+    sendTransaction(() => counterContract.increase())
   }
 
   return (

@@ -166,14 +166,12 @@ function Waver({
   const actionData = useActionData<ActionData>()
   const error = actionData?.error
 
-  const { send } = useTransaction()
+  const { sendTransaction } = useTransaction()
 
   async function handleWave(): Promise<void> {
-    console.log("waving")
     invariant(typeof message === "string", 'Expected "message" to have a value')
-    console.log("handleWave ~ message", message)
 
-    send(() =>
+    sendTransaction(() =>
       waverContract.wave(message, {
         gasLimit: 300000,
       }),
