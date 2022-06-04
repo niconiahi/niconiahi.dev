@@ -1,22 +1,21 @@
 import { Dialog, Transition } from "@headlessui/react"
+import { useActor } from "@xstate/react"
 import type { FC, ReactElement } from "react"
 import { useRef, useState, useEffect, useContext, createContext } from "react"
 
 import { X } from "~/icons"
 import { IconButton } from "~/components"
 import { useTransaction } from "~/hooks"
-import type { TransactionOn, TransactionState } from "~/types"
 import { TransactionStateType } from "~/types"
+import type { TransactionOn, TransactionMachineState } from "~/types"
 
 type Titles = {
-  [TransactionStateType.Idle]: undefined
   [TransactionStateType.Mined]: string
   [TransactionStateType.Failed]: string
   [TransactionStateType.Mining]: string
   [TransactionStateType.Pending]: string
 }
 type Descriptions = {
-  [TransactionStateType.Idle]: undefined
   [TransactionStateType.Mined]: string
   [TransactionStateType.Failed]: string
   [TransactionStateType.Mining]: string
@@ -29,14 +28,12 @@ export type TransactionToastMessages = {
 
 const DEFAULT_OPTIONS = {
   titles: {
-    [TransactionStateType.Idle]: undefined,
     [TransactionStateType.Mined]: "Transaction mined",
     [TransactionStateType.Failed]: "Transaction failed",
     [TransactionStateType.Mining]: "Transaction mining",
     [TransactionStateType.Pending]: "Transaction pending",
   },
   descriptions: {
-    [TransactionStateType.Idle]: undefined,
     [TransactionStateType.Mined]: "Your transaction was mined by a miner",
     [TransactionStateType.Failed]: "Your transaction failed to be transacted",
     [TransactionStateType.Mining]:
@@ -57,8 +54,6 @@ export const TransactionToastContext = createContext<Value>(
 export const TransactionToastProvider: FC = ({ children }) => {
   const [messages, setMessages] =
     useState<TransactionToastMessages>(DEFAULT_OPTIONS)
-
-  const { state } = useTransaction()
 
   const composeMessages = (nextMessages: Partial<TransactionToastMessages>) => {
     const getMessages = (
@@ -81,7 +76,7 @@ export const TransactionToastProvider: FC = ({ children }) => {
   return (
     <TransactionToastContext.Provider value={{ composeMessages }}>
       {children}
-      <Toast key={state.state} messages={messages} state={state} />
+      <Toast messages={messages} />
     </TransactionToastContext.Provider>
   )
 }
@@ -115,37 +110,52 @@ export const useTransactionToast = ({
 }
 
 function Toast({
-  state,
   messages,
 }: {
-  state: TransactionState
   messages: TransactionToastMessages
 }): ReactElement | null {
+  const { transactionService } = useTransaction()
+  const [state] = useActor(transactionService)
+
   const [isOpen, setIsOpen] = useState<boolean>(true)
   const { descriptions, titles } = messages
 
   function getTitle(
-    { state }: TransactionState,
+    state: TransactionMachineState,
     titles: Titles,
   ): string | undefined {
-    if (state === TransactionStateType.Idle) return undefined
+    if (state.value === TransactionStateType.Mined)
+      return titles[TransactionStateType.Mined]
+    if (state.value === TransactionStateType.Mining)
+      return titles[TransactionStateType.Mining]
+    if (state.value === TransactionStateType.Pending)
+      return titles[TransactionStateType.Pending]
+    if (state.value === TransactionStateType.Failed)
+      return titles[TransactionStateType.Failed]
 
-    return titles[state]
+    return undefined
   }
 
   function getDescription(
-    { state }: TransactionState,
+    state: TransactionMachineState,
     descriptions: Descriptions,
   ): string | undefined {
-    if (state === TransactionStateType.Idle) return undefined
+    if (state.value === TransactionStateType.Mined)
+      return descriptions[TransactionStateType.Mined]
+    if (state.value === TransactionStateType.Mining)
+      return descriptions[TransactionStateType.Mining]
+    if (state.value === TransactionStateType.Pending)
+      return descriptions[TransactionStateType.Pending]
+    if (state.value === TransactionStateType.Failed)
+      return descriptions[TransactionStateType.Failed]
 
-    return descriptions[state]
+    return undefined
   }
+
+  if (state.value === TransactionStateType.Idle) return null
 
   const title = getTitle(state, titles)
   const description = getDescription(state, descriptions)
-
-  if (state.state === TransactionStateType.Idle) return null
 
   return (
     <Transition
