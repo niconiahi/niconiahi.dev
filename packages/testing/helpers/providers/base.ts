@@ -21,15 +21,15 @@ export type BaseProviderMock = {
   transactionResponse: TransactionResponse
 }
 
-export const getBaseProvider = ({
+export function getBaseProvider({
   blockNumber,
   chainReference,
   transactionResponse,
-}: BaseProviderMock): BaseProvider => {
-  const sendTransaction = (
+}: BaseProviderMock): BaseProvider {
+  function sendTransaction(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     signedTransaction: string | Promise<string>,
-  ): Promise<TransactionResponse> => {
+  ): Promise<TransactionResponse> {
     // TODO: assert something with "signedTransaction" (???)
     //       what is this parameter?
 
@@ -38,7 +38,7 @@ export const getBaseProvider = ({
     })
   }
 
-  const getNetwork = (): Promise<Network> => {
+  function getNetwork(): Promise<Network> {
     return new Promise((resolve) => {
       const networks: Record<ChainId, Network> = {
         [ChainId.Mainnet]: {
@@ -61,7 +61,7 @@ export const getBaseProvider = ({
     })
   }
 
-  const getBlockNumber = (): Promise<number> => {
+  function getBlockNumber(): Promise<number> {
     return new Promise((resolve) => {
       setTimeout(() => resolve(blockNumber), DELAY)
     })

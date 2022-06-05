@@ -15,11 +15,11 @@ type ContractMock = {
   transaction?: ContractTransactionMock
 }
 
-export const getContractTransaction = ({
+export function getContractTransaction({
   receipt,
   transaction,
-}: ContractMock = {}): ContractTransaction => {
-  const wait = (): Promise<ContractReceipt> => {
+}: ContractMock = {}): ContractTransaction {
+  function wait(): Promise<ContractReceipt> {
     return new Promise((resolve) => {
       const nextReceipt = receipt ?? {}
       const contractReceipt = getContractReceipt(nextReceipt)
@@ -36,8 +36,8 @@ export const getContractTransaction = ({
   return contractTransaction as ContractTransaction
 }
 
-export const getContractReceipt = (
+export function getContractReceipt(
   contractReceipt: ContractReceiptMock,
-): ContractReceipt => {
+): ContractReceipt {
   return contractReceipt as ContractReceipt
 }

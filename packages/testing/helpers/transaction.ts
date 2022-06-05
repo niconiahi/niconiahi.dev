@@ -15,13 +15,13 @@ type TransactionMock = {
   response?: TransactionResponseMock
 }
 
-export const getTransactionResponse = ({
+export function getTransactionResponse({
   receipt,
   response,
-}: TransactionMock = {}): TransactionResponse => {
-  const wait = (): Promise<TransactionReceipt> => {
+}: TransactionMock = {}): TransactionResponse {
+  function wait(): Promise<TransactionReceipt> {
     return new Promise((resolve) => {
-      const getNextReceipt = (receipt?: TransactionReceiptMock) => {
+      function getNextReceipt(receipt?: TransactionReceiptMock) {
         const hasLogs = Boolean(receipt?.logs?.length)
 
         if (!receipt) {
@@ -55,8 +55,8 @@ export const getTransactionResponse = ({
   return transactionResponse as TransactionResponse
 }
 
-export const getTransactionReceipt = (
+export function getTransactionReceipt(
   transactionReceipt: TransactionReceiptMock,
-): TransactionReceipt => {
+): TransactionReceipt {
   return transactionReceipt as TransactionReceipt
 }
