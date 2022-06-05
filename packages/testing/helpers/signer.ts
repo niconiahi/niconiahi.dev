@@ -8,19 +8,19 @@ type Options = BaseProviderMock & {
   address: string
 }
 
-export const getSigner = ({
+export function getSigner({
   address,
   blockNumber,
   chainReference,
   transactionResponse,
-}: Options): JsonRpcSigner => {
+}: Options): JsonRpcSigner {
   const baseProvider = getBaseProvider({
     blockNumber,
     chainReference,
     transactionResponse,
   })
 
-  const getAddress = () => {
+  function getAddress() {
     return address
   }
 

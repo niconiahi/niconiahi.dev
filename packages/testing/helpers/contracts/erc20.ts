@@ -5,8 +5,8 @@ import type { ContractTransaction } from "@ethersproject/contracts"
 import type { ContractReceiptMock } from "@niconiahi/testing"
 import { DELAY, getContractTransaction } from "@niconiahi/testing"
 
-export const getErc20Contract = (): ERC20 => {
-  const delegate = (delegatee: string): Promise<ContractTransaction> => {
+export function getErc20Contract(): ERC20 {
+  function delegate(delegatee: string): Promise<ContractTransaction> {
     return new Promise((resolve) => {
       const contractReceiptMock: ContractReceiptMock = {
         to: delegatee,

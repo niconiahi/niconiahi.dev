@@ -36,7 +36,7 @@ type TransactionStateMined = {
   receipt: ContractReceipt
   transaction: ContractTransaction
 }
-export type TransactionOnMined = (conetext: TransactionStateMined) => void
+export type TransactionOnMined = (context: TransactionStateMined) => void
 
 export type TransactionOnPending = () => void
 

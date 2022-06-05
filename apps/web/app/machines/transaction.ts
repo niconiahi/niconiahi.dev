@@ -103,6 +103,7 @@ export const transactionMachine = createMachine<
   initial: "idle",
   states: {
     idle: {
+      type: "atomic",
       on: {
         START: {
           target: "pending",
@@ -110,6 +111,7 @@ export const transactionMachine = createMachine<
       },
     },
     pending: {
+      type: "atomic",
       entry: [(context) => context.on.pending?.()],
       on: {
         SIGNED: {
@@ -122,6 +124,7 @@ export const transactionMachine = createMachine<
       },
     },
     mining: {
+      type: "atomic",
       entry: [
         (context) =>
           context.on.mining?.({
@@ -140,6 +143,7 @@ export const transactionMachine = createMachine<
       },
     },
     mined: {
+      type: "final",
       entry: [
         (context) =>
           context.on.mined?.({
@@ -147,16 +151,15 @@ export const transactionMachine = createMachine<
             transaction: context.transaction as ContractTransaction,
           }),
       ],
-      type: "final",
     },
     failed: {
+      type: "final",
       entry: [
         (context) =>
           context.on.failed?.({
             error: context.error as Error,
           }),
       ],
-      type: "final",
     },
   },
   on: {
