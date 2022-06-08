@@ -14,7 +14,9 @@
     "clean:deep": "turbo run clean && rm -rf node_modules && rm yarn.lock",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
-    "format": "turbo run format"
+    "format": "turbo run format",
+    "test": "turbo run test",
+    "test:coverage": "turbo run test:coverage"
   },
   "devDependencies": {
     "turbo": "latest",
