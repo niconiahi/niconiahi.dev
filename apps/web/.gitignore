@@ -2,5 +2,6 @@
 .env
 .turbo
 build
+coverage
 public/build
 node_modules

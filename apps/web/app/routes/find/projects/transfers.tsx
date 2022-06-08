@@ -6,7 +6,7 @@ import type { TransferEvent } from "@niconiahi/web3"
 
 import { ETHERSCAN_URL } from "~/constants"
 import { AddressDisplay } from "~/components"
-import { bigNumberToString, truncateString } from "~/helpers"
+import { bigNumberToString, truncate } from "~/helpers"
 import { useXyz, useConnectMetamask, useTransfersContract } from "~/hooks"
 import type { Transfers as TransfersContract } from "~/types"
 import { ChainId } from "~/types"
@@ -204,9 +204,9 @@ function Transfer({
       className="flex items-center bg-gray-200 p-1 space-x-2 rounded-md transition text-gray-500 hover:bg-gray-700 hover:text-gray-100 dark:text-gray-500 dark:hover:text-gray-100"
       href={href}
     >
-      <span>{truncateString(from)}</span>
+      <span>{truncate(from)}</span>
       <ArrowRight className="h-4 w-4" />
-      <span>{truncateString(to)}</span>
+      <span>{truncate(to)}</span>
     </a>
   )
 }
