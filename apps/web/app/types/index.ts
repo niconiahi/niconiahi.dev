@@ -12,7 +12,7 @@ export type {
   TransactionOnPending,
 } from "~/providers/transaction-provider"
 
-export { Project } from "~/helpers/fetching.server"
+export { Project } from "~/helpers/fetching"
 export { XyzNextValueType } from "~/providers/xyz-provider"
 export type {
   TransactionMachineSend,

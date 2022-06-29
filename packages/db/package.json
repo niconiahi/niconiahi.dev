@@ -12,11 +12,11 @@
     "clean": "rm -rf .turbo && rm -rf node_modules"
   },
   "dependencies": {
-    "eslint": "^8.14.0",
-    "@remix-run/eslint-config": "^1.4.3",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
     "@niconiahi/eslint-config": "*",
-    "@niconiahi/tsconfig": "*"
+    "@niconiahi/tsconfig": "*",
+    "@remix-run/eslint-config": "^1.4.3",
+    "eslint": "^8.14.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0"
   }
 }

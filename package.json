@@ -19,16 +19,16 @@
     "test:coverage": "turbo run test:coverage"
   },
   "devDependencies": {
-    "turbo": "latest",
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
     "commitizen": "^4.2.4",
+    "cz-conventional-changelog": "^3.3.0",
     "prettier": "^2.6.2",
-    "cz-conventional-changelog": "^3.3.0"
+    "turbo": "latest"
   },
   "engines": {
     "npm": ">=7.0.0",
     "node": ">=14.0.0"
   },
-  "packageManager": "yarn@1.22.11"
+  "packageManager": "yarn@3.1.0"
 }
