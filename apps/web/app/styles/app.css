@@ -584,6 +584,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .ml-2 {
   margin-left: 0.5rem;
 }
+.mt-2 {
+  margin-top: 0.5rem;
+}
 .block {
   display: block;
 }
@@ -642,6 +645,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .min-w-60 {
   min-width: 15rem;
+}
+.max-w-full {
+  max-width: 100%;
 }
 .flex-1 {
   flex: 1 1 0%;
@@ -705,6 +711,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 .overflow-y-scroll {
   overflow-y: scroll;
 }
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .rounded-md {
   border-radius: 0.375rem;
 }
@@ -713,6 +724,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .border-2 {
   border-width: 2px;
+}
+.border {
+  border-width: 1px;
 }
 .border-r-2 {
   border-right-width: 2px;

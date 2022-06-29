@@ -20,32 +20,32 @@ export type TransactionMachineService = InterpreterFrom<
 
 type TransactionMachineEvent =
   | {
-      type: "START"
-    }
+    type: "START"
+  }
   | {
-      type: "SIGNED"
-      transaction: ContractTransaction
-    }
+    type: "SIGNED"
+    transaction: ContractTransaction
+  }
   | {
-      type: "ABORT"
-    }
+    type: "ABORT"
+  }
   | {
-      type: "MINED"
-      receipt: ContractReceipt
-      transaction: ContractTransaction
-    }
+    type: "MINED"
+    receipt: ContractReceipt
+    transaction: ContractTransaction
+  }
   | {
-      type: "FAILED"
-      error: Error
-    }
+    type: "FAILED"
+    error: Error
+  }
   | {
-      type: "ABORT"
-      error: Error
-    }
+    type: "ABORT"
+    error: Error
+  }
   | {
-      type: "SET_ON"
-      on: TransactionOn
-    }
+    type: "SET_ON"
+    on: TransactionOn
+  }
 
 type TransactionMachineContext = {
   on: TransactionOn
@@ -56,32 +56,32 @@ type TransactionMachineContext = {
 
 type TransactionMachineTypestate =
   | {
-      value: "idle"
-      context: TransactionMachineContext
-    }
+    value: "idle"
+    context: TransactionMachineContext
+  }
   | {
-      value: "pending"
-      context: TransactionMachineContext
-    }
+    value: "pending"
+    context: TransactionMachineContext
+  }
   | {
-      value: "mining"
-      context: TransactionMachineContext & {
-        transaction: ContractTransaction
-      }
+    value: "mining"
+    context: TransactionMachineContext & {
+      transaction: ContractTransaction
     }
+  }
   | {
-      value: "mined"
-      context: TransactionMachineContext & {
-        receipt: ContractReceipt
-        transaction: ContractTransaction
-      }
+    value: "mined"
+    context: TransactionMachineContext & {
+      receipt: ContractReceipt
+      transaction: ContractTransaction
     }
+  }
   | {
-      value: "failed"
-      context: TransactionMachineContext & {
-        error: Error
-      }
+    value: "failed"
+    context: TransactionMachineContext & {
+      error: Error
     }
+  }
 
 export const transactionMachine = createMachine<
   TransactionMachineContext,
