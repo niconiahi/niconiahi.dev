@@ -13,6 +13,7 @@
     "clean": "turbo run clean && rm -rf node_modules",
     "clean:deep": "turbo run clean && rm -rf node_modules && rm yarn.lock",
     "dev": "turbo run dev --parallel",
+    "start": "turbo run start",
     "lint": "turbo run lint",
     "format": "turbo run format",
     "test": "turbo run test",
