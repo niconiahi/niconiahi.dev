@@ -81,6 +81,32 @@ select {
   width: 1px !important;
   white-space: nowrap !important;
 }
+.route-transition {
+  -webkit-animation-duration: 10s;
+          animation-duration: 10s;
+  -webkit-animation-name: routeloading;
+          animation-name: routeloading;
+  -webkit-animation-timing-function: ease-out;
+          animation-timing-function: ease-out;
+}
+@-webkit-keyframes routeloading {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+@keyframes routeloading {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
 :root {
   --stripe-height: 0.2rem;
 }
@@ -581,11 +607,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 .mr-2 {
   margin-right: 0.5rem;
 }
-.ml-2 {
-  margin-left: 0.5rem;
-}
 .mt-2 {
   margin-top: 0.5rem;
+}
+.ml-2 {
+  margin-left: 0.5rem;
 }
 .block {
   display: block;
@@ -595,6 +621,12 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .h-2 {
   height: 0.5rem;
+}
+.h-1\.5 {
+  height: 0.375rem;
+}
+.h-1 {
+  height: 0.25rem;
 }
 .h-full {
   height: 100%;
@@ -620,12 +652,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .w-2 {
   width: 0.5rem;
 }
-.w-0 {
-  width: 0px;
-}
-.w-screen {
-  width: 100vw;
-}
 .w-5 {
   width: 1.25rem;
 }
@@ -645,9 +671,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .min-w-60 {
   min-width: 15rem;
-}
-.max-w-full {
-  max-width: 100%;
 }
 .flex-1 {
   flex: 1 1 0%;
@@ -823,11 +846,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-.transition-all {
-  transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }

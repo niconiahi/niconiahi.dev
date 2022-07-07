@@ -1,5 +1,6 @@
 @import url("a11yreset.css");
 @import url("utilitary.css");
+@import url("animations.css");
 
 :root {
   --stripe-height: 0.2rem;

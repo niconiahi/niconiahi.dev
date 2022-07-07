@@ -1,0 +1,28 @@
+.route-transition {
+  -webkit-animation-duration: 10s;
+          animation-duration: 10s;
+  -webkit-animation-name: routeloading;
+          animation-name: routeloading;
+  -webkit-animation-timing-function: ease-out;
+          animation-timing-function: ease-out;
+}
+
+@-webkit-keyframes routeloading {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes routeloading {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
