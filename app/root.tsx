@@ -8,10 +8,8 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
 } from "@remix-run/react";
 import appStyles from "~/styles/app.css";
-import { env } from "~/utils/env.server";
 
 export function links() {
   return [
@@ -32,7 +30,7 @@ export const meta: V2_MetaFunction = () => {
 
 export async function loader() {
   return json(
-    { gaTrackingId: env.GA_TRACKING_ID },
+    // { gaTrackingId: process.env.GA_TRACKING_ID },
     {
       headers: {
         // https://stackoverflow.com/questions/7071763/max-value-for-cache-control-header-in-http
@@ -43,7 +41,7 @@ export async function loader() {
 }
 
 export default function App() {
-  const { gaTrackingId } = useLoaderData<typeof loader>();
+  // const { gaTrackingId } = useLoaderData<typeof loader>();
 
   return (
     <html lang="en" className="h-full">
@@ -51,7 +49,7 @@ export default function App() {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Partytown debug={true} forward={["dataLayer.push"]} />
-        {process.env.NODE_ENV === "production" ? (
+        {/* {process.env.NODE_ENV === "production" ? (
           <>
             <script
               type="text/partytown"
@@ -73,7 +71,7 @@ export default function App() {
               }}
             />
           </>
-        ) : null}
+        ) : null} */}
         <Meta />
         <Links />
       </head>
