@@ -6,7 +6,6 @@ import { Link } from "@remix-run/react";
 function IconLink({
   children,
   isExternal = false,
-
   className: classNameProp,
   ...linkProps
 }: {
@@ -15,11 +14,16 @@ function IconLink({
   className?: string;
 } & LinkProps): ReactElement {
   if (isExternal) {
+    if (typeof linkProps.to !== "string") {
+      throw new Error('"to" must be a string');
+    }
+
     return (
       <a
         className={composeClassName(classNameProp)}
         rel="norefereer noopener"
         target="_blank"
+        href={linkProps.to}
         {...linkProps}
       >
         {children}
