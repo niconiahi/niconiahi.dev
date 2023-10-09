@@ -3,15 +3,15 @@ import type {
   LinksFunction,
   LoaderArgs,
   V2_MetaFunction,
-} from "@remix-run/cloudflare";
-import { json } from "@remix-run/cloudflare";
-import { useLoaderData } from "@remix-run/react";
-import invariant from "tiny-invariant";
-import highlightCss from "highlight.js/styles/a11y-dark.css";
-import articleCss from "~/styles/article.css";
+} from "@remix-run/cloudflare"
+import { json } from "@remix-run/cloudflare"
+import { useLoaderData } from "@remix-run/react"
+import invariant from "tiny-invariant"
+import highlightCss from "highlight.js/styles/a11y-dark.css"
+import articleCss from "~/styles/article.css"
 // import { getArticle } from "~/models/article.server";
-import IconLink from "~/components/icon-link";
-import ArrowLeftIcon from "~/icons/arrow-left";
+import IconLink from "~/components/icon-link"
+import ArrowLeftIcon from "~/icons/arrow-left"
 
 export const links: LinksFunction = () => {
   return [
@@ -24,8 +24,8 @@ export const links: LinksFunction = () => {
       type: "font/ttf",
       crossorigin: "anonymous",
     },
-  ];
-};
+  ]
+}
 
 export const meta: V2_MetaFunction = ({ data }) => {
   return [
@@ -33,15 +33,15 @@ export const meta: V2_MetaFunction = ({ data }) => {
       title: `${data.title} by niconiahi`,
       description: data.description,
     },
-  ];
-};
+  ]
+}
 
 export const headers: HeadersFunction = ({ loaderHeaders }) => ({
   "Cache-Control": loaderHeaders.get("Cache-Control") ?? "no-cache",
-});
+})
 
-export async function loader({ params }: LoaderArgs) {
-  invariant(params.slug, `params.slug is required`);
+export async function loader({ params, context }: LoaderArgs) {
+  invariant(params.slug, `params.slug is required`)
 
   // const article = await getArticle(params.slug);
   // invariant(article, `Article not found: ${params.slug}`);
@@ -49,23 +49,23 @@ export async function loader({ params }: LoaderArgs) {
   return json(
     {
       // title: article.title,
-      // html: article.html,
+      // html: article.html,articles
       // description: article.description,
-      title: 'title',
-      html: 'html',
-      description: 'description',
+      title: "title",
+      html: "html",
+      description: "description",
     },
     {
       headers: {
         // https://stackoverflow.com/questions/7071763/max-value-for-cache-control-header-in-http
         "Cache-Control": "s-maxage=31536000",
       },
-    }
-  );
+    },
+  )
 }
 
 export default function ArticleSlug() {
-  const { html } = useLoaderData<typeof loader>();
+  const { html } = useLoaderData<typeof loader>()
 
   return (
     <>
@@ -80,5 +80,5 @@ export default function ArticleSlug() {
         dangerouslySetInnerHTML={{ __html: html }}
       />
     </>
-  );
+  )
 }

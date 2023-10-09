@@ -1,22 +1,11 @@
-# Welcome to Remix!
+### Expectations
+In this repo you'll learn how to setup a [D1 database](https://developers.cloudflare.com/d1/) using [Remix](https://remix.run/docs/en/main). Here I'll post articles as about stuff I care
 
-- [Remix Docs](https://remix.run/docs)
-
-## Development
-
-You will be utilizing Wrangler for local development to emulate the Cloudflare runtime. This is already wired up in your package.json as the `dev` script:
-
-```sh
-# start the remix dev server and wrangler
-npm run dev
-```
-
-Open up [http://127.0.0.1:8788](http://127.0.0.1:8788) and you should be ready to go!
-
-## Deployment
-
-Cloudflare Pages are currently only deployable through their Git provider integrations.
-
-If you don't already have an account, then [create a Cloudflare account here](https://dash.cloudflare.com/sign-up/pages) and after verifying your email address with Cloudflare, go to your dashboard and follow the [Cloudflare Pages deployment guide](https://developers.cloudflare.com/pages/framework-guides/deploy-anything).
-
-Configure the "Build command" should be set to `npm run build`, and the "Build output directory" should be set to `public`.
+### Files to pay attention
+1. [article.create.ts](/app/routes/article.create.ts)
+2. [article.get.$slug.ts](/app/routes/article.get.$slug.ts)
+3. [article.get.all.ts](/app/routes/article.get.all.ts)
+4. [article.update.ts](/app/routes/article.update.ts)
+5. [article.$slug.tsx](/app/routes/article.update.tsx)
+6. [_index.tsx](/app/routes/_index.tsx)
+7. [root.tsx](/app/root.tsx)

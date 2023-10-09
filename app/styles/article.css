@@ -1,41 +1,15 @@
 main code {
-
-    font-size: 0.9375rem
+  @apply text-md;
 }
 
 main p, main ul li {
-
-    font-size: 1.125rem;
-
-    line-height: 1.75rem
+  @apply text-lg;
 }
 
 main p code {
-
-    border-radius: 0.125rem;
-
-    --tw-bg-opacity: 1;
-
-    background-color: hsl(0 0% 78% / var(--tw-bg-opacity));
-
-    padding-left: 0.25rem;
-
-    padding-right: 0.25rem;
-
-    padding-top: 0.125rem;
-
-    padding-bottom: 0.125rem;
-
-    --tw-text-opacity: 1;
-
-    color: hsl(0 0% 10% / var(--tw-text-opacity))
+  @apply bg-gray-200 text-gray-500 px-1 py-0.5 rounded-sm;
 }
 
-main ul > :not([hidden]) ~ :not([hidden]) {
-
-    --tw-space-y-reverse: 0;
-
-    margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));
-
-    margin-bottom: calc(0.25rem * var(--tw-space-y-reverse))
+main ul {
+  @apply space-y-1;
 }
