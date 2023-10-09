@@ -1,7 +1,7 @@
-import type { LoaderArgs } from "@remix-run/cloudflare"
+import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 
-export function loader({ context }: LoaderArgs) {
-  console.log("context", context)
+export function loader({ context }: LoaderFunctionArgs) {
+  console.log("context", context);
   // 	slug          String   @id
   // 	hash          String
   // 	title         String

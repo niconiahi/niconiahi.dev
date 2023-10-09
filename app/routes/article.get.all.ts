@@ -1,3 +1,3 @@
-import type { LoaderArgs } from "@remix-run/cloudflare"
+import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
 
-export function loader({ context }: LoaderArgs) {}
+export function loader({ context }: LoaderFunctionArgs) {}

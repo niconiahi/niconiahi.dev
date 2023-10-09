@@ -1,6 +1,6 @@
-import type { LinksFunction, V2_MetaFunction } from "@remix-run/cloudflare"
-import { json } from "@remix-run/cloudflare"
-import { Partytown } from "@builder.io/partytown/react"
+import type { LinksFunction, MetaFunction } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
+import { Partytown } from "@builder.io/partytown/react";
 import {
   Links,
   LiveReload,
@@ -8,8 +8,8 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "@remix-run/react"
-import appStyles from "~/styles/app.css"
+} from "@remix-run/react";
+import appStyles from "~/styles/app.css";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: appStyles },
@@ -20,11 +20,11 @@ export const links: LinksFunction = () => [
     type: "font/ttf",
     crossOrigin: "anonymous",
   },
-]
+];
 
-export const meta: V2_MetaFunction = () => {
-  return [{ title: "Remix notes" }]
-}
+export const meta: MetaFunction = () => {
+  return [{ title: "Remix notes" }];
+};
 
 export async function loader() {
   return json(
@@ -35,7 +35,7 @@ export async function loader() {
         "Cache-Control": "s-maxage=31536000",
       },
     },
-  )
+  );
 }
 
 export default function App() {
@@ -80,5 +80,5 @@ export default function App() {
         {process.env.NODE_ENV === "development" && <LiveReload />}
       </body>
     </html>
-  )
+  );
 }

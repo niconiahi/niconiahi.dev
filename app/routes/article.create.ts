@@ -1,3 +1,3 @@
-import type { ActionArgs } from "@remix-run/cloudflare"
+import type { ActionFunctionArgs } from "@remix-run/cloudflare";
 
-export function action({ context }: ActionArgs) {}
+export function action({ context }: ActionFunctionArgs) {}
