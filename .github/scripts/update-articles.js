@@ -29,7 +29,7 @@ const ROUTES = {
 async function main() {
   async function getArticle(slug) {
       try {
-        run({
+        return run({
           endpoint: `${NICONIAHI_DEV_URL}${ROUTES.getArticle(slug)}`,
           configuration: JSON.stringify({
             method: "GET",
@@ -46,7 +46,7 @@ async function main() {
 
   async function createArticle(article) {
       try {
-        run({
+        return run({
           endpoint: `${NICONIAHI_DEV_URL}${ROUTES.createArticle()}`,
           configuration: JSON.stringify({
             method: "POST",
@@ -66,7 +66,7 @@ async function main() {
 
   async function updateArticle(slug, article) {
       try {
-        run({
+        return run({
           endpoint: `${NICONIAHI_DEV_URL}${ROUTES.updateArticle(slug)}`,
           configuration: JSON.stringify({
             method: "POST",
@@ -127,11 +127,14 @@ async function main() {
 
     async function invalidateBySlug(slug) {
       try {
-        run(CLOUDFLARE_PURGE_URL, {
-          body: {
-            prefixes: [`${NICONIAHI_DEV_URL}/article/${slug}`],
-          },
-        });
+        return run({
+          endpoint: CLOUDFLARE_PURGE_URL,
+          configuration: {
+            body: {
+              prefixes: [`${NICONIAHI_DEV_URL}/article/${slug}`],
+            }
+          }
+        })
       } catch (error) {
         console.log("Error when invalidating by slug =>", error);
         // nothing yet. It would be nice to track this and being aware each time it happens
