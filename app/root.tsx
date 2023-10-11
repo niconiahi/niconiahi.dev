@@ -40,6 +40,7 @@ export async function loader() {
 
 export default function App() {
   // const { gaTrackingId } = useLoaderData<typeof loader>();
+  console.log("rendering root");
 
   return (
     <html lang="en" className="h-full">
