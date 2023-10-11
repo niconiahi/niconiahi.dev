@@ -9,3 +9,6 @@ In this repo you'll learn how to setup a [D1 database](https://developers.cloudf
 5. [article.$slug.tsx](/app/routes/article.update.tsx)
 6. [_index.tsx](/app/routes/_index.tsx)
 7. [root.tsx](/app/root.tsx)
+
+### Links
+[Purge Clodflare cached content by URL](https://developers.cloudflare.com/api/operations/zone-purge#purge-cached-content-by-url)

@@ -1,6 +1,7 @@
 import type {
   HeadersFunction,
   LinksFunction,
+  LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
@@ -9,6 +10,17 @@ import IconLink from "~/components/icon-link";
 import TwitterIcon from "~/icons/twitter";
 import GithubIcon from "~/icons/github";
 import homeCss from "~/styles/home.css";
+import { array, object, parse, string } from "valibot";
+import { NICONIAHI_DEV_URL, ROUTES } from "~/utils/routes";
+
+const ArticlesSchema = object({
+  articles: array(
+    object({
+      slug: string(),
+      title: string(),
+    }),
+  ),
+});
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: homeCss }];
@@ -27,12 +39,12 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => ({
   "Cache-Control": loaderHeaders.get("Cache-Control") ?? "no-cache",
 });
 
-function getArticles() {
-  return [] as any;
-}
-
-export async function loader() {
-  const articles = await getArticles();
+export async function loader({ context }: LoaderFunctionArgs) {
+  const { articles } = parse(
+    ArticlesSchema,
+    await (await fetch(`${NICONIAHI_DEV_URL}${ROUTES.getArticles()}`)).json(),
+  );
+  console.log("loader ~ articles:", articles);
   const interests = [
     "remix.run",
     "Tailwind",
@@ -106,7 +118,6 @@ export default function Index() {
       <section className="col-span-2 h-fit">
         <h2 className="mb-2">Articles</h2>
         <ul>
-          {/* @ts-expect-error no pasa nada */}
           {articles.map((article) => (
             <li key={article.slug}>
               <article>

@@ -8,20 +8,77 @@ const { marked } = require("marked");
 const { JSDOM } = require("jsdom");
 const hljs = require("highlight.js");
 require("dotenv").config();
-const CLOUDFLARE_PURGE_API =
-  "https://api.cloudflare.com/client/v4/zones/023e105f4ecef8ad9ca31a8372d0c353/purge_cache";
+const CLOUDFLARE_PURGE_URL =
+  "https://api.cloudflare.com/client/v4/zones/identifier/purge_cache";
+const NICONIAHI_DEV_URL = "https://niconiahi-dev.pages.dev";
+const ROUTES = {
+  getArticle(slug) {
+    return `/article/get/${slug}`;
+  },
+  createArticle() {
+    return `/article/create`;
+  },
+  updateArticle(slug) {
+    return `/article/update/${slug}`;
+  },
+};
 
 async function main() {
   async function getArticle(slug) {
-    // call to get article endpoint with "run"
+      try {
+        run({
+          endpoint: `${NICONIAHI_DEV_URL}${ROUTES.getArticle(slug)}`,
+          configuration: JSON.stringify({
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${process.env['TOKEN']}`
+            },
+          })
+        })
+      } catch (error) {
+        console.log("Error when getting by slug =>", error);
+        // nothing yet. It would be nice to track this and being aware each time it happens
+      }
   }
 
   async function createArticle(article) {
-    // call to create article endpoint with "run"
+      try {
+        run({
+          endpoint: `${NICONIAHI_DEV_URL}${ROUTES.createArticle()}`,
+          configuration: JSON.stringify({
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${process.env['TOKEN']}`
+            },
+            body: {
+              article,
+            },
+          })
+        })
+      } catch (error) {
+        console.log("Error when creating article =>", error);
+        // nothing yet. It would be nice to track this and being aware each time it happens
+      }
   }
 
   async function updateArticle(slug, article) {
-    // call to update article endpoint with "run"
+      try {
+        run({
+          endpoint: `${NICONIAHI_DEV_URL}${ROUTES.updateArticle(slug)}`,
+          configuration: JSON.stringify({
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${process.env['TOKEN']}`
+            },
+            body: {
+              article,
+            },
+          })
+        })
+      } catch (error) {
+        console.log("Error when updating by slug =>", error);
+        // nothing yet. It would be nice to track this and being aware each time it happens
+      }
   }
 
   const articlesPath = path.join(process.cwd(), "articles");
@@ -67,19 +124,14 @@ async function main() {
 
     async function invalidateBySlug(slug) {
       try {
-        run(CLOUDFLARE_PURGE_API, {
+        run(CLOUDFLARE_PURGE_URL, {
           body: {
-            files: [`https://www.niconiahi.dev/article/${slug}`],
-          },
-          headers: {
-            "Content-Type": "application/json",
-            "X-Auth-Key": process.env.CLOUDFLARE_AUTH_KEY,
-            "X-Auth-Email": process.env.CLOUDFLARE_AUTH_EMAIL,
+            prefixes: [`${NICONIAHI_DEV_URL}/article/${slug}`],
           },
         });
       } catch (error) {
-        console.log("Error when invalidting by slug =>", error);
-        // nothing yet. Would be nice tracking this and being aware each time it happens
+        console.log("Error when invalidating by slug =>", error);
+        // nothing yet. It would be nice to track this and being aware each time it happens
       }
     }
 

@@ -1,12 +1,34 @@
-import type { LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { json, type LoaderFunctionArgs } from "@remix-run/cloudflare";
+import type { DB } from "db/types";
+import { Kysely } from "kysely";
+import { D1Dialect } from "kysely-d1";
+import { object, parse, string } from "valibot";
 
-export function loader({ context }: LoaderFunctionArgs) {
-  console.log("context", context);
-  // 	slug          String   @id
-  // 	hash          String
-  // 	title         String
-  // 	description   String
-  // 	html          String   @db.LongText
-  // 	createdAt     DateTime @default(now())
-  // 	updatedAt     DateTime @updatedAt
+interface Env {
+  DB: D1Database;
+}
+const ArticleSchema = object({
+  slug: string(),
+});
+
+export async function loader({ context, request }: LoaderFunctionArgs) {
+  const { slug } = parse(ArticleSchema, await request.json());
+  const env = context.env as Env;
+  const db = new Kysely<DB>({
+    dialect: new D1Dialect({ database: env.DB }),
+  });
+  const article = await db
+    .selectFrom("article")
+    .select(["title", "html", "description"])
+    .where("slug", "=", slug)
+    .executeTakeFirst();
+
+  if (!article) {
+    throw new Response(null, {
+      status: 404,
+      statusText: "Article not found",
+    });
+  }
+
+  return json({ article });
 }

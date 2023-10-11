@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@builder.io/partytown": "^0.8.1",
+    "@jamesives/fetch-api-data-action": "^2.3.0",
     "@remix-run/cloudflare": "^2.0.1",
     "@remix-run/cloudflare-pages": "^2.0.1",
     "@remix-run/css-bundle": "^2.0.1",
@@ -27,7 +28,8 @@
     "kysely-d1": "^0.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tiny-invariant": "^1.3.1"
+    "tiny-invariant": "^1.3.1",
+    "valibot": "^0.19.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20231002.0",

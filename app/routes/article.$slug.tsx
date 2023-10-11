@@ -6,12 +6,21 @@ import type {
 } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
-import invariant from "tiny-invariant";
 import highlightCss from "highlight.js/styles/a11y-dark.css";
 import articleCss from "~/styles/article.css";
-// import { getArticle } from "~/models/article.server";
 import IconLink from "~/components/icon-link";
 import ArrowLeftIcon from "~/icons/arrow-left";
+import { object, parse, string } from "valibot";
+import { NICONIAHI_DEV_URL, ROUTES } from "~/utils/routes";
+
+const ParamsSchema = object({
+  slug: string(),
+});
+const ArticleSchema = object({
+  html: string(),
+  title: string(),
+  description: string(),
+});
 
 export const links: LinksFunction = () => {
   return [
@@ -44,20 +53,20 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => ({
   "Cache-Control": loaderHeaders.get("Cache-Control") ?? "no-cache",
 });
 
-export async function loader({ params, context }: LoaderFunctionArgs) {
-  invariant(params.slug, `params.slug is required`);
-
-  // const article = await getArticle(params.slug);
-  // invariant(article, `Article not found: ${params.slug}`);
+export async function loader({ params }: LoaderFunctionArgs) {
+  const { slug } = parse(ParamsSchema, params);
+  const { description, html, title } = parse(
+    ArticleSchema,
+    await (
+      await fetch(`${NICONIAHI_DEV_URL}${ROUTES.getArticle(slug)}`)
+    ).json(),
+  );
 
   return json(
     {
-      // title: article.title,
-      // html: article.html,articles
-      // description: article.description,
-      title: "title",
-      html: "html",
-      description: "description",
+      title,
+      html,
+      description,
     },
     {
       headers: {
