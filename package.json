@@ -4,8 +4,10 @@
   "type": "module",
   "scripts": {
     "build": "npm run partytown && cross-env NODE_ENV=production remix build",
-    "dev": "remix dev --manual -c \"npm run start\"",
+    "dev": "remix dev --manual -c \"npm run start:dev\"",
+    "lint": "eslint --fix --ext .ts,.tsx .",
     "start": "wrangler pages dev --compatibility-date=2023-06-21 ./public --d1=DB",
+    "start:dev": "wrangler pages dev --compatibility-date=2023-06-21 ./public --d1=DB",
     "db:migrate:local": "wrangler d1 migrations apply niconiahi-dev --local",
     "db:types": "npx kysely-codegen --out-file db/types.ts --dialect=sqlite",
     "db:migrate": "wrangler d1 migrations apply niconiahi-dev",
