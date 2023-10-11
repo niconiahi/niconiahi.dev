@@ -78,6 +78,6 @@ jobs:
           useLockFile: false
 
       - name: ⚡ Update articles
-        run: node ./scripts/update-articles.js
+        run: node ./.github/scripts/update-articles.js
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
