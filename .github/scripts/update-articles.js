@@ -1,13 +1,16 @@
-const run = require("@jamesives/fetch-api-data-action");
-const path = require("path");
-const fsp = require("fs/promises");
-const crypto = require("crypto");
-const invariant = require("tiny-invariant");
-const createDOMPurify = require("dompurify");
-const { marked } = require("marked");
-const { JSDOM } = require("jsdom");
-const hljs = require("highlight.js");
-require("dotenv").config();
+import run from '@jamesives/fetch-api-data-action'
+import path from 'path'
+import fsp from 'fs/promises'
+import crypto from 'crypto'
+import invariant from 'tiny-invariant'
+import createDOMPurify from 'dompurify'
+import { marked } from 'marked'
+import { JSDOM } from 'jsdom'
+import hljs from 'highlight.js'
+import dotenv from 'dotenv'
+
+dotenv.config()
+
 const CLOUDFLARE_PURGE_URL =
   "https://api.cloudflare.com/client/v4/zones/identifier/purge_cache";
 const NICONIAHI_DEV_URL = "https://niconiahi-dev.pages.dev";
