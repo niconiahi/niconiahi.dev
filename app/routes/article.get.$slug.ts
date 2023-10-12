@@ -22,6 +22,7 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
     .select(["title", "html", "description"])
     .where("slug", "=", slug)
     .executeTakeFirst();
+  console.log("loader ~ article:", article);
 
   if (!article) {
     throw new Response(null, {
