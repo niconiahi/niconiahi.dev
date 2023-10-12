@@ -22,20 +22,8 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
     .select(["title", "html", "description"])
     .where("slug", "=", slug)
     .executeTakeFirst();
-  console.log("loader ~ article:", article);
 
-  if (!article) {
-    throw new Response(null, {
-      status: 404,
-      statusText: "Article not found",
-    });
-  }
   console.log("loader ~ article:", article);
-  // const article = {
-  //   title: "title",
-  //   html: "hmtl",
-  //   description: "description",
-  // };
 
   return json({ article });
 }
