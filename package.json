@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "@builder.io/partytown": "^0.8.1",
-    "@jamesives/fetch-api-data-action": "^2.3.0",
     "@remix-run/cloudflare": "^2.0.1",
     "@remix-run/cloudflare-pages": "^2.0.1",
     "@remix-run/css-bundle": "^2.0.1",

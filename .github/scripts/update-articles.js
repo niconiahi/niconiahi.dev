@@ -1,4 +1,3 @@
-import run from '@jamesives/fetch-api-data-action'
 import path from 'path'
 import fsp from 'fs/promises'
 import crypto from 'crypto'
@@ -29,14 +28,8 @@ const ROUTES = {
 async function main() {
   async function getArticle(slug) {
       try {
-        return run({
-          endpoint: `${NICONIAHI_DEV_URL}${ROUTES.getArticle(slug)}`,
-          configuration: JSON.stringify({
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${process.env['TOKEN']}`
-            },
-          })
+        fetch(`${NICONIAHI_DEV_URL}${ROUTES.getArticle(slug)}`, {
+
         })
       } catch (error) {
         console.log("Error when getting by slug =>", error);
@@ -46,17 +39,11 @@ async function main() {
 
   async function createArticle(article) {
       try {
-        return run({
-          endpoint: `${NICONIAHI_DEV_URL}${ROUTES.createArticle()}`,
-          configuration: JSON.stringify({
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${process.env['TOKEN']}`
-            },
-            body: {
-              article,
-            },
-          })
+        fetch(`${NICONIAHI_DEV_URL}${ROUTES.createArticle()}`, {
+          method: "POST",
+          body: {
+            article
+          }
         })
       } catch (error) {
         console.log("Error when creating article =>", error);
@@ -66,17 +53,11 @@ async function main() {
 
   async function updateArticle(slug, article) {
       try {
-        return run({
-          endpoint: `${NICONIAHI_DEV_URL}${ROUTES.updateArticle(slug)}`,
-          configuration: JSON.stringify({
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${process.env['TOKEN']}`
-            },
-            body: {
-              article,
-            },
-          })
+        fetch(`${NICONIAHI_DEV_URL}${ROUTES.updateArticle(slug)}`, {
+          method: "POST",
+          body: {
+            article
+          }
         })
       } catch (error) {
         console.log("Error when updating by slug =>", error);
@@ -127,12 +108,10 @@ async function main() {
 
     async function invalidateBySlug(slug) {
       try {
-        return run({
-          endpoint: CLOUDFLARE_PURGE_URL,
-          configuration: {
-            body: {
-              prefixes: [`${NICONIAHI_DEV_URL}/article/${slug}`],
-            }
+        fetch(CLOUDFLARE_PURGE_URL, {
+          method: "POST",
+          body: {
+            prefixes: [`${NICONIAHI_DEV_URL}/article/${slug}`],
           }
         })
       } catch (error) {
