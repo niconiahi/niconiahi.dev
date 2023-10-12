@@ -31,7 +31,7 @@ export const links: LinksFunction = () => {
       href: "https://www.niconiahi.dev/fonts/JetBrainsMono-Regular.ttf",
       as: "font",
       type: "font/ttf",
-      crossorigin: "anonymous",
+      crossOrigin: "anonymous",
     },
   ];
 };
@@ -55,12 +55,17 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => ({
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { slug } = parse(ParamsSchema, params);
+  const url = `${NICONIAHI_DEV_URL}${ROUTES.getArticle(slug)}`;
+  console.log("loader ~ url:", url);
+  const response = await fetch(url);
+  console.log("loader ~ response:", response);
   const { description, html, title } = parse(
     ArticleSchema,
-    await (
-      await fetch(`${NICONIAHI_DEV_URL}${ROUTES.getArticle(slug)}`)
-    ).json(),
+    await response.json(),
   );
+  // const title = "title";
+  // const html = "hmtl";
+  // const description = "description";
 
   return json(
     {

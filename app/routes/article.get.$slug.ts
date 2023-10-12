@@ -7,12 +7,12 @@ import { object, parse, string } from "valibot";
 interface Env {
   DB: D1Database;
 }
-const ArticleSchema = object({
+const ParamsSchema = object({
   slug: string(),
 });
 
-export async function loader({ context, request }: LoaderFunctionArgs) {
-  const { slug } = parse(ArticleSchema, await request.json());
+export async function loader({ context, params }: LoaderFunctionArgs) {
+  const { slug } = parse(ParamsSchema, params);
   const env = context.env as Env;
   const db = new Kysely<DB>({
     dialect: new D1Dialect({ database: env.DB }),
@@ -30,6 +30,12 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
       statusText: "Article not found",
     });
   }
+  console.log("loader ~ article:", article);
+  // const article = {
+  //   title: "title",
+  //   html: "hmtl",
+  //   description: "description",
+  // };
 
   return json({ article });
 }
