@@ -1,4 +1,4 @@
-import type { ActionFunctionArgs } from "@remix-run/cloudflare";
+import { json, type ActionFunctionArgs } from "@remix-run/cloudflare";
 import type { DB } from "db/types";
 import { Kysely } from "kysely";
 import { D1Dialect } from "kysely-d1";
@@ -28,5 +28,11 @@ export async function action({ context, request, params }: ActionFunctionArgs) {
     .where("slug", "=", slug)
     .executeTakeFirst();
 
-  console.log(`updated article => ${slug}`);
+  const article = await db
+    .selectFrom("article")
+    .select("article.slug")
+    .where("slug", "=", slug)
+    .executeTakeFirst();
+
+  return json({ article });
 }

@@ -1,4 +1,4 @@
-import type { ActionFunctionArgs } from "@remix-run/cloudflare";
+import { json, type ActionFunctionArgs } from "@remix-run/cloudflare";
 import type { DB } from "db/types";
 import { Kysely } from "kysely";
 import { D1Dialect } from "kysely-d1";
@@ -47,5 +47,5 @@ export async function action({ context, request }: ActionFunctionArgs) {
     .where("slug", "=", slug)
     .executeTakeFirst();
 
-  console.log("created article =>", article?.slug);
+  return json({ article });
 }

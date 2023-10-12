@@ -28,9 +28,10 @@ const ROUTES = {
 async function main() {
   async function getArticle(slug) {
       try {
-        fetch(`${NICONIAHI_DEV_URL}${ROUTES.getArticle(slug)}`, {
+        const response = await fetch(`${NICONIAHI_DEV_URL}${ROUTES.getArticle(slug)}`, {
           headers: { "Content-Type": "application/json" },
         })
+        console.log('fetched article from "getArticle" =>', response.json())
       } catch (error) {
         console.log("Error when getting by slug =>", error);
         // nothing yet. It would be nice to track this and being aware each time it happens
@@ -39,11 +40,12 @@ async function main() {
 
   async function createArticle(article) {
       try {
-        fetch(`${NICONIAHI_DEV_URL}${ROUTES.createArticle()}`, {
+        const response = await fetch(`${NICONIAHI_DEV_URL}${ROUTES.createArticle()}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ article })
         })
+        console.log('created article from "createArticle" =>', response.json())
       } catch (error) {
         console.log("Error when creating article =>", error);
         // nothing yet. It would be nice to track this and being aware each time it happens
@@ -52,11 +54,12 @@ async function main() {
 
   async function updateArticle(slug, article) {
       try {
-        fetch(`${NICONIAHI_DEV_URL}${ROUTES.updateArticle(slug)}`, {
+        const response = await fetch(`${NICONIAHI_DEV_URL}${ROUTES.updateArticle(slug)}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ article })
         })
+        console.log('updated article from "updateArticle" =>', response.json())
       } catch (error) {
         console.log("Error when updating by slug =>", error);
         // nothing yet. It would be nice to track this and being aware each time it happens
