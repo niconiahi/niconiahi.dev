@@ -31,7 +31,6 @@ async function main() {
         const response = await fetch(`${NICONIAHI_DEV_URL}${ROUTES.getArticle(slug)}`, {
           headers: { "Content-Type": "application/json" },
         })
-        console.log('fetched article from "getArticle" => transformed to text =>', await response.text())
         console.log('fetched article from "getArticle" =>', await response.json())
       } catch (error) {
         console.log("Error when getting by slug =>", error);
