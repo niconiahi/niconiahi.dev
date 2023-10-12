@@ -29,7 +29,7 @@ async function main() {
   async function getArticle(slug) {
       try {
         fetch(`${NICONIAHI_DEV_URL}${ROUTES.getArticle(slug)}`, {
-
+          headers: { "Content-Type": "application/json" },
         })
       } catch (error) {
         console.log("Error when getting by slug =>", error);
@@ -41,9 +41,8 @@ async function main() {
       try {
         fetch(`${NICONIAHI_DEV_URL}${ROUTES.createArticle()}`, {
           method: "POST",
-          body: {
-            article
-          }
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ article })
         })
       } catch (error) {
         console.log("Error when creating article =>", error);
@@ -55,9 +54,8 @@ async function main() {
       try {
         fetch(`${NICONIAHI_DEV_URL}${ROUTES.updateArticle(slug)}`, {
           method: "POST",
-          body: {
-            article
-          }
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ article })
         })
       } catch (error) {
         console.log("Error when updating by slug =>", error);
@@ -110,9 +108,10 @@ async function main() {
       try {
         fetch(CLOUDFLARE_PURGE_URL, {
           method: "POST",
-          body: {
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
             prefixes: [`${NICONIAHI_DEV_URL}/article/${slug}`],
-          }
+          })
         })
       } catch (error) {
         console.log("Error when invalidating by slug =>", error);
