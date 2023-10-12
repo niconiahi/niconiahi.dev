@@ -134,6 +134,12 @@ async function main() {
       invariant(descriptionMatch, 'Article should contain a "description"');
       const [description] = descriptionMatch;
 
+        console.log('articlesFileNamesPromises ~ title.trim():', title.trim())
+        console.log('articlesFileNamesPromises ~ description:', description)
+        console.log('articlesFileNamesPromises ~ slug:', slug)
+        console.log('articlesFileNamesPromises ~ getHtml(article):', getHtml(article))
+        console.log('articlesFileNamesPromises ~ hash:', hash)
+
       await createArticle({
         title: title.trim(),
         description,

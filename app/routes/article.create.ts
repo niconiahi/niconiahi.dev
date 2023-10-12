@@ -8,14 +8,15 @@ interface Env {
   DB: D1Database;
 }
 const ArticleSchema = object({
-  description: string(),
-  hash: string(),
-  html: string(),
-  slug: string(),
   title: string(),
+  description: string(),
+  slug: string(),
+  html: string(),
+  hash: string(),
 });
 
 export async function action({ context, request }: ActionFunctionArgs) {
+  console.log("action ~ await request.json():", await request.json());
   const { description, hash, html, slug, title } = parse(
     ArticleSchema,
     await request.json(),
