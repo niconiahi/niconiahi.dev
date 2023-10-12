@@ -45,7 +45,7 @@ async function main() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ article })
         })
-        console.log('created article from "createArticle" =>', response.json())
+        console.log('created article from "createArticle" =>', await response.json())
       } catch (error) {
         console.log("Error when creating article =>", error);
         // nothing yet. It would be nice to track this and being aware each time it happens
@@ -59,7 +59,7 @@ async function main() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ article })
         })
-        console.log('updated article from "updateArticle" =>', response.json())
+        console.log('updated article from "updateArticle" =>', await response.json())
       } catch (error) {
         console.log("Error when updating by slug =>", error);
         // nothing yet. It would be nice to track this and being aware each time it happens
@@ -123,6 +123,7 @@ async function main() {
     }
 
     const prevArticle = await getArticle(slug);
+    console.log('articlesFileNamesPromises ~ prevArticle:', prevArticle)
 
     if (!prevArticle) {
       const titleMatch = article.match(/(?<=title:).*/);
