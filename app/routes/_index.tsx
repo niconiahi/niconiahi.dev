@@ -1,7 +1,6 @@
 import type {
   HeadersFunction,
   LinksFunction,
-  LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
@@ -39,12 +38,11 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => ({
   "Cache-Control": loaderHeaders.get("Cache-Control") ?? "no-cache",
 });
 
-export async function loader({ context }: LoaderFunctionArgs) {
+export async function loader() {
   const { articles } = parse(
     ArticlesSchema,
     await (await fetch(`${NICONIAHI_DEV_URL}${ROUTES.getArticles()}`)).json(),
   );
-  console.log("loader ~ articles:", articles);
   const interests = [
     "remix.run",
     "Tailwind",

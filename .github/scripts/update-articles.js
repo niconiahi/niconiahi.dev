@@ -28,10 +28,9 @@ const ROUTES = {
 async function main() {
   async function getArticle(slug) {
       try {
-        const response = await fetch(`${NICONIAHI_DEV_URL}${ROUTES.getArticle(slug)}`, {
+        return fetch(`${NICONIAHI_DEV_URL}${ROUTES.getArticle(slug)}`, {
           headers: { "Content-Type": "application/json" },
         })
-        console.log('fetched article from "getArticle" =>', await response.json())
       } catch (error) {
         console.log("Error when getting by slug =>", error);
         // nothing yet. It would be nice to track this and being aware each time it happens
@@ -40,12 +39,11 @@ async function main() {
 
   async function createArticle(article) {
       try {
-        const response = await fetch(`${NICONIAHI_DEV_URL}${ROUTES.createArticle()}`, {
+        return fetch(`${NICONIAHI_DEV_URL}${ROUTES.createArticle()}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ article })
         })
-        console.log('created article from "createArticle" =>', await response.json())
       } catch (error) {
         console.log("Error when creating article =>", error);
         // nothing yet. It would be nice to track this and being aware each time it happens
@@ -54,12 +52,11 @@ async function main() {
 
   async function updateArticle(slug, article) {
       try {
-        const response = await fetch(`${NICONIAHI_DEV_URL}${ROUTES.updateArticle(slug)}`, {
+        return fetch(`${NICONIAHI_DEV_URL}${ROUTES.updateArticle(slug)}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ article })
         })
-        console.log('updated article from "updateArticle" =>', await response.json())
       } catch (error) {
         console.log("Error when updating by slug =>", error);
         // nothing yet. It would be nice to track this and being aware each time it happens
@@ -123,7 +120,6 @@ async function main() {
     }
 
     const prevArticle = await getArticle(slug);
-    console.log('articlesFileNamesPromises ~ prevArticle:', prevArticle)
 
     if (!prevArticle) {
       const titleMatch = article.match(/(?<=title:).*/);
@@ -133,12 +129,6 @@ async function main() {
       const descriptionMatch = article.match(/(?<=description:).*/);
       invariant(descriptionMatch, 'Article should contain a "description"');
       const [description] = descriptionMatch;
-
-        console.log('articlesFileNamesPromises ~ title.trim():', title.trim())
-        console.log('articlesFileNamesPromises ~ description:', description)
-        console.log('articlesFileNamesPromises ~ slug:', slug)
-        console.log('articlesFileNamesPromises ~ getHtml(article):', getHtml(article))
-        console.log('articlesFileNamesPromises ~ hash:', hash)
 
       await createArticle({
         title: title.trim(),

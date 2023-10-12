@@ -1,5 +1,6 @@
 CREATE TABLE "article" (
-  "slug" TEXT NOT NULL PRIMARY KEY,
+  "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "slug" TEXT NOT NULL,
   "hash" TEXT NOT NULL,
   "title" TEXT NOT NULL,
   "description" TEXT NOT NULL,

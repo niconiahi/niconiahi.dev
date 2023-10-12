@@ -10,6 +10,7 @@ export interface _CfKV {
 }
 
 export interface Article {
+  id: Generated<number | null>;
   slug: string;
   hash: string;
   title: string;

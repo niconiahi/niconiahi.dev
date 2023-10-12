@@ -8,7 +8,6 @@ interface Env {
 }
 
 export async function loader({ context }: LoaderFunctionArgs) {
-  console.log("getting articles =>");
   const env = context.env as Env;
   const db = new Kysely<DB>({
     dialect: new D1Dialect({ database: env.DB }),

@@ -16,7 +16,6 @@ const ArticleSchema = object({
 });
 
 export async function action({ context, request }: ActionFunctionArgs) {
-  console.log("action ~ await request.json():", await request.json());
   const { description, hash, html, slug, title } = parse(
     ArticleSchema,
     await request.json(),
@@ -26,7 +25,7 @@ export async function action({ context, request }: ActionFunctionArgs) {
     dialect: new D1Dialect({ database: env.DB }),
   });
 
-  const update = await db
+  const { insertId } = await db
     .insertInto("article")
     .values({
       description,
@@ -37,15 +36,14 @@ export async function action({ context, request }: ActionFunctionArgs) {
     })
     .executeTakeFirst();
 
-  if (update.numInsertedOrUpdatedRows ?? 0 > 0) {
-    console.log("error updating the article =>", slug);
-    return;
+  if (insertId === undefined) {
+    return json({ error: "error creating the article" });
   }
 
   const article = await db
     .selectFrom("article")
-    .select("article.slug")
-    .where("slug", "=", slug)
+    .select("slug")
+    .where("id", "=", Number(insertId))
     .executeTakeFirst();
 
   return json({ article });
