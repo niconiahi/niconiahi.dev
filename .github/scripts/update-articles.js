@@ -60,7 +60,7 @@ async function main() {
         return fetch(`${NICONIAHI_DEV_URL}${ROUTES.updateArticle(slug)}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ article })
+          body: JSON.stringify(article)
         }).then((data) => data.json())
       } catch (error) {
         console.log("Error when updating by slug =>", error);
