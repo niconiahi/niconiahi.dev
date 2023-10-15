@@ -120,6 +120,7 @@ async function main() {
     }
 
     const prevArticle = await getArticle(slug);
+    console.log('prevArticle =>', prevArticle)
 
     if (!prevArticle) {
       const titleMatch = article.match(/(?<=title:).*/);
@@ -130,18 +131,20 @@ async function main() {
       invariant(descriptionMatch, 'Article should contain a "description"');
       const [description] = descriptionMatch;
 
-      await createArticle({
+      const createdArticle = await createArticle({
         title: title.trim(),
         description,
         slug,
         html: getHtml(article),
         hash,
       });
+      console.log('createdArticle =>', createdArticle)
       console.log(`Created https://www.niconiahi.dev/article/${slug}`);
       await invalidateBySlug(slug);
       console.log(`Invalidated https://www.niconiahi.dev/article/${slug}`);
     } else if (prevArticle.hash !== hash) {
-      await updateArticle(slug, { html: getHtml(article) });
+      const updatedArticle = await updateArticle(slug, { html: getHtml(article) });
+      console.log('updatedArticle =>', updatedArticle)
       console.log(`Updated https://www.niconiahi.dev/article/${slug}`);
       await invalidateBySlug(slug);
       console.log(`Invalidated https://www.niconiahi.dev/article/${slug}`);

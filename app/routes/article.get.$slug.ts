@@ -23,5 +23,5 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
     .where("slug", "=", slug)
     .executeTakeFirst();
 
-  return json(article ?? null);
+  return json({ article: article ?? null });
 }
