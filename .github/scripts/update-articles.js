@@ -47,6 +47,7 @@ async function main() {
           body: JSON.stringify({ article })
         })
           console.log('createArticle => response =>', response)
+          console.log('createArticle => response text =>', response.text())
           return await response.json()
       } catch (error) {
         console.log("Error when creating article =>", error);
