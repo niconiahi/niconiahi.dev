@@ -41,13 +41,13 @@ async function main() {
   async function createArticle(article) {
     console.log('creating article ')
       try {
-        const response = fetch(`${NICONIAHI_DEV_URL}${ROUTES.createArticle()}`, {
+        const response = await fetch(`${NICONIAHI_DEV_URL}${ROUTES.createArticle()}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ article })
         })
           console.log('createArticle => response =>', response)
-          return response.json()
+          return await response.json()
       } catch (error) {
         console.log("Error when creating article =>", error);
         // nothing yet. It would be nice to track this and being aware each time it happens
