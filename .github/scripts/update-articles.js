@@ -30,7 +30,7 @@ async function main() {
       try {
         return fetch(`${NICONIAHI_DEV_URL}${ROUTES.getArticle(slug)}`, {
           headers: { "Content-Type": "application/json" },
-        })
+        }).then((data) => data.json())
       } catch (error) {
         console.log("Error when getting by slug =>", error);
         // nothing yet. It would be nice to track this and being aware each time it happens
@@ -43,7 +43,7 @@ async function main() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ article })
-        })
+        }).then((data) => data.json())
       } catch (error) {
         console.log("Error when creating article =>", error);
         // nothing yet. It would be nice to track this and being aware each time it happens
@@ -56,7 +56,7 @@ async function main() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ article })
-        })
+        }).then((data) => data.json())
       } catch (error) {
         console.log("Error when updating by slug =>", error);
         // nothing yet. It would be nice to track this and being aware each time it happens
