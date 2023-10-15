@@ -27,6 +27,7 @@ const ROUTES = {
 
 async function main() {
   async function getArticle(slug) {
+    console.log('getting article ')
       try {
         return fetch(`${NICONIAHI_DEV_URL}${ROUTES.getArticle(slug)}`, {
           headers: { "Content-Type": "application/json" },
@@ -38,6 +39,7 @@ async function main() {
   }
 
   async function createArticle(article) {
+    console.log('creating article ')
       try {
         const response = fetch(`${NICONIAHI_DEV_URL}${ROUTES.createArticle()}`, {
           method: "POST",
@@ -53,6 +55,7 @@ async function main() {
   }
 
   async function updateArticle(slug, article) {
+    console.log('updating article ')
       try {
         return fetch(`${NICONIAHI_DEV_URL}${ROUTES.updateArticle(slug)}`, {
           method: "POST",
@@ -125,6 +128,7 @@ async function main() {
     console.log('prevArticle =>', prevArticle)
 
     if (!prevArticle) {
+      console.log('prevArticle not found')
       const titleMatch = article.match(/(?<=title:).*/);
       invariant(titleMatch, 'Article should contain a "title"');
       const [title] = titleMatch;
@@ -145,6 +149,7 @@ async function main() {
       await invalidateBySlug(slug);
       console.log(`Invalidated https://www.niconiahi.dev/article/${slug}`);
     } else if (prevArticle.hash !== hash) {
+      console.log('prevArticle found')
       const updatedArticle = await updateArticle(slug, { html: getHtml(article) });
       console.log('updatedArticle =>', updatedArticle)
       console.log(`Updated https://www.niconiahi.dev/article/${slug}`);
