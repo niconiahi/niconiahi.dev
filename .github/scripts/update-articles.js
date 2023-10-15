@@ -124,7 +124,7 @@ async function main() {
       }
     }
 
-    const prevArticle = await getArticle(slug);
+    const {article: prevArticle}= await getArticle(slug);
     console.log('prevArticle =>', prevArticle)
 
     if (!prevArticle) {
