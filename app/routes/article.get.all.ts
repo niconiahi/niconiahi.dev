@@ -17,5 +17,5 @@ export async function loader({ context }: LoaderFunctionArgs) {
     .select(["slug", "title"])
     .execute();
 
-  return json({ articles });
+  return json(articles);
 }

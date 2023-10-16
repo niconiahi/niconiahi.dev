@@ -46,5 +46,5 @@ export async function action({ context, request }: ActionFunctionArgs) {
     .where("id", "=", Number(insertId))
     .executeTakeFirst();
 
-  return json({ article });
+  return json(article);
 }

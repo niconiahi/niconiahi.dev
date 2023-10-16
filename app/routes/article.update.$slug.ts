@@ -35,5 +35,5 @@ export async function action({ context, request, params }: ActionFunctionArgs) {
     .executeTakeFirst();
   console.log("action ~ article:", article);
 
-  return json({ article });
+  return json(article);
 }
