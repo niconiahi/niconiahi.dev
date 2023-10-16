@@ -6,7 +6,7 @@ import type {
 } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
-import highlightCss from "highlight.js/styles/monokai.css";
+import highlightCss from "highlight.js/styles/github.css";
 import articleCss from "~/styles/article.css";
 import IconLink from "~/components/icon-link";
 import ArrowLeftIcon from "~/icons/arrow-left";
