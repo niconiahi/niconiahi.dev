@@ -53,7 +53,6 @@ async function main() {
   }
 
   async function updateArticle(slug, article) {
-    console.log('updating article ')
       try {
         return fetch(`${NICONIAHI_DEV_URL}${ROUTES.updateArticle(slug)}`, {
           method: "POST",
