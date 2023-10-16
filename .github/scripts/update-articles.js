@@ -44,7 +44,7 @@ async function main() {
         const response = await fetch(`${NICONIAHI_DEV_URL}${ROUTES.createArticle()}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ article })
+          body: JSON.stringify(article)
         })
           console.log('createArticle => response =>', response)
           console.log('createArticle => response text =>', await response.text())
