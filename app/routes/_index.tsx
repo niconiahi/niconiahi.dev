@@ -12,14 +12,12 @@ import homeCss from "~/styles/home.css";
 import { array, object, parse, string } from "valibot";
 import { NICONIAHI_DEV_URL, ROUTES } from "~/utils/routes";
 
-const ArticlesSchema = object({
-  articles: array(
-    object({
-      slug: string(),
-      title: string(),
-    }),
-  ),
-});
+const ArticlesSchema = array(
+  object({
+    slug: string(),
+    title: string(),
+  }),
+);
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: homeCss }];
@@ -39,11 +37,10 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => ({
 });
 
 export async function loader() {
-  const { articles } = parse(
+  const articles = parse(
     ArticlesSchema,
     await (await fetch(`${NICONIAHI_DEV_URL}${ROUTES.getArticles()}`)).json(),
   );
-  console.log("sdfsdf");
   const interests = [
     "remix.run",
     "Tailwind",
