@@ -43,6 +43,7 @@ export async function loader() {
     ArticlesSchema,
     await (await fetch(`${NICONIAHI_DEV_URL}${ROUTES.getArticles()}`)).json(),
   );
+  console.log("sdfsdf");
   const interests = [
     "remix.run",
     "Tailwind",
