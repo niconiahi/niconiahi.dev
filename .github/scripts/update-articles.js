@@ -6,7 +6,6 @@ import createDOMPurify from 'dompurify'
 import { marked } from 'marked'
 import { JSDOM } from 'jsdom'
 import hljs from 'highlight.js'
-import "highlight.js/styles/monokai.css";
 import dotenv from 'dotenv'
 
 dotenv.config()
