@@ -33,7 +33,6 @@ export async function action({ context, request, params }: ActionFunctionArgs) {
     .select("article.slug")
     .where("slug", "=", slug)
     .executeTakeFirst();
-  console.log("action ~ article:", article);
 
   return json(article);
 }

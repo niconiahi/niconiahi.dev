@@ -41,14 +41,11 @@ async function main() {
   async function createArticle(article) {
     console.log('creating article ')
       try {
-        const response = await fetch(`${NICONIAHI_DEV_URL}${ROUTES.createArticle()}`, {
+        return fetch(`${NICONIAHI_DEV_URL}${ROUTES.createArticle()}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(article)
-        })
-          console.log('createArticle => response =>', response)
-          // console.log('createArticle => response text =>', await response.text())
-          return await response.json()
+        }).then((data) => data.json())
       } catch (error) {
         console.log("Error when creating article =>", error);
         // nothing yet. It would be nice to track this and being aware each time it happens
@@ -126,10 +123,8 @@ async function main() {
     }
 
     const prevArticle = await getArticle(slug);
-    console.log('prevArticle =>', prevArticle)
 
     if (!prevArticle) {
-      console.log('prevArticle not found')
       const titleMatch = article.match(/(?<=title:).*/);
       invariant(titleMatch, 'Article should contain a "title"');
       const [title] = titleMatch;
@@ -138,21 +133,18 @@ async function main() {
       invariant(descriptionMatch, 'Article should contain a "description"');
       const [description] = descriptionMatch;
 
-      const createdArticle = await createArticle({
+      await createArticle({
         title: title.trim(),
         description,
         slug,
         html: getHtml(article),
         hash,
       });
-      console.log('createdArticle =>', createdArticle)
       console.log(`Created https://www.niconiahi.dev/article/${slug}`);
       await invalidateBySlug(slug);
       console.log(`Invalidated https://www.niconiahi.dev/article/${slug}`);
     } else if (prevArticle.hash !== hash) {
-      console.log('prevArticle found')
-      const updatedArticle = await updateArticle(slug, { html: getHtml(article) });
-      console.log('updatedArticle =>', updatedArticle)
+      await updateArticle(slug, { html: getHtml(article) });
       console.log(`Updated https://www.niconiahi.dev/article/${slug}`);
       await invalidateBySlug(slug);
       console.log(`Invalidated https://www.niconiahi.dev/article/${slug}`);

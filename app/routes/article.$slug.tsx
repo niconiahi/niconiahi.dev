@@ -48,14 +48,12 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => ({
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { slug } = parse(ParamsSchema, params);
-  console.log("loader ~ slug:", slug);
-  const response = await fetch(
-    `${NICONIAHI_DEV_URL}${ROUTES.getArticle(slug)}`,
+  const { description, html, title } = parse(
+    ArticleSchema,
+    await (
+      await fetch(`${NICONIAHI_DEV_URL}${ROUTES.getArticle(slug)}`)
+    ).json(),
   );
-  console.log("loader ~ response:", response);
-  const data = await response.json();
-  console.log("loader ~ data:", data);
-  const { description, html, title } = parse(ArticleSchema, data);
 
   return json(
     {
