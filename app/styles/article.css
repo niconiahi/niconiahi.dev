@@ -3,7 +3,7 @@ main p code {
 }
 
 main pre code {
-  @apply bg-gray-50 border-2 border-gray-200 rounded-sm;
+  @apply border-2 border-gray-200 rounded-sm;
 }
 
 main ul {
