@@ -3,10 +3,11 @@ import fsp from 'fs/promises'
 import crypto from 'crypto'
 import invariant from 'tiny-invariant'
 import createDOMPurify from 'dompurify'
-import { marked } from 'marked'
 import { JSDOM } from 'jsdom'
-import hljs from 'highlight.js'
 import dotenv from 'dotenv'
+import { Marked } from "marked";
+import { markedHighlight } from "marked-highlight";
+import hljs from 'highlight.js';
 
 dotenv.config()
 
@@ -83,19 +84,15 @@ async function main() {
     }
 
     function getHtml(article) {
-      marked.setOptions({
-        renderer: new marked.Renderer(),
-        highlight: function (code, lang) {
-          const language = hljs.getLanguage(lang) ? lang : "plaintext";
-          console.log('getHtml ~ language:', language)
-
-          return hljs.highlight(code, { language }).value;
-        },
-        langPrefix: "hljs language-",
-        pedantic: false,
-        gfm: true,
-        breaks: false,
-      });
+      const marked = new Marked(
+        markedHighlight({
+          langPrefix: 'hljs language-',
+          highlight(code, lang) {
+            const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+            return hljs.highlight(code, { language }).value;
+          }
+        })
+      );
 
       const { window } = new JSDOM("");
       // @ts-expect-error types don't match but it works. I don't know how to coerce it in a way
