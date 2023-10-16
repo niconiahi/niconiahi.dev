@@ -13,13 +13,6 @@ import appStyles from "~/styles/app.css";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: appStyles },
-  {
-    rel: "preload",
-    href: "https://www.niconiahi.dev/fonts/Rubik-Regular.ttf",
-    as: "font",
-    type: "font/ttf",
-    crossOrigin: "anonymous",
-  },
 ];
 
 export const meta: MetaFunction = () => {

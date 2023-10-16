@@ -26,13 +26,6 @@ export const links: LinksFunction = () => {
   return [
     { rel: "stylesheet", href: articleCss },
     { rel: "stylesheet", href: highlightCss },
-    {
-      rel: "preload",
-      href: "https://www.niconiahi.dev/fonts/JetBrainsMono-Regular.ttf",
-      as: "font",
-      type: "font/ttf",
-      crossOrigin: "anonymous",
-    },
   ];
 };
 

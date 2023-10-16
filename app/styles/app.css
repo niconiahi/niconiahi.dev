@@ -5,22 +5,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: "JetBrains Mono";
-  src: url("/fonts/JetBrainsMono-Regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: optional;
-}
-
-@font-face {
-  font-family: "Rubik";
-  src: url("/fonts/Rubik-Regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: optional;
-}
-
 body {
   @apply bg-gray-50;
 
