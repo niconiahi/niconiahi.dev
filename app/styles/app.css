@@ -7,12 +7,6 @@
 
 body {
   @apply bg-gray-50;
-
-  font-family: "Rubik", sans-serif;
-}
-
-code {
-  font-family: "JetBrains Mono", monospace;
 }
 
 main h1 {
