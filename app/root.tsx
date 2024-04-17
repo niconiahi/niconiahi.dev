@@ -1,3 +1,4 @@
+import { LinksFunction } from "@remix-run/cloudflare";
 import {
   Links,
   Meta,
@@ -5,6 +6,15 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import a11yStyles from "~/styles/a11y.css?url"
+import globalStyles from "~/styles/global.css?url"
+import tailwindStyles from "~/styles/tailwind.css?url"
+
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: a11yStyles },
+  { rel: "stylesheet", href: globalStyles },
+  { rel: "stylesheet", href: tailwindStyles },
+]
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
