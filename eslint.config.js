@@ -8,7 +8,7 @@ export default antfu(
     formatters: {
       markdown: "prettier",
     },
-    ignores: ["db/types.ts", ".github/scripts/**"],
+    ignores: ["app/generated/db.ts", ".github/scripts/**"],
   },
   {
     files: ["**/*.ts,.tsx"],

@@ -13,9 +13,9 @@
     "typecheck": "tsc",
     "typegen": "wrangler types",
     "partytown": "partytown copylib public/~partytown",
+    "db:types": "npx kysely-codegen --out-file app/generated/db.ts --dialect=sqlite",
     "db:migrate": "wrangler d1 migrations apply niconiahi-dev --remote",
-    "db:migrate:local": "wrangler d1 migrations apply niconiahi-dev --local",
-    "db:types": "npx kysely-codegen --out-file app/generated/db.ts --dialect=sqlite"
+    "db:migrate:local": "wrangler d1 migrations apply niconiahi-dev --local"
   },
   "dependencies": {
     "@builder.io/partytown": "^0.8.1",
