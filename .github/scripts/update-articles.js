@@ -92,14 +92,19 @@ async function main() {
       const DOMPurify = createDOMPurify(window)
       const renderer = {
         heading(text, level) {
-          console.log('text', text)
           const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
-          console.log('escapedText', escapedText)
 
           return `
             <h${level} id="${escapedText}">
               ${text}
             </h${level}>`;
+        },
+        link(href, title) {
+          if (href.includes('#')) {
+            return `<Link to="${href}">${title}</Link>`
+          }
+
+          return `<a href="${href}" target="_blank" rel="noopener noreferrer">${title}</a>`
         }
       }
       marked.use({ renderer })
