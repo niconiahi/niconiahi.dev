@@ -164,7 +164,7 @@ function useProvider(): {
       })
   }
 
-  return { provider, connectProvider }
+  return { provider, connectProvider  }
 }
 ```
 

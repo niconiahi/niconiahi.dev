@@ -83,6 +83,19 @@ async function main() {
             const language = hljs.getLanguage(lang) ? lang : "plaintext"
             return hljs.highlight(code, { language }).value
           },
+          renderer: {
+            heading(text, level) {
+              const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
+
+              return `
+            <h${level}>
+              <a name="${escapedText}" class="anchor" href="#${escapedText}">
+                <span class="header-link"></span>
+              </a>
+              ${text}
+            </h${level}>`;
+            }
+          }
         }),
       )
 
