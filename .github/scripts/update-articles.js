@@ -86,6 +86,7 @@ async function main() {
           renderer: {
             heading(text, level) {
               const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
+              console.log('heading text', text)
 
               return `
             <h${level}>
