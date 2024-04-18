@@ -15,7 +15,7 @@ There is a different option which makes use of cryptography, a foundational conc
 
 ## Demo
 
-I've created an [example repository](https://github.com/niconiahi/remix-siwe-demo) and also there is a [running demo](https://remix-siwe-demo.netlify.app/) in you'd like to jump right to the code or just see how it works
+I've created an [example repository](https://github.com/niconiahi/remix-siwe-demo) and also there is a [running demo](https://remix-siwe-demo.pages.dev) in you'd like to jump right to the code or just see how it works
 
 ## Hands-on
 
