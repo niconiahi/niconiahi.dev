@@ -13,24 +13,13 @@ dotenv.config()
 
 const CLOUDFLARE_PURGE_URL
   = "https://api.cloudflare.com/client/v4/zones/identifier/purge_cache"
-const NICONIAHI_DEV_URL = "https://niconiahi-dev.pages.dev"
-const ROUTES = {
-  getArticle(slug) {
-    return `/article/get/${slug}`
-  },
-  createArticle() {
-    return `/article/create`
-  },
-  updateArticle(slug) {
-    return `/article/update/${slug}`
-  },
-}
+const PRODUCTION_URL = "https://niconiahi.pages.dev"
 
 async function main() {
   async function getArticle(slug) {
     console.log("getting article ")
     try {
-      return fetch(`${NICONIAHI_DEV_URL}${ROUTES.getArticle(slug)}`, {
+      return fetch(`${PRODUCTION_URL}/article/get/${slug}`, {
         headers: { "Content-Type": "application/json" },
       }).then(data => data.json())
     }
@@ -43,7 +32,7 @@ async function main() {
   async function createArticle(article) {
     console.log("creating article ")
     try {
-      return fetch(`${NICONIAHI_DEV_URL}${ROUTES.createArticle()}`, {
+      return fetch(`${PRODUCTION_URL}/article/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(article),
@@ -57,7 +46,7 @@ async function main() {
 
   async function updateArticle(slug, article) {
     try {
-      return fetch(`${NICONIAHI_DEV_URL}${ROUTES.updateArticle(slug)}`, {
+      return fetch(`${PRODUCTION_URL}/article/update/${slug}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(article),
@@ -113,7 +102,7 @@ async function main() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            prefixes: [`${NICONIAHI_DEV_URL}/article/${slug}`],
+            prefixes: [`${PRODUCTION_URL}/article/${slug}`],
           }),
         })
       }
