@@ -11,7 +11,8 @@ import articleCss from "~/styles/article.css?url";
 import IconLink from "~/components/icon-link";
 import ArrowLeftIcon from "~/icons/arrow-left";
 import { object, parse, string } from "valibot";
-import { NICONIAHI_DEV_URL, ROUTES } from "~/utils/routes";
+import { ROUTES, getOrigin } from "~/utils/routes";
+import { getEnv } from "~/utils/env.server";
 
 const ParamsSchema = object({
   slug: string(),
@@ -46,12 +47,14 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => ({
   "Cache-Control": loaderHeaders.get("Cache-Control") ?? "no-cache",
 });
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, context }: LoaderFunctionArgs) {
+  const env = getEnv(context)
+  const origin = getOrigin(env)
   const { slug } = parse(ParamsSchema, params);
   const { description, html, title } = parse(
     ArticleSchema,
     await (
-      await fetch(`${NICONIAHI_DEV_URL}${ROUTES.getArticle(slug)}`)
+      await fetch(`${origin}/${ROUTES.getArticle(slug)}`)
     ).json(),
   );
 

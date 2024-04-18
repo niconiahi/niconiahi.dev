@@ -12,8 +12,8 @@
     "typecheck": "tsc",
     "typegen": "wrangler types",
     "partytown": "partytown copylib public/~partytown",
-    "db:migrate": "wrangler d1 migrations apply olga-production --remote",
-    "db:migrate:local": "wrangler d1 migrations apply olga-production --local",
+    "db:migrate": "wrangler d1 migrations apply niconiahi-dev --remote",
+    "db:migrate:local": "wrangler d1 migrations apply niconiahi-dev --local",
     "db:types": "npx kysely-codegen --out-file app/generated/db.ts --dialect=sqlite"
   },
   "dependencies": {

@@ -1,6 +1,7 @@
 import type {
   HeadersFunction,
   LinksFunction,
+  LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
@@ -10,7 +11,8 @@ import TwitterIcon from "~/icons/twitter";
 import GithubIcon from "~/icons/github";
 import homeCss from "~/styles/home.css?url";
 import { array, object, parse, string } from "valibot";
-import { NICONIAHI_DEV_URL, ROUTES } from "~/utils/routes";
+import { ROUTES, getOrigin } from "~/utils/routes";
+import { getEnv } from "~/utils/env.server";
 
 const ArticlesSchema = array(
   object({
@@ -36,10 +38,12 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => ({
   "Cache-Control": loaderHeaders.get("Cache-Control") ?? "no-cache",
 });
 
-export async function loader() {
+export async function loader({ context }: LoaderFunctionArgs) {
+  const env = getEnv(context)
+  const origin = getOrigin(env)
   const articles = parse(
     ArticlesSchema,
-    await (await fetch(`${NICONIAHI_DEV_URL}${ROUTES.getArticles()}`)).json(),
+    await (await fetch(`${origin}/article/get/all`)).json(),
   );
   const interests = [
     "remix.run",

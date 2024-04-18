@@ -1,12 +1,7 @@
 import { json, type ActionFunctionArgs } from "@remix-run/cloudflare";
-import type { DB } from "db/types";
-import { Kysely } from "kysely";
-import { D1Dialect } from "kysely-d1";
 import { object, parse, string } from "valibot";
+import { getQueryBuilder } from "~/utils/query-builder.server";
 
-interface Env {
-  DB: D1Database;
-}
 const ArticleSchema = object({
   title: string(),
   description: string(),
@@ -20,12 +15,9 @@ export async function action({ context, request }: ActionFunctionArgs) {
     ArticleSchema,
     await request.json(),
   );
-  const env = context.env as Env;
-  const db = new Kysely<DB>({
-    dialect: new D1Dialect({ database: env.DB }),
-  });
+  const queryBuilder = getQueryBuilder(context)
 
-  const { insertId } = await db
+  const { insertId } = await queryBuilder
     .insertInto("article")
     .values({
       description,
@@ -40,7 +32,7 @@ export async function action({ context, request }: ActionFunctionArgs) {
     return json({ error: "error creating the article" });
   }
 
-  const article = await db
+  const article = await queryBuilder
     .selectFrom("article")
     .select("slug")
     .where("id", "=", Number(insertId))
