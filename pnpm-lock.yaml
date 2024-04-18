@@ -76,6 +76,9 @@ devDependencies:
   better-sqlite3:
     specifier: ^9.4.5
     version: 9.5.0
+  dompurify:
+    specifier: ^3.1.0
+    version: 3.1.0
   eslint-plugin-format:
     specifier: ^0.1.0
     version: 0.1.1(eslint@8.57.0)
@@ -3873,6 +3876,10 @@ packages:
     dependencies:
       webidl-conversions: 7.0.0
     dev: false
+
+  /dompurify@3.1.0:
+    resolution: {integrity: sha512-yoU4rhgPKCo+p5UrWWWNKiIq+ToGqmVVhk0PmMYBK4kRsR3/qhemNFL8f6CFmBd4gMwm3F4T7HBoydP5uY07fA==}
+    dev: true
 
   /dotenv-expand@11.0.6:
     resolution: {integrity: sha512-8NHi73otpWsZGBSZwwknTXS5pqMOrk9+Ssrna8xCaxkzEpU9OTf9R5ArQGVw03//Zmk9MOwLPng9WwndvpAJ5g==}
