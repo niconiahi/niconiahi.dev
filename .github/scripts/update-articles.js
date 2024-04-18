@@ -92,14 +92,12 @@ async function main() {
       const DOMPurify = createDOMPurify(window)
       const renderer = {
         heading(text, level) {
+          console.log('text', text)
           const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
-          console.log('heading text', text)
+          console.log('escapedText', escapedText)
 
           return `
-            <h${level}>
-              <a name="${escapedText}" class="anchor" href="#${escapedText}">
-                <span class="header-link"></span>
-              </a>
+            <h${level} id="#${escapedText}">
               ${text}
             </h${level}>`;
         }
