@@ -99,27 +99,14 @@ async function main() {
               ${text}
             </h${level}>`;
         },
-        link(href, title, text) {
-          console.log('href', href)
-          console.log('title', title)
-          console.log('text', text)
-          if (href.includes('#')) {
-            return `<Link to="${href}">${text}</Link>`
-          }
-
+        link(href, _, text) {
           return `<a target="_blank" rel="noopener noreferrer" href="${href}">${text}</a>`
         }
       }
       marked.use({ renderer })
       // we remove description and title header, used for routing
       const html = DOMPurify.sanitize(marked.parse(article.split("---")[2]), {
-        ADD_TAGS: ['Link'],
         ADD_ATTR: ['target'],
-        CUSTOM_ELEMENT_HANDLING: {
-          tagNameCheck: (tagName) => tagName.match(/^Link-/), // allow all tags starting with "foo-"
-          attributeNameCheck: (attributeName) => attributeName.match(/to/), // allow all containing "baz"
-          allowCustomizedBuiltInElements: true, // allow customized built-ins
-        },
       })
 
       return html
