@@ -115,6 +115,10 @@ async function main() {
       const html = DOMPurify.sanitize(marked.parse(article.split("---")[2]), {
         ADD_TAGS: ['Link'],
         ADD_ATTR: ['target'],
+        CUSTOM_ELEMENT_HANDLING: {
+          tagNameCheck: (tagName) => tagName.match(/^Link-/), // allow all tags starting with "foo-"
+          allowCustomizedBuiltInElements: true, // allow customized built-ins
+        },
       })
 
       return html
