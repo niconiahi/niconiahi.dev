@@ -5,12 +5,6 @@ description: Using the Sign in with Ethereum library, it's possible to create an
 
 # Create a cryptographic session using Remix
 
-## Table of contents
-
-- [Thoughts](#thoughts)
-- [Demo](#demo)
-- [Hands-on](#hands-on)
-
 ## Thoughts
 
 I'm a big fan of the decentralization capabilities that Ethereum brings to the world. Having the option of being transparent vs not being, I think speaks for itself about what's the better choice. How long will it take to get there, it's another topic. We might get there eventually, which would make sense to me. I would leave the speculative part of it all, I do not consider that as important

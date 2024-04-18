@@ -100,10 +100,6 @@ async function main() {
             </h${level}>`;
         },
         link(href, _, text) {
-          if (href.includes('#')) {
-            return `<a href="${href}">${text}</Link>`
-          }
-
           return `<a target="_blank" rel="noopener noreferrer" href="${href}">${text}</a>`
         }
       }
