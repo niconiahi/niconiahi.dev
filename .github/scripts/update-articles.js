@@ -97,7 +97,7 @@ async function main() {
           console.log('escapedText', escapedText)
 
           return `
-            <h${level} id="#${escapedText}">
+            <h${level} id="${escapedText}">
               ${text}
             </h${level}>`;
         }
