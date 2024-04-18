@@ -83,20 +83,6 @@ async function main() {
             const language = hljs.getLanguage(lang) ? lang : "plaintext"
             return hljs.highlight(code, { language }).value
           },
-          renderer: {
-            heading(text, level) {
-              const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
-              console.log('heading text', text)
-
-              return `
-            <h${level}>
-              <a name="${escapedText}" class="anchor" href="#${escapedText}">
-                <span class="header-link"></span>
-              </a>
-              ${text}
-            </h${level}>`;
-            }
-          }
         }),
       )
 
@@ -104,6 +90,21 @@ async function main() {
       // @ts-expect-error types don't match but it works. I don't know how to coerce it in a way
       //                  that is happy and is clean
       const DOMPurify = createDOMPurify(window)
+      const renderer = {
+        heading(text, level) {
+          const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
+          console.log('heading text', text)
+
+          return `
+            <h${level}>
+              <a name="${escapedText}" class="anchor" href="#${escapedText}">
+                <span class="header-link"></span>
+              </a>
+              ${text}
+            </h${level}>`;
+        }
+      }
+      marked.use({ renderer })
       // we remove description and title header, used for routing
       const html = DOMPurify.sanitize(marked.parse(article.split("---")[2]))
 
