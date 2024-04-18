@@ -11,7 +11,7 @@ import { object, parse, string } from "valibot"
 import articleCss from "~/styles/article.css?url"
 import IconLink from "~/components/icon-link"
 import ArrowLeftIcon from "~/icons/arrow-left"
-import { ROUTES, getOrigin } from "~/utils/routes"
+import { getOrigin } from "~/utils/routes"
 import { getEnv } from "~/utils/env.server"
 
 const ParamsSchema = object({
@@ -53,7 +53,7 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
   const { description, html, title } = parse(
     ArticleSchema,
     await (
-      await fetch(`${origin}/${ROUTES.getArticle(slug)}`)
+      await fetch(`${origin}/article/get/${slug}`)
     ).json(),
   )
 
