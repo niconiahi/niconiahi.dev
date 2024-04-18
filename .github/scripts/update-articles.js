@@ -113,8 +113,8 @@ async function main() {
       marked.use({ renderer })
       // we remove description and title header, used for routing
       const html = DOMPurify.sanitize(marked.parse(article.split("---")[2]), {
-        ALLOWED_TAGS: ['Link'],
-        ALLOWED_ATTR: ['target'],
+        ADD_TAGS: ['Link'],
+        ADD_ATTR: ['target'],
       })
 
       return html
