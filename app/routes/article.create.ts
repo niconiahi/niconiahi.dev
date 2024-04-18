@@ -1,6 +1,6 @@
-import { json, type ActionFunctionArgs } from "@remix-run/cloudflare";
-import { object, parse, string } from "valibot";
-import { getQueryBuilder } from "~/utils/query-builder.server";
+import { type ActionFunctionArgs, json } from "@remix-run/cloudflare"
+import { object, parse, string } from "valibot"
+import { getQueryBuilder } from "~/utils/query-builder.server"
 
 const ArticleSchema = object({
   title: string(),
@@ -8,13 +8,13 @@ const ArticleSchema = object({
   slug: string(),
   html: string(),
   hash: string(),
-});
+})
 
 export async function action({ context, request }: ActionFunctionArgs) {
   const { description, hash, html, slug, title } = parse(
     ArticleSchema,
     await request.json(),
-  );
+  )
   const queryBuilder = getQueryBuilder(context)
 
   const { insertId } = await queryBuilder
@@ -26,17 +26,16 @@ export async function action({ context, request }: ActionFunctionArgs) {
       slug,
       title,
     })
-    .executeTakeFirst();
+    .executeTakeFirst()
 
-  if (insertId === undefined) {
-    return json({ error: "error creating the article" });
-  }
+  if (insertId === undefined)
+    return json({ error: "error creating the article" })
 
   const article = await queryBuilder
     .selectFrom("article")
     .select("slug")
     .where("id", "=", Number(insertId))
-    .executeTakeFirst();
+    .executeTakeFirst()
 
-  return json(article);
+  return json(article)
 }

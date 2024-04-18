@@ -1,11 +1,11 @@
-import { LinksFunction } from "@remix-run/cloudflare";
+import type { LinksFunction } from "@remix-run/cloudflare"
 import {
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "@remix-run/react";
+} from "@remix-run/react"
 import a11yStyles from "~/styles/a11y.css?url"
 import globalStyles from "~/styles/global.css?url"
 import tailwindStyles from "~/styles/tailwind.css?url"
@@ -31,9 +31,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Scripts />
       </body>
     </html>
-  );
+  )
 }
 
 export default function App() {
-  return <Outlet />;
+  return <Outlet />
 }

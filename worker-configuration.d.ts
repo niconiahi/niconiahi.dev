@@ -2,6 +2,6 @@
 // by running `wrangler types`
 
 interface Env {
-	ENVIRONMENT: string;
-	DB: D1Database;
+  ENVIRONMENT: string
+  DB: D1Database
 }

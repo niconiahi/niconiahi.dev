@@ -6,6 +6,7 @@ description: Using the Sign in with Ethereum library, it's possible to create an
 # Create a cryptographic session using Remix
 
 ## Table of contents
+
 - [Thoughts](#thoughts)
 - [Demo](#demo)
 - [Hands-on](#hands-on)
@@ -24,13 +25,13 @@ I've created an [example repository](https://github.com/niconiahi/remix-siwe-dem
 
 ## Hands-on
 
-First, we are going to work on the `/join` route. On this page, we are going to create a user using the user's connected wallet. With this wallet, the user will be able to sign (cryptographically) a message. Because of how cryptography works, with these values: the signed message (`signature`) and the `message` itself, we'll be able to check if the user is in fact how he says he is. 
+First, we are going to work on the `/join` route. On this page, we are going to create a user using the user's connected wallet. With this wallet, the user will be able to sign (cryptographically) a message. Because of how cryptography works, with these values: the signed message (`signature`) and the `message` itself, we'll be able to check if the user is in fact how he says he is.
 
 Firstly, we are going to add the code to connect to user's wallet. We'll check the implementation of `useProvider` next in the article
 
 ```tsx
 export default function JoinPage() {
-  const { provider, connectMetamask }= useProvider()
+  const { provider, connectMetamask } = useProvider()
 
   return (
     <main>
@@ -61,7 +62,7 @@ import { SiweMessage } from "siwe"
 
 export default function JoinPage() {
   const { nonce } = useLoaderData<typeof loader>()
-  const { provider }= useProvider()
+  const { provider } = useProvider()
   const [account, setAccount] = useState<string | undefined>(undefined)
   const [message, setMessage] = useState<string | undefined>(undefined)
   const [signature, setSignature] = useState<string | undefined>(undefined)
@@ -75,7 +76,7 @@ export default function JoinPage() {
         aria-label="Generate personal signature"
         onClick={async () => {
           if (!provider) {
-            alert('You need to have Metamask connected to create your signature')
+            alert("You need to have Metamask connected to create your signature")
 
             return
           }
@@ -128,16 +129,19 @@ function useProvider(): {
       const provider = new Web3Provider((window as any).ethereum)
       const account = await getAccount(provider)
 
-      if (!account) return setProvider(undefined)
+      if (!account)
+        return setProvider(undefined)
 
       setProvider(provider)
-    } else {
+    }
+    else {
       setProvider(undefined)
     }
   }
 
   useEffect(() => {
-    if (typeof window === "undefined") return
+    if (typeof window === "undefined")
+      return
 
     getProvider()
   }, [])
@@ -146,7 +150,8 @@ function useProvider(): {
     new Web3Provider((window as any).ethereum)
       .send("eth_requestAccounts", [])
       .then(() => {
-        if (provider) return
+        if (provider)
+          return
 
         getProvider()
       })
@@ -167,7 +172,7 @@ This is the code for `getAccount`:
 
 ```tsx
 async function getAccount(provider: Web3Provider): Promise<string> {
-  return provider.send("eth_accounts", []).then((accounts) => accounts[0])
+  return provider.send("eth_accounts", []).then(accounts => accounts[0])
 }
 ```
 
@@ -330,7 +335,8 @@ export async function action({ request }: ActionArgs) {
         { status: 422 },
       )
     }
-  } catch (error) {
+  }
+  catch (error) {
     // we are handling the error next
     // ...
   }
@@ -346,7 +352,8 @@ import { createUserSession } from "~/utils/session.server"
 export async function action({ request }: ActionArgs) {
   try {
     // ...
-  } catch (error) {
+  }
+  catch (error) {
     // ...
   }
 
@@ -361,7 +368,8 @@ export async function action({ request }: ActionArgs) {
       remember: true,
       redirectTo
     })
-  } else {
+  }
+  else {
     return createUserSession({
       request,
       userAddress: user.address,
@@ -372,7 +380,7 @@ export async function action({ request }: ActionArgs) {
 }
 ```
 
-The `createUser` comes from any Remix Stack, like the one in Blues Stack. Here is [it's implementation](https://github.com/remix-run/blues-stack/blob/main/app/models/user.server.ts#L16). It also shows on Remix's [guided tutorial](https://remix.run/docs/en/v1/tutorials/jokes). The same thing goes for `createUserSession` but with a little tweak because I'm using the `address` as the user's identifier. You can check [it's implementation](https://github.com/remix-run/blues-stack/blob/main/app/session.server.ts#L66) here 
+The `createUser` comes from any Remix Stack, like the one in Blues Stack. Here is [it's implementation](https://github.com/remix-run/blues-stack/blob/main/app/models/user.server.ts#L16). It also shows on Remix's [guided tutorial](https://remix.run/docs/en/v1/tutorials/jokes). The same thing goes for `createUserSession` but with a little tweak because I'm using the `address` as the user's identifier. You can check [it's implementation](https://github.com/remix-run/blues-stack/blob/main/app/session.server.ts#L66) here
 
 We are missing one more thing: handling expected errors for the SIWE library. Let's add that to our `action`
 
@@ -382,7 +390,8 @@ import { ErrorTypes } from "siwe"
 export async function action({ request }: ActionArgs) {
   try {
     // ...
-  } catch (error) {
+  }
+  catch (error) {
     switch (error) {
       case ErrorTypes.EXPIRED_MESSAGE: {
         return json(
@@ -430,7 +439,8 @@ import { createUserSession } from "~/utils/session.server"
 export async function action({ request }: ActionArgs) {
   try {
     // ...
-  } catch (error) {
+  }
+  catch (error) {
     // ...
   }
   // note the removal of "createUser"
