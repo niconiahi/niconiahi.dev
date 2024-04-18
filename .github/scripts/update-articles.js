@@ -117,6 +117,7 @@ async function main() {
         ADD_ATTR: ['target'],
         CUSTOM_ELEMENT_HANDLING: {
           tagNameCheck: (tagName) => tagName.match(/^Link-/), // allow all tags starting with "foo-"
+          attributeNameCheck: (attributeName) => attributeName.match(/to/), // allow all containing "baz"
           allowCustomizedBuiltInElements: true, // allow customized built-ins
         },
       })
