@@ -99,12 +99,15 @@ async function main() {
               ${text}
             </h${level}>`;
         },
-        link(href, title) {
+        link(href, title, text) {
+          console.log('href', href)
+          console.log('title', title)
+          console.log('text', text)
           if (href.includes('#')) {
-            return `<Link to="${href}">${title}</Link>`
+            return `<Link to="${href}">${text}</Link>`
           }
 
-          return `<a href="${href}" target="_blank" rel="noopener noreferrer">${title}</a>`
+          return `<a href="${href}" target="_blank" rel="noopener noreferrer">${text}</a>`
         }
       }
       marked.use({ renderer })
