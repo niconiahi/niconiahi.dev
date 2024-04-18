@@ -107,12 +107,15 @@ async function main() {
             return `<Link to="${href}">${text}</Link>`
           }
 
-          return `<a href="${href}" target="_blank" rel="noopener noreferrer">${text}</a>`
+          return `<a target="_blank" rel="noopener noreferrer" href="${href}">${text}</a>`
         }
       }
       marked.use({ renderer })
       // we remove description and title header, used for routing
-      const html = DOMPurify.sanitize(marked.parse(article.split("---")[2]))
+      const html = DOMPurify.sanitize(marked.parse(article.split("---")[2]), {
+        ALLOWED_TAGS: ['Link'],
+        ALLOWED_ATTR: ['target'],
+      })
 
       return html
     }
