@@ -126,6 +126,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
         "The goal of this repo was to get a feeling of Go's templating engine to produce components",
         "Another goal of this repo was to lay a structure of a webserver similar to what Remix's is",
         "It lays the ground of the structure required by a page to load: it needs a loader to load data, templates to be used as components and which files need to be loaded to create such templates. With these three, a page is composed. Very simple, very powerful",
+        "The value in this project is not on the UI but solely on the proposed structure",
       ]
     },
     {
@@ -139,18 +140,6 @@ export async function loader({ context }: LoaderFunctionArgs) {
         "This was also the first Go application I created and deployed. It's only a webserver with two endpoints but it was a great learning experience",
         "Go is awesome",
         "htmx is equally awesome",
-      ]
-    },
-    {
-      links: {
-        github: 'https://github.com/niconiahi/gig.dance',
-        demo: 'https://gig-dance.fly.dev',
-      },
-      title: "Minimalistic Go application",
-      notes: [
-        "The goal of this repo was to get a feeling of Go's templating engine to produce components",
-        "Another goal of this repo was to lay a structure of a webserver similar to what Remix's is",
-        "It lays the ground of the structure required by a page to load: it needs a loader to load data, templates to be used as components and which files need to be loaded to create such templates. With these three, a page is composed. Very simple, very powerful",
       ]
     },
     {
