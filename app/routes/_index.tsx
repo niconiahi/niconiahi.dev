@@ -140,7 +140,32 @@ export async function loader({ context }: LoaderFunctionArgs) {
         "Go is awesome",
         "htmx is equally awesome",
       ]
+    },
+    {
+      links: {
+        github: 'https://github.com/niconiahi/gig.dance',
+        demo: 'https://gig-dance.fly.dev',
+      },
+      title: "Minimalistic Go application",
+      notes: [
+        "The goal of this repo was to get a feeling of Go's templating engine to produce components",
+        "Another goal of this repo was to lay a structure of a webserver similar to what Remix's is",
+        "It lays the ground of the structure required by a page to load: it needs a loader to load data, templates to be used as components and which files need to be loaded to create such templates. With these three, a page is composed. Very simple, very powerful",
+      ]
+    },
+    {
+      links: {
+        github: 'https://github.com/niconiahi/qiuar',
+        demo: 'https://qiuar.pages.dev/'
+      },
+      title: "QR generating library",
+      notes: [
+        "The goal of this project was to deep dive into a technical definition of some well established pattern. There are tons of formal documentation on how to generate, read and interpret a QR",
+        "Another goal was to make, what would be the most successful QR generating library of the time, clearer in terms of codebase. I found myself reading and not understanding a thing, even though the wikidedia defintion didn't seem as complicated",
+        "I thought it was the perfect place to use tests as the result was extremly specific so that's what I did. Every function, up until now, of the current library implementation is tested. This gives me extreme confidence while touching and trying new things out. I love it",
+      ]
     }
+
   ]
 
   return json(
