@@ -96,6 +96,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
     {
       links: {
         github: 'https://github.com/niconiahi/ariabones',
+        demo: 'https://ariabones.pages.dev',
       },
       title: "Web components that are completely WAI-ARIA compliant",
       notes: [
