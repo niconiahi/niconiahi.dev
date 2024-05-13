@@ -223,6 +223,30 @@ export async function loader({ context }: LoaderFunctionArgs) {
         "It was also a goal not to use React state but instead using some form of signal to fine-grain update the UI. For this I used Jotai. Preventing re-renders feels good",
       ]
     },
+    {
+      links: {
+        github: 'https://github.com/niconiahi/remix-siwe-demo',
+        demo: 'https://remix-siwe-demo.pages.dev/'
+      },
+      title: "Cryptographically-protected authentication flow demo",
+      notes: [
+        "The goal of this project was to recreate an already existent demo but which was poorly structured and unclear. Also it was using no frameworks to demostrate the flow, which is kind of an archaic way of doing it (not even vanilla Vite). This made it really unclear how this would fit with the modern days of metaframeworks",
+        "It only has one dependency which is the official one provided by the team who implemented the Sign in with Ethereum protocol. Using the user's private and public keys, it validates and creates a session",
+        "To demostrate simplicity only HTML form submissions are used to handle mutations. These submissions are validated and handled using Remix's actions",
+      ]
+    },
+    {
+      links: {
+        github: 'https://github.com/niconiahi/remix-d1-kysely-demo',
+        demo: 'https://remix-d1-kysely-demo.pages.dev/'
+      },
+      title: "Minimalistic application showcasing Kysely query builder with Cloudflare D1 database",
+      notes: [
+        "The goal of this project was to create a detailed documentation on how to setup all the configuration required to connect Kysely query builder with Cloudflare's D1 SQLite database along with an example query and mutation to the SQLite database",
+        "This was also my first time using a query builder which was my approach of choice between this one and an ORM. I was intending to use raw SQQL to learn but the autocompletion of a query builder was a dealbreaker. I intend to jump on using raw SQL at some point but not today",
+        "This was also my first using D1, so I was answering many questions on how the DX would be. The rough edges it would have and that. Nowadays, with workerd, Remix seemesly integrates with Cloudflare D1. The experience is awesome",
+      ]
+    },
   ]
 
   return json(
