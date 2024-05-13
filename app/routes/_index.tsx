@@ -144,6 +144,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
         "As it was too difficult to grasp the full comprehension of it, I started slowly by first creating a system in which I could establish the connection within the same browser window",
         "After having succeeded in that first system, I moved on to creating a more complex system which I used understand which actions did one user needed to do and what the other needed to do. With this I have a cristal clear understanding of how's the interaction to establish a WebRTC connection for two users in different browser's windows",
         "The last step in this project, not yet finished, is to add a singaling system so that this connection between the two peers is done automatically. A signaling system is no other than a WebSocket connection that sends messages from one end to the other. In this case, the signaling system is being implemented using Cloudflare, for which I need to implement a Cloudflare Worker that makes use Cloudflare's Durable Objects to persist connections, so that I can then broadcast to every connection the corresponding peer events",
+        "This last step is being implemented using state machines, for which when finished, there will be a state machine that knows how to establish a WebRTC connection. Super powerful",
       ]
     },
     {
@@ -207,8 +208,21 @@ export async function loader({ context }: LoaderFunctionArgs) {
         "Another goal was to make, what would be the most successful QR generating library of the time, clearer in terms of codebase. I found myself reading and not understanding a thing, even though the wikidedia defintion didn't seem as complicated",
         "I thought it was the perfect place to use tests as the result was extremly specific so that's what I did. Every function, up until now, of the current library implementation is tested. This gives me extreme confidence while touching and trying new things out. I love it",
       ]
-    }
-
+    },
+    {
+      links: {
+        github: 'https://github.com/niconiahi/animatronik',
+        demo: 'https://animatronik.pages.dev/'
+      },
+      title: "Share and store your animated SVG collectible",
+      notes: [
+        "The goal of this project was to merge the knowledge of ERC721 blockchain collectibles with my knowledge of HTML and CSS",
+        "This project includes the first finished and successful state machine. This machine knows how to handle sending a transaction to the blockchain, including the possible successful and error states",
+        "I created a first smart contract, deployed it to the blockchain and consumed it from the application",
+        "I also store the data required by the collectible in a decentralized storage center. A reference to this data is stored in each collectible found in the contract",
+        "It was also a goal not to use React state but instead using some form of signal to fine-grain update the UI. For this I used Jotai. Preventing re-renders feels good",
+      ]
+    },
   ]
 
   return json(
