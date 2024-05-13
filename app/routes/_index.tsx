@@ -186,7 +186,7 @@ export default function Index() {
         <p>Nicolas Accetta</p>
         <p>Buenos Aires, Argentina</p>
         <p>web developer</p>
-        <p>crazy about details</p>
+        <p>bleeding edge consumer</p>
         <div className="mt-2 flex items-center space-x-1">
           <IconLink
             isExternal
