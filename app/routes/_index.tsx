@@ -54,14 +54,67 @@ export async function loader({ context }: LoaderFunctionArgs) {
     ArticlesSchema,
     await (await fetch(`${origin}/article/get/all`)).json(),
   )
-  const interests = [
-    "remix.run",
-    "Tailwind",
-    "validation",
-    "serverless",
-    "Web3",
-    "Ethereum",
-    "clean code",
+  const stack = [
+    {
+      label: "remix.run",
+      link: "https://remix.run/"
+    },
+    {
+      label: "tailwind",
+      link: "https://tailwindcss.com/"
+    },
+    {
+      label: "valibot",
+      link: "https://valibot.dev/"
+    },
+    {
+      label: "cloudflare pages",
+      link: "https://pages.cloudflare.com/"
+    },
+    {
+      label: "cloudflare d1",
+      link: "https://developers.cloudflare.com/d1/"
+    },
+    {
+      label: "cloudflare durable objects",
+      link: "https://developers.cloudflare.com/durable-objects/"
+    },
+    {
+      label: "cloudflare r2",
+      link: "https://developers.cloudflare.com/r2/"
+    },
+    {
+      label: "cloudflare workers",
+      link: "https://developers.cloudflare.com/workers/"
+    },
+    {
+      label: "kysely",
+      link: "https://kysely.dev/"
+    },
+    {
+      label: "go",
+      link: "https://go.dev/"
+    },
+    {
+      label: "lucia-auth",
+      link: "https://lucia-auth.com/"
+    },
+    {
+      label: "pnpm",
+      link: "https://pnpm.io/"
+    },
+    {
+      label: "pnpm workspaces",
+      link: "https://pnpm.io/workspaces/"
+    },
+    {
+      label: "htmx",
+      link: "https://htmx.org/"
+    },
+    {
+      label: "viem",
+      link: "https://viem.sh/"
+    },
   ]
 
   const projects: Project[] = [
@@ -161,7 +214,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
   return json(
     {
       articles,
-      interests,
+      stack,
       projects
     },
     {
@@ -178,7 +231,7 @@ const EXTERNAL_ROUTES = {
 }
 
 export default function Index() {
-  const { articles, interests, projects } = useLoaderData<typeof loader>()
+  const { articles, stack, projects } = useLoaderData<typeof loader>()
 
   return (
     <main className="mx-auto grid w-full grid-cols-2 gap-y-8 bg-gray-50 py-4 md:w-3/5 md:py-20 px-2">
@@ -206,15 +259,17 @@ export default function Index() {
         </div>
       </section>
       <section className="col-span-1">
-        <h2 className="mb-2">Interests</h2>
+        <h2 className="mb-2">Tech stack</h2>
         <div className="interests-grid grid gap-1">
-          {interests.map(interest => (
-            <span
-              key={`interest-${interest}`}
+          {stack.map((s) => (
+            <a
+              key={`interest-${s.label}`}
+              href={s.link}
+              target="_blank"
               className="flex justify-center rounded-md bg-gray-300 px-1 py-0.5"
             >
-              {interest}
-            </span>
+              {s.label}
+            </a>
           ))}
         </div>
       </section>
