@@ -96,7 +96,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
       link: "https://go.dev/"
     },
     {
-      label: "lucia-auth",
+      label: "lucia",
       link: "https://lucia-auth.com/"
     },
     {
