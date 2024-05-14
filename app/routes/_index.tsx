@@ -119,6 +119,10 @@ export async function loader({ context }: LoaderFunctionArgs) {
       label: "web apis",
       link: "https://developer.mozilla.org/en-US/docs/Web/API/"
     },
+    {
+      label: "vitest",
+      link: "https://vitest.dev/"
+    },
   ]
 
   const projects: Project[] = [
