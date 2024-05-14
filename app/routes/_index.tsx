@@ -115,6 +115,10 @@ export async function loader({ context }: LoaderFunctionArgs) {
       label: "viem",
       link: "https://viem.sh/"
     },
+    {
+      label: "web apis",
+      link: "https://developer.mozilla.org/en-US/docs/Web/API/"
+    },
   ]
 
   const projects: Project[] = [
