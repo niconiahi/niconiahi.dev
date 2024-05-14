@@ -247,6 +247,19 @@ export async function loader({ context }: LoaderFunctionArgs) {
         "This was also my first using D1, so I was answering many questions on how the DX would be. The rough edges it would have and that. Nowadays, with workerd, Remix seemesly integrates with Cloudflare D1. The experience is awesome",
       ]
     },
+    {
+      links: {
+        github: 'https://github.com/niconiahi/gorkerd',
+      },
+      title: "Go webserver running on a workerd environment using Svelte as template engine",
+      notes: [
+        "The goal of this project was a little bit ambitious as it was to create a ultra minimal representation of what would be a framework which stack is: Go + Cloudflare (through workerd) as deployment + JS templating engine (through Svelte. Solid was also thought)",
+        "The structure should be simple: a loader that is in charge to gather the data, a root html that composes from components and a handler that is in charge of rendering such root with the already gathered data",
+        "The difficulty here resides in that there has to be a process where the Svelte components are compiled down to Javascript in order to be injected by Go when responding to a given route call",
+        "Another difficulty resides in that this has to be compiled to WebAssembly (through the use of tinygo) due to the limited memory available inside the workerd instance",
+        "The last difficulty of this project is to grab this .wasm file and run it in a workerd environment. I don't know yet how to do this but it should be possible as workerd knows how to receive Requests and send Responses, and the Wasm binary does exactly that. That's the premise of this project",
+      ]
+    },
   ]
 
   return json(
