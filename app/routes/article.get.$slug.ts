@@ -1,5 +1,6 @@
 import { type LoaderFunctionArgs, json } from "@remix-run/cloudflare"
 import { object, parse, string } from "valibot"
+
 import { getQueryBuilder } from "~/utils/query-builder.server"
 
 const ParamsSchema = object({
@@ -15,8 +16,9 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
     .where("slug", "=", slug)
     .executeTakeFirst()
 
-  if (!article)
+  if (!article) {
     return json(null)
+  }
 
   return json(article)
 }

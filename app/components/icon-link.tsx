@@ -1,7 +1,7 @@
-import type { ReactElement, ReactNode } from "react"
-import clsx from "clsx"
 import type { LinkProps } from "@remix-run/react"
 import { Link } from "@remix-run/react"
+import clsx from "clsx"
+import type { ReactElement, ReactNode } from "react"
 
 function IconLink({
   children,
@@ -14,8 +14,9 @@ function IconLink({
   className?: string
 } & LinkProps): ReactElement {
   if (isExternal) {
-    if (typeof linkProps.to !== "string")
-      throw new Error("\"to\" must be a string")
+    if (typeof linkProps.to !== "string") {
+      throw new TypeError("\"to\" must be a string")
+    }
 
     return (
       <a

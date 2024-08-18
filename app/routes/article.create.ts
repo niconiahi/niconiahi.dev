@@ -1,5 +1,6 @@
 import { type ActionFunctionArgs, json } from "@remix-run/cloudflare"
 import { object, parse, string } from "valibot"
+
 import { getQueryBuilder } from "~/utils/query-builder.server"
 
 const ArticleSchema = object({
@@ -28,8 +29,9 @@ export async function action({ context, request }: ActionFunctionArgs) {
     })
     .executeTakeFirst()
 
-  if (insertId === undefined)
+  if (insertId === undefined) {
     return json({ error: "error creating the article" })
+  }
 
   const article = await queryBuilder
     .selectFrom("article")

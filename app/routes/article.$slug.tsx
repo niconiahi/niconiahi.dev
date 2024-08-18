@@ -8,11 +8,12 @@ import { json } from "@remix-run/cloudflare"
 import { useLoaderData } from "@remix-run/react"
 import highlightCss from "highlight.js/styles/github.css?url"
 import { object, parse, string } from "valibot"
-import articleCss from "~/styles/article.css?url"
+
 import IconLink from "~/components/icon-link"
 import ArrowLeftIcon from "~/icons/arrow-left"
-import { getOrigin } from "~/utils/routes"
+import articleCss from "~/styles/article.css?url"
 import { getEnv } from "~/utils/env.server"
+import { getOrigin } from "~/utils/routes"
 
 const ParamsSchema = object({
   slug: string(),
@@ -31,8 +32,9 @@ export const links: LinksFunction = () => {
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  if (!data)
+  if (!data) {
     return []
+  }
 
   return [
     {

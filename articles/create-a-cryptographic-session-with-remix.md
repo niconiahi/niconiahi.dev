@@ -123,19 +123,20 @@ function useProvider(): {
       const provider = new Web3Provider((window as any).ethereum)
       const account = await getAccount(provider)
 
-      if (!account)
+      if (!account) {
         return setProvider(undefined)
+      }
 
       setProvider(provider)
-    }
-    else {
+    } else {
       setProvider(undefined)
     }
   }
 
   useEffect(() => {
-    if (typeof window === "undefined")
+    if (typeof window === "undefined") {
       return
+    }
 
     getProvider()
   }, [])
@@ -144,8 +145,9 @@ function useProvider(): {
     new Web3Provider((window as any).ethereum)
       .send("eth_requestAccounts", [])
       .then(() => {
-        if (provider)
+        if (provider) {
           return
+        }
 
         getProvider()
       })
@@ -158,7 +160,7 @@ function useProvider(): {
       })
   }
 
-  return { provider, connectProvider  }
+  return { provider, connectProvider }
 }
 ```
 
@@ -329,8 +331,7 @@ export async function action({ request }: ActionArgs) {
         { status: 422 },
       )
     }
-  }
-  catch (error) {
+  } catch (error) {
     // we are handling the error next
     // ...
   }
@@ -346,8 +347,7 @@ import { createUserSession } from "~/utils/session.server"
 export async function action({ request }: ActionArgs) {
   try {
     // ...
-  }
-  catch (error) {
+  } catch (error) {
     // ...
   }
 
@@ -362,8 +362,7 @@ export async function action({ request }: ActionArgs) {
       remember: true,
       redirectTo
     })
-  }
-  else {
+  } else {
     return createUserSession({
       request,
       userAddress: user.address,
@@ -384,8 +383,7 @@ import { ErrorTypes } from "siwe"
 export async function action({ request }: ActionArgs) {
   try {
     // ...
-  }
-  catch (error) {
+  } catch (error) {
     switch (error) {
       case ErrorTypes.EXPIRED_MESSAGE: {
         return json(
@@ -427,14 +425,12 @@ That's it for creating a new user! For the `/login` route the whole code is the 
 
 ```tsx
 // /routes/login
-import { createUser } from "~/models/user.server"
 import { createUserSession } from "~/utils/session.server"
 
 export async function action({ request }: ActionArgs) {
   try {
     // ...
-  }
-  catch (error) {
+  } catch (error) {
     // ...
   }
   // note the removal of "createUser"

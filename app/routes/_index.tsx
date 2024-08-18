@@ -7,12 +7,13 @@ import type {
 import { json } from "@remix-run/cloudflare"
 import { Link, useLoaderData } from "@remix-run/react"
 import { array, object, parse, string } from "valibot"
+
 import IconLink from "~/components/icon-link"
-import TwitterIcon from "~/icons/twitter"
 import GithubIcon from "~/icons/github"
+import TwitterIcon from "~/icons/twitter"
 import homeCss from "~/styles/home.css?url"
-import { getOrigin } from "~/utils/routes"
 import { getEnv } from "~/utils/env.server"
+import { getOrigin } from "~/utils/routes"
 
 const ArticlesSchema = array(
   object({
@@ -38,11 +39,11 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => ({
   "Cache-Control": loaderHeaders.get("Cache-Control") ?? "no-cache",
 })
 
-type Project = {
+interface Project {
   links: {
     github: string
     demo?: string
-  },
+  }
   title: string
   notes: string[]
 }
@@ -57,78 +58,78 @@ export async function loader({ context }: LoaderFunctionArgs) {
   const stack = [
     {
       label: "remix.run",
-      link: "https://remix.run/"
+      link: "https://remix.run/",
     },
     {
       label: "tailwind",
-      link: "https://tailwindcss.com/"
+      link: "https://tailwindcss.com/",
     },
     {
       label: "valibot",
-      link: "https://valibot.dev/"
+      link: "https://valibot.dev/",
     },
     {
       label: "cloudflare pages",
-      link: "https://pages.cloudflare.com/"
+      link: "https://pages.cloudflare.com/",
     },
     {
       label: "cloudflare d1",
-      link: "https://developers.cloudflare.com/d1/"
+      link: "https://developers.cloudflare.com/d1/",
     },
     {
       label: "cloudflare durable objects",
-      link: "https://developers.cloudflare.com/durable-objects/"
+      link: "https://developers.cloudflare.com/durable-objects/",
     },
     {
       label: "cloudflare r2",
-      link: "https://developers.cloudflare.com/r2/"
+      link: "https://developers.cloudflare.com/r2/",
     },
     {
       label: "cloudflare workers",
-      link: "https://developers.cloudflare.com/workers/"
+      link: "https://developers.cloudflare.com/workers/",
     },
     {
       label: "kysely",
-      link: "https://kysely.dev/"
+      link: "https://kysely.dev/",
     },
     {
       label: "go",
-      link: "https://go.dev/"
+      link: "https://go.dev/",
     },
     {
       label: "lucia",
-      link: "https://lucia-auth.com/"
+      link: "https://lucia-auth.com/",
     },
     {
       label: "pnpm",
-      link: "https://pnpm.io/"
+      link: "https://pnpm.io/",
     },
     {
       label: "pnpm workspaces",
-      link: "https://pnpm.io/workspaces/"
+      link: "https://pnpm.io/workspaces/",
     },
     {
       label: "htmx",
-      link: "https://htmx.org/"
+      link: "https://htmx.org/",
     },
     {
       label: "viem",
-      link: "https://viem.sh/"
+      link: "https://viem.sh/",
     },
     {
       label: "web apis",
-      link: "https://developer.mozilla.org/en-US/docs/Web/API/"
+      link: "https://developer.mozilla.org/en-US/docs/Web/API/",
     },
     {
       label: "vitest",
-      link: "https://vitest.dev/"
+      link: "https://vitest.dev/",
     },
   ]
 
   const projects: Project[] = [
     {
       links: {
-        github: 'https://github.com/niconiahi/ethernauta',
+        github: "https://github.com/niconiahi/ethernauta",
       },
       title: "Blockchain client called Ethernauta",
       notes: [
@@ -138,12 +139,12 @@ export async function loader({ context }: LoaderFunctionArgs) {
         "It leverages the use of tree-shaking to its highest expresion in order to provide minimalistic bundles to the client, effectively making much faster the app consuming it",
         "It's dependency-free, meaning that I have complete control over the behaviour of the library. I prefer my code to be written this way. With this I get to learn how to design software. I do reach for libraries but for much more specific and highly complicated stuff",
         "Some of the many methods that are exposed have tests associated with them, effectively setting precedent on how to test other methods",
-      ]
+      ],
     },
     {
       links: {
-        github: 'https://github.com/niconiahi/remix-peer-video-call-demo',
-        demo: 'https://remix-peer-video-call-demo.pages.dev/',
+        github: "https://github.com/niconiahi/remix-peer-video-call-demo",
+        demo: "https://remix-peer-video-call-demo.pages.dev/",
       },
       title: "Peer to peer videoconference call application",
       notes: [
@@ -153,36 +154,36 @@ export async function loader({ context }: LoaderFunctionArgs) {
         "After having succeeded in that first system, I moved on to creating a more complex system which I used understand which actions did one user needed to do and what the other needed to do. With this I have a cristal clear understanding of how's the interaction to establish a WebRTC connection for two users in different browser's windows",
         "The last step in this project, not yet finished, is to add a singaling system so that this connection between the two peers is done automatically. A signaling system is no other than a WebSocket connection that sends messages from one end to the other. In this case, the signaling system is being implemented using Cloudflare, for which I need to implement a Cloudflare Worker that makes use Cloudflare's Durable Objects to persist connections, so that I can then broadcast to every connection the corresponding peer events",
         "This last step is being implemented using state machines, for which when finished, there will be a state machine that knows how to establish a WebRTC connection. Super powerful",
-      ]
+      ],
     },
     {
       links: {
-        github: 'https://github.com/niconiahi/ariabones',
-        demo: 'https://ariabones.pages.dev',
+        github: "https://github.com/niconiahi/ariabones",
+        demo: "https://ariabones.pages.dev",
       },
       title: "Web components that are completely WAI-ARIA compliant",
       notes: [
         "The goal of this project is to implement, via Web Components, the components that are defined by the W3C's patterns",
         "It should have no dependencies and it should work as a base building block for frameworks to build upon",
         "The component are unstyled and absolutely accesible",
-      ]
+      ],
     },
     {
       links: {
-        github: 'https://github.com/niconiahi/olga',
-        demo: 'https://olga.media',
+        github: "https://github.com/niconiahi/olga",
+        demo: "https://olga.media",
       },
       title: "Youtube video's chapters visualizer for a streaming channel",
       notes: [
         "The goal of this project was to easily visualize the different chapters a video has, in a non-YouTube environment. This is imposible to do today as you would have to check each and every video to see. Discoverability is directly non-existent: you can't search through chapters",
         "There are many many videos a YouTube channel may have so I needed a way to automatically scrap the data for each of the videos, so that's what I did. I have a page in which I give it a starting date and an ending date and the program will gather the data for all the videos found wihtin that range",
-        "It is usual that a streaming channel has several shows that it airs. Because of that, the notion of this entity was introduced in the system. For a given day, there might have been multiple shows that were aired. As long as the show is known by the system, it will extract the chapters for it"
-      ]
+        "It is usual that a streaming channel has several shows that it airs. Because of that, the notion of this entity was introduced in the system. For a given day, there might have been multiple shows that were aired. As long as the show is known by the system, it will extract the chapters for it",
+      ],
     },
     {
       links: {
-        github: 'https://github.com/niconiahi/gig.dance',
-        demo: 'https://gig-dance.fly.dev',
+        github: "https://github.com/niconiahi/gig.dance",
+        demo: "https://gig-dance.fly.dev",
       },
       title: "Minimalistic Go application",
       notes: [
@@ -190,12 +191,12 @@ export async function loader({ context }: LoaderFunctionArgs) {
         "Another goal of this repo was to lay a structure of a webserver similar to what Remix's is",
         "It lays the ground of the structure required by a page to load: it needs a loader to load data, templates to be used as components and which files need to be loaded to create such templates. With these three, a page is composed. Very simple, very powerful",
         "The value in this project is not on the UI but solely on the proposed structure",
-      ]
+      ],
     },
     {
       links: {
-        github: 'https://github.com/niconiahi/go-htmx-demo',
-        demo: 'https://go-htmx-demo-niconiahi.fly.dev',
+        github: "https://github.com/niconiahi/go-htmx-demo",
+        demo: "https://go-htmx-demo-niconiahi.fly.dev",
       },
       title: "htmx + Go proof-of-concept application",
       notes: [
@@ -203,24 +204,24 @@ export async function loader({ context }: LoaderFunctionArgs) {
         "This was also the first Go application I created and deployed. It's only a webserver with two endpoints but it was a great learning experience",
         "Go is awesome",
         "htmx is equally awesome",
-      ]
+      ],
     },
     {
       links: {
-        github: 'https://github.com/niconiahi/qiuar',
-        demo: 'https://qiuar.pages.dev/'
+        github: "https://github.com/niconiahi/qiuar",
+        demo: "https://qiuar.pages.dev/",
       },
       title: "QR generating library",
       notes: [
         "The goal of this project was to deep dive into a technical definition of some well established pattern. There are tons of formal documentation on how to generate, read and interpret a QR",
         "Another goal was to make, what would be the most successful QR generating library of the time, clearer in terms of codebase. I found myself reading and not understanding a thing, even though the wikidedia defintion didn't seem as complicated",
         "I thought it was the perfect place to use tests as the result was extremly specific so that's what I did. Every function, up until now, of the current library implementation is tested. This gives me extreme confidence while touching and trying new things out. I love it",
-      ]
+      ],
     },
     {
       links: {
-        github: 'https://github.com/niconiahi/animatronik',
-        demo: 'https://animatronik.pages.dev/'
+        github: "https://github.com/niconiahi/animatronik",
+        demo: "https://animatronik.pages.dev/",
       },
       title: "Share and store your animated SVG collectible",
       notes: [
@@ -229,35 +230,35 @@ export async function loader({ context }: LoaderFunctionArgs) {
         "I created a first smart contract, deployed it to the blockchain and consumed it from the application",
         "I also store the data required by the collectible in a decentralized storage center. A reference to this data is stored in each collectible found in the contract",
         "It was also a goal not to use React state but instead using some form of signal to fine-grain update the UI. For this I used Jotai. Preventing re-renders feels good",
-      ]
+      ],
     },
     {
       links: {
-        github: 'https://github.com/niconiahi/remix-siwe-demo',
-        demo: 'https://remix-siwe-demo.pages.dev/'
+        github: "https://github.com/niconiahi/remix-siwe-demo",
+        demo: "https://remix-siwe-demo.pages.dev/",
       },
       title: "Cryptographically-protected authentication flow demo",
       notes: [
         "The goal of this project was to recreate an already existent demo but which was poorly structured and unclear. Also it was using no frameworks to demostrate the flow, which is kind of an archaic way of doing it (not even vanilla Vite). This made it really unclear how this would fit with the modern days of metaframeworks",
         "It only has one dependency which is the official one provided by the team who implemented the Sign in with Ethereum protocol. Using the user's private and public keys, it validates and creates a session",
         "To demostrate simplicity only HTML form submissions are used to handle mutations. These submissions are validated and handled using Remix's actions",
-      ]
+      ],
     },
     {
       links: {
-        github: 'https://github.com/niconiahi/remix-d1-kysely-demo',
-        demo: 'https://remix-d1-kysely-demo.pages.dev/'
+        github: "https://github.com/niconiahi/remix-d1-kysely-demo",
+        demo: "https://remix-d1-kysely-demo.pages.dev/",
       },
       title: "Minimalistic application showcasing Kysely query builder with Cloudflare D1 database",
       notes: [
         "The goal of this project was to create a detailed documentation on how to setup all the configuration required to connect Kysely query builder with Cloudflare's D1 SQLite database along with an example query and mutation to the SQLite database",
         "This was also my first time using a query builder which was my approach of choice between this one and an ORM. I was intending to use raw SQQL to learn but the autocompletion of a query builder was a dealbreaker. I intend to jump on using raw SQL at some point but not today",
         "This was also my first using D1, so I was answering many questions on how the DX would be. The rough edges it would have and that. Nowadays, with workerd, Remix seemesly integrates with Cloudflare D1. The experience is awesome",
-      ]
+      ],
     },
     {
       links: {
-        github: 'https://github.com/niconiahi/gorkerd',
+        github: "https://github.com/niconiahi/gorkerd",
       },
       title: "Go webserver running on a workerd environment using Svelte as template engine",
       notes: [
@@ -266,7 +267,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
         "The difficulty here resides in that there has to be a process where the Svelte components are compiled down to Javascript in order to be injected by Go when responding to a given route call",
         "Another difficulty resides in that this has to be compiled to WebAssembly (through the use of tinygo) due to the limited memory available inside the workerd instance",
         "The last difficulty of this project is to grab this .wasm file and run it in a workerd environment. I don't know yet how to do this but it should be possible as workerd knows how to receive Requests and send Responses, and the Wasm binary does exactly that. That's the premise of this project",
-      ]
+      ],
     },
   ]
 
@@ -274,7 +275,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
     {
       articles,
       stack,
-      projects
+      projects,
     },
     {
       headers: {
@@ -320,7 +321,7 @@ export default function Index() {
       <section className="col-span-1">
         <h2 className="mb-2">Tech stack</h2>
         <div className="interests-grid grid gap-1">
-          {stack.map((s) => (
+          {stack.map(s => (
             <a
               key={`interest-${s.label}`}
               href={s.link}
@@ -342,9 +343,11 @@ export default function Index() {
                 <div className="flex flex-col justify-between w-full items-center md:flex-row">
                   <h5 className="font-bold">{project.title}</h5>
                   <nav className="space-x-2">
-                    {project.links?.demo ? (
-                      <a target="_blank" href={project.links.demo}>See demo</a>
-                    ) : null}
+                    {project.links?.demo
+                      ? (
+                        <a target="_blank" href={project.links.demo}>See demo</a>
+                        )
+                      : null}
                     <a target="_blank" href={project.links.github}>Check it out on Github</a>
                   </nav>
                 </div>

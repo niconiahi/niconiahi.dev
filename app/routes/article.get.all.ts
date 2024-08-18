@@ -1,4 +1,5 @@
 import { type LoaderFunctionArgs, json } from "@remix-run/cloudflare"
+
 import { getQueryBuilder } from "~/utils/query-builder.server"
 
 export async function loader({ context }: LoaderFunctionArgs) {
