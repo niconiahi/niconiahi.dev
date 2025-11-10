@@ -29,7 +29,7 @@
   .logo {
     width: 3.75rem;
     height: 3.75rem;
-    background: red;
+    background: var(--red);
   }
   ul a {
     text-decoration: none;
