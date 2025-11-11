@@ -43,7 +43,7 @@
 <article onmousemove={handle_mouse_move} onmouseleave={handle_mouse_leave}>
   <img alt="jejejejejej" src={project.image} />
   <h3>{project.title}</h3>
-  <span>Posted · {date}</span>
+  <span>Created · {date}</span>
   <p>{project.description}</p>
 </article>
 
@@ -53,7 +53,7 @@
     flex-direction: column;
     gap: 0.5rem;
     outline: 2px solid transparent;
-    outline-offset: 2px;
+    outline-offset: 4px;
     transition:
       transform 100ms ease-out,
       outline-color 100ms ease-out;
@@ -66,20 +66,20 @@
       cursor: pointer;
     }
   }
-
   h3 {
     font-size: 1.25rem;
     font-weight: bold;
   }
-
   img {
     box-shadow: 2px 2px 6px var(--neutral-400);
     border-radius: 0.25rem;
   }
-
   span {
     color: var(--neutral-600);
     font-size: 0.75rem;
     font-weight: bold;
+  }
+  p {
+    white-space: pre-line;
   }
 </style>

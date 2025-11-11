@@ -1,6 +1,10 @@
 <script lang="ts">
   import Title from "$lib/components/title.svelte";
   import Card from "./components/card.svelte";
+  import ethernauta_img from "$lib/assets/ethernauta.png";
+  import peer_to_peer_videoconference_img from "$lib/assets/peer-to-peer-videoconference.png";
+  import ariabones_img from "$lib/assets/ariabones.png";
+  import morfar_img from "$lib/assets/morfar.png";
   type Project = {
     title: string;
     description: string;
@@ -10,11 +14,35 @@
   const projects: Project[] = [
     {
       title: "Etherenauta",
+      date: new Date(2025, 7, 20),
+      image: ethernauta_img,
       description:
-        "The initial idea here was to do a deep dive into a Web API that I was requiring to understand fully in order to use it for another project: a web torrent client. This technology is called WebRTC and it's used to create a channel in which pairs can share data with each other once established",
-      date: new Date(2025, 5, 25),
-      image:
-        "https://media.gettyimages.com/id/1454065258/photo/couple-standing-on-top-of-a-cliff-looking-at-sunset-lanzarote-spain.jpg?s=612x612&w=0&k=20&c=i1EBYi6nZjHVZwiMPr1yFe10od-M6OUMcuF8En1e_XI=",
+        `This open-source library allows you to interact with the Ethereum's blockchain in a type-safe manner`.trim(),
+    },
+    {
+      title: "Morfar",
+      date: new Date(2025, 7, 20),
+      image: morfar_img,
+      description:
+        `Restaurant management application which helps owners set dietary restrictions for their products automatically
+
+On the other end, users get completely reliable dietary restrictions's filters when navigating the restaurant's menu`.trim(),
+    },
+    {
+      title: "Peer-to-peer videoconference application",
+      date: new Date(2024, 5, 9),
+      image: peer_to_peer_videoconference_img,
+      description:
+        `Google Meet alternative which allows you to connect call another peorson without signing up`.trim(),
+    },
+    {
+      title: "Ariabones",
+      date: new Date(2024, 5, 9),
+      image: ariabones_img,
+      description:
+        `Modular and atomic unstyled web components that you can easily install and use
+
+You take care of the styles, the library takes care of the accessibility`.trim(),
     },
   ];
 </script>
