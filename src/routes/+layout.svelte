@@ -3,6 +3,7 @@
   import favicon from "$lib/assets/favicon.svg";
   import "$lib/styles/fonts.css";
   import "$lib/styles/global.css";
+  import "$lib/styles/tokens.css";
   let { children } = $props();
 </script>
 

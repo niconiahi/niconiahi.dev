@@ -1,11 +1,3 @@
-:root {
-  --red: #c7253e;
-  --neutral-300: #f4f4f8;
-  --neutral-500: #cacbd4;
-  --neutral-700: #717188;
-  --neutral-1000: #000;
-}
-
 * {
   margin: 0;
   padding: 0;
