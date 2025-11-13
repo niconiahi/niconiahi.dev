@@ -6,7 +6,6 @@
   import ariabones_img from "$lib/assets/ariabones.png";
   import morfar_img from "$lib/assets/morfar.png";
   import animatronik_img from "$lib/assets/animatronik.png";
-  import olga_img from "$lib/assets/olga.png";
   import cryptoman_img from "$lib/assets/cryptoman.png";
 
   const projects: Project[] = [
@@ -27,16 +26,7 @@
 On the other end, users get completely reliable dietary restrictions's filters when navigating the restaurant's menu`.trim(),
     },
     {
-      title: "Olga",
-      date: new Date(2024, 4, 5),
-      image: olga_img,
-      description:
-        `This application extracts all chapters for every uploaded video for every show of a streaming channel called Olga
-
-It then lists these chapters with the corresponding link that navigates to the expected video in the expected time`.trim(),
-    },
-    {
-      title: "Cryptoman",
+      title: "Wallet",
       date: new Date(2025, 8, 7),
       image: cryptoman_img,
       description: `An Ethereum wallet written completely from scratch
