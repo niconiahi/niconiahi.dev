@@ -134,7 +134,7 @@ const hash = await writable(writer(SEPOLIA_CHAIN_ID))
 
 ### register_transaction
 
-This function will store the executed transaction in `window.transactions`. It returns the initial state for the `transaction`. It implements a _pooling system_ that every few seconds, gets the latest transaction state and modify the stored transactin accordingly
+This function will store the executed transaction in `window.transactions`. It returns the initial state for the `transaction`. It implements a _pooling system_ that every few seconds, gets the latest transaction state and modify the stored transaction accordingly
 
 ```ts
 const transaction = register_transaction(hash)
@@ -145,5 +145,7 @@ const transaction = register_transaction(hash)
 If you want to subscribe to transaction state changes, you can use `watch_transaction`. This allows, between other things, informing the user as his/her transaction is getting confirmed
 
 ```ts
-const transaction = register_transaction(hash)
+watch_transaction(hash, (transaction) => {
+  // subsequent states that the transaction goes trough
+})
 ```
