@@ -1,0 +1,20 @@
+---
+title: Wallet
+description: Ethereum wallet built from scratch
+author: niconiahi
+date: 2025-09-07
+---
+
+## The story
+
+An Ethereum wallet written completely from scratch.
+
+It uses the base building blocks provided by my other project, Ethernauta.
+
+## Technical decisions
+
+Coming soon...
+
+## The code
+
+Coming soon...

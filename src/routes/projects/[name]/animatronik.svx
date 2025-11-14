@@ -1,0 +1,20 @@
+---
+title: Animatronik
+description: Share CSS collectibles as blockchain NFTs
+author: niconiahi
+date: 2024-05-18
+---
+
+## The story
+
+Share your CSS collectible with the world.
+
+The foundational technology used is blockchain NFTs.
+
+## Technical decisions
+
+Coming soon...
+
+## The code
+
+Coming soon...

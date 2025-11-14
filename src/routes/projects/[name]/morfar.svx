@@ -1,0 +1,20 @@
+---
+title: Morfar
+description: Restaurant management application for dietary restrictions
+author: niconiahi
+date: 2025-05-11
+---
+
+## The story
+
+Restaurant management application which helps owners set dietary restrictions for their products automatically.
+
+On the other end, users get completely reliable dietary restrictions's filters when navigating the restaurant's menu.
+
+## Technical decisions
+
+Coming soon...
+
+## The code
+
+Coming soon...

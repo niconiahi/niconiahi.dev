@@ -1,0 +1,20 @@
+---
+title: Ariabones
+description: Modular and atomic unstyled web components
+author: niconiahi
+date: 2024-02-19
+---
+
+## The story
+
+Modular and atomic unstyled web components that you can easily install and use.
+
+You take care of the styles, the library takes care of the accessibility.
+
+## Technical decisions
+
+Coming soon...
+
+## The code
+
+Coming soon...
