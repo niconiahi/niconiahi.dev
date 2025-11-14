@@ -7,24 +7,32 @@ date: 2025-01-11
 
 ## The story
 
-This project was implemented with the initial theory that the foundational technology to connect Javascript codebases with the blockchain should only use Browser APIs. This way, the library will work both on the server and on the client
+This project was implemented with the initial theory that the foundational technology to connect Javascript codebases with the blockchain should only use Browser APIs. This way, the library _will_ work both on the server and on the client
+
+The problem is that, for some reason, the protocol expects NodeJS's `EventEmitter`, which in my opinion is a _huge_ mistake
+
+Why tying the functionality of the Ethereum protocol to a non-standard Web API? It's even more grave given that many cloud providers use Standard Web APIs
+
+This means that we are obligated to run libraries like `viem` or `etherjs` in the browser. Runninng them on the server, _might_ error out
+
+This goes against the new wave of meta-frameworks which are moving code execution to the server
 
 ## Technical decisions
 
 The API design for the library has _composability_ as a pilar. In this sense, there are only a few moving components with which all functionalities are achieved
 
-Another key decision was to not use any libraries. Everything is written from scratch, but the much complicated and probably extraordinarily error-prone cryptography libraries
+Another key decision was to be dependency-free. Everything is written from scratch, _all but_ the much complicated and probably extraordinarily error-prone cryptography libraries such as `@noble/secp256k1` or `@scure/bip32`
 
 ## The code
 
 ### reader
 
-The `create_reader` function creates a `reader`. The `reader` is a function that will be used along with corresponding [readable](#reader) counterpart. It is the combination of these two that will _read_ the blockchain
+The `create_reader` function creates a `reader`. The `reader` is a function that will be used along with corresponding `readable` counterpart. It is the combination of these two that will _read_ the blockchain
 
 ```ts
 export const reader = create_reader([
   {
-    chainId: "eip155:11155111",
+    chainId: SEPOLIA_CHAIN_ID,
     transports: [
       http("https://grounded-electronic-house.ethereum-sepolia.quiknode.pro/4d40a4c7ec139649d4b1f43f5d536c3756faacc9")
     ],
@@ -89,4 +97,53 @@ const readable = eth_getBlockByHash([
 ]);
 const block = await readable(reader(SEPOLIA_CHAIN_ID));
 const block = await readable(reader(MAINNET_CHAIN_ID));
+```
+
+If you execute your call against a chain that is not configured in the `reader`, it will error out
+
+```ts
+const readable = eth_getBlockByHash([
+  "0x31386e6cfba70bb4d8a95404bdb740572b758a15c62e51ee912071a7b5be9e26",
+  false,
+]);
+const block = await readable(reader(POLYGON_MAINNET_CHAIN_ID)); // -> Error
+```
+
+### writer
+
+The `writer` gets instanced exactly the same as `reader`
+
+```ts
+export const writer = create_writer([
+  {
+    chainId: SEPOLIA_CHAIN_ID,
+    transports: [
+      http("https://grounded-electronic-house.ethereum-sepolia.quiknode.pro/4d40a4c7ec139649d4b1f43f5d536c3756faacc9")
+    ],
+  },
+])
+```
+
+### writable
+
+The `writable` usage is the same as `reader`, with the difference of what's return from executing the call is a _hash_
+
+```ts
+const hash = await writable(writer(SEPOLIA_CHAIN_ID))
+```
+
+### register_transaction
+
+This function will store the executed transaction in `window.transactions`. It returns the initial state for the `transaction`. It implements a _pooling system_ that every few seconds, gets the latest transaction state and modify the stored transactin accordingly
+
+```ts
+const transaction = register_transaction(hash)
+```
+
+### watch_transaction
+
+If you want to subscribe to transaction state changes, you can use `watch_transaction`. This allows, between other things, informing the user as his/her transaction is getting confirmed
+
+```ts
+const transaction = register_transaction(hash)
 ```
