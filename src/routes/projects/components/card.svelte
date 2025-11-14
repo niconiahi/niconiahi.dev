@@ -36,10 +36,12 @@
 </script>
 
 <article onmousemove={handle_mouse_move} onmouseleave={handle_mouse_leave}>
-  <img alt="jejejejejej" src={project.image} />
-  <h3>{project.title}</h3>
-  <span>Created · {date}</span>
-  <p>{project.description}</p>
+  <a href={`/projects/${project.title.toLocaleLowerCase()}`}>
+    <img alt="jejejejejej" src={project.image} />
+    <h3>{project.title}</h3>
+    <span>Created · {date}</span>
+    <p>{project.description}</p>
+  </a>
 </article>
 
 <style>
@@ -65,10 +67,15 @@
     font-size: 1.25rem;
     font-weight: bold;
   }
+  a {
+    text-decoration: none;
+    color: var(--neutral-1000);
+  }
   img {
     box-shadow: 2px 2px 6px var(--neutral-400);
     border-radius: 0.25rem;
     aspect-ratio: 1;
+    max-width: 100%;
   }
   span {
     color: var(--neutral-600);

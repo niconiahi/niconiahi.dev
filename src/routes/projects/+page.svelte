@@ -10,7 +10,7 @@
 
   const projects: Project[] = [
     {
-      title: "Etherenauta",
+      title: "Ethernauta",
       date: new Date(2025, 7, 20),
       image: ethernauta_img,
       description:

@@ -1,0 +1,92 @@
+---
+title: Ethernauta
+description: In depth explanation of Ethernauta project
+author: niconiahi
+date: 2025-01-11
+---
+
+## The story
+
+This project was implemented with the initial theory that the foundational technology to connect Javascript codebases with the blockchain should only use Browser APIs. This way, the library will work both on the server and on the client
+
+## Technical decisions
+
+The API design for the library has _composability_ as a pilar. In this sense, there are only a few moving components with which all functionalities are achieved
+
+Another key decision was to not use any libraries. Everything is written from scratch, but the much complicated and probably extraordinarily error-prone cryptography libraries
+
+## The code
+
+### reader
+
+The `create_reader` function creates a `reader`. The `reader` is a function that will be used along with corresponding [readable](#reader) counterpart. It is the combination of these two that will _read_ the blockchain
+
+```ts
+export const reader = create_reader([
+  {
+    chainId: "eip155:11155111",
+    transports: [
+      http("https://grounded-electronic-house.ethereum-sepolia.quiknode.pro/4d40a4c7ec139649d4b1f43f5d536c3756faacc9")
+    ],
+  },
+])
+```
+
+### readable
+
+The `readable` defines _what_ is going to be read from the blochain. Which brings the question: what can be read from the blockchain? It can be:
+- `view` functions
+- `pure` functions
+- Auto-generated getters for `public` state variables
+- Raw chain data via `eth_` native functions
+
+For example we can create a `readable` for the Ethereum native `eth_getBlockByHash` to get the block information for a given hash
+
+```ts
+const readable = eth_getBlockByHash([
+  "0x31386e6cfba70bb4d8a95404bdb740572b758a15c62e51ee912071a7b5be9e26",
+  false,
+]);
+```
+
+Now we are only missing executing this _read_. For that to happen we have to combine the call the `readable` using a `reader`
+
+```ts
+const readable = eth_getBlockByHash([
+  "0x31386e6cfba70bb4d8a95404bdb740572b758a15c62e51ee912071a7b5be9e26",
+  false,
+]);
+const block = await readable(reader(SEPOLIA_CHAIN_ID));
+```
+
+This last line can be read as: "execute this readable function in the Sepolia blockchain". You could be asking yourself: why do you need to provide the `SEPOLIA_CHAIN_ID` param? because only a single `reader` is expected to be used. Then, at the time of execution, you provide the target chain
+
+Here is how a more interesting `reader` which handles Sepolia and Mainnet would look like:
+
+```ts
+export const reader = create_reader([
+  {
+    chainId: SEPOLIA_CHAIN_ID,
+    transports: [
+      http("https://grounded-electronic-house.ethereum-sepolia.quiknode.pro/4d40a4c7ec139649d4b1f43f5d536c3756faacc9"),
+    ],
+  },
+  {
+    chainId: MAINNET_CHAIN_ID,
+    transports: [
+      http("https://fire-water-wind.ethereum-mainnet.quiknode.pro/4d40a4c7ec139649d4b1f43f5d536c3756faacc9"),
+    ],
+  },
+])
+```
+
+With this, you can easily switch which chain you execute your call against
+
+```ts
+const readable = eth_getBlockByHash([
+  "0x31386e6cfba70bb4d8a95404bdb740572b758a15c62e51ee912071a7b5be9e26",
+  false,
+]);
+const block = await readable(reader(SEPOLIA_CHAIN_ID));
+const block = await readable(reader(MAINNET_CHAIN_ID));
+```
