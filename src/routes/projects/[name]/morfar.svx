@@ -7,14 +7,47 @@ date: 2025-05-11
 
 ## The story
 
-Restaurant management application which helps owners set dietary restrictions for their products automatically.
+This starts with a personal problem. Very often, more than I would like, I would be looking for restaurants to go eat and it would be a very difficult for me to find the right resturant -- given that I'm vegan. The same problem would still happen when sitting at a restaurant: I would sit, ask for the menu and with any luck I would find the green symbol in the form of a leaft
 
-On the other end, users get completely reliable dietary restrictions's filters when navigating the restaurant's menu.
+With this problem in mind, I knew what I wanted to see: restaurant menues with first-class dietary restrictions filters. At the same time, I felt confident that I could come up with a system that would enforce restaurants to provide such information. I solved that in a simple way: whenever an ingredient enters the system, the application will enforce the user to also set which dietary restrictions that ingredient belongs to
+
+That said, raw ingredients like wheat floor, water, orange, etc -- are all already provided by the system already. The only time the user has to interact with the dietary restrictions picker is when adding a new external ingredient
+
+With this ingredients setup -- and with the notion that a product is a group of ingredients -- I can accurately inform the user the dietary restrictions for any of the products
+
+I can also create a very reliable filtering system for dietary restrictions. The only possibility for the filter not to work correctly, is if the restuarant has set incorrect information about the ingredients of that product. That's it
+
 
 ## Technical decisions
 
-Coming soon...
+### caching
 
-## The code
+For this project I wanted to put all my knowledge to test. First of all, using a meta-framework like `react-router`, relying completely on server side rendering. This way, I could rely on asset [fingerprinting](https://en.wikipedia.org/wiki/Fingerprint_(computing)) achieved using [Vite](https://vite.dev/)
 
-Coming soon...
+What is important to understand about a _fingerprinted asset_ is that it's _name_ will include a _hash_ that will make the asset unique. This _hash_ is based on its content: if the content changes, the hash changes. For example: `/assets/header.CHQecuu7.css`
+
+With this fingerprinted assets, it's completely safe to be utilize aggresive caching strategies like `Cache-Control: public, max-age=31536000, immutable`. This strategy in specific is going to store the asset in the user's browser for a year. Whenever this asset is fetched again, it's not going to go to the server to get it, it will get it from the browser cache
+
+### database
+
+Another pilar of the project was apply normalization at its fullest. None of the _40 tables_ for the application duplicate data. To balance the potential strain that this could have on the database, and connected to what was mentioned before, I heavily rely on chaching
+
+Information about restaurants rarely change, so what I basically do is _invalidation on demand_: whenever there is a mutation on the database for a particular restaurant, I will invalidate the cache which uses it. To cache here I make use of [Workers KV](https://developers.cloudflare.com/kv/) which a _Redis-like_ service--and a very cheap one
+
+As for the database itself, I chose [Cloudflare D1](https://www.cloudflare.com/developer-platform/products/d1/), the _SQLite_ database provided by Cloudflare itself. This way latency is reduced to a minimum, given that both the application and the database run in the same premises
+
+### interacting with database
+
+I knew that I didn't want to write raw SQL but at the same time I knew _I didn't_ want much abstraction around it. In this sense, I did a little investigation and came up with _query builders_
+
+What's great about them? it's intended API is to mimic ordering, naming and functionality of _raw SQL_. It doesn't add _any magic_ by design
+
+### execution flow
+
+Also I made sure the architecture stays dead simple:
+
+SQL (with query builder) loaded on [react-router's loader](https://reactrouter.com/start/framework/data-loading#server-data-loading) -> render JSX using that data
+
+That's it: no `useEffect`, no store management libraries, no `react-query`--just plain old database read -> hand data directly
+
+This makes debugging so easy: no jumping around in many files--it's either on the `loader` or the function that the `loader` calls. One or two layers, no more
