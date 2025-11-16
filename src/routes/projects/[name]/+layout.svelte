@@ -4,10 +4,14 @@
 
 <style>
   main {
-    padding-inline: 2.5rem;
+    padding-inline: 1.5rem;
     padding-block: 4rem;
-    max-width: 70vw;
     margin: 0 auto;
+    width: 100%;
+
+    @media (min-width: 60rem) {
+      width: 60vw;
+    }
   }
   main :global(> *) {
     margin-bottom: 1rem;
