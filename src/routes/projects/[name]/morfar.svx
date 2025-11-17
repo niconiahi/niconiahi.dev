@@ -46,7 +46,7 @@ What's great about them? it's intended API is to mimic ordering, naming and func
 
 Also I made sure the architecture stays dead simple:
 
-SQL (with query builder) loaded on [react-router's loader](https://reactrouter.com/start/framework/data-loading#server-data-loading) -> render JSX using that data
+HTTP request received on [react-router's loader](https://reactrouter.com/start/framework/data-loading#server-data-loading) -> SQL (with query builder)  -> render JSX using that data
 
 That's it: no `useEffect`, no store management libraries, no `react-query`--just plain old database read -> hand data directly
 

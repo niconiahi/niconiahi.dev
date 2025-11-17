@@ -7,14 +7,46 @@ date: 2025-09-07
 
 ## The story
 
-An Ethereum wallet written completely from scratch.
+This starts with the intention of creating a proof of concept that closes up an idea. This idea had to be an moderately complicated Ethereum project
 
-It uses the base building blocks provided by my other project, Ethernauta.
+For this, I started thinking and decided on a wallet. That's because I wanted to dive deep into concepts like: 
+- how signing a transaction worked
+- how setting up a new wallet using the nmemonics work
+- how to store this information safely
+- how the password interacted with it all
 
 ## Technical decisions
 
-Coming soon...
+### simplicity
 
-## The code
+I wanted the API to be dead simple, that's why there are only two methods exposed: `sign` and `connect`. You just have to install the extension and:
 
-Coming soon...
+To connect, execute:
+
+```ts
+window.wallet.connect()
+```
+
+To sign a transaction, execute:
+
+```ts
+const signed_transaction = await window.wallet.sign(
+  "transfer", // the method
+  ["0x636c0fcd6da2207abfa80427b556695a4ad0af94"] // the params
+)
+```
+
+### modularity
+
+Only exposing these two methods is by design. This wallet is a small utility that let's you _signing the transactions_. Usually, wallets handle signing _and sending_. This wallet, doesn't
+
+What this means is that it doesn't lock the user in. You sign it and send it however you want to send it. You may use `viem`, `ether.js` or, why not, [ethernauta](https://github.com/niconiahi/ethernauta)
+
+You can send a signed transaction with `ethernauta`, like so:
+
+```ts
+const writable = eth_sendRawTransaction([signed_transaction])
+const hash = await writable(writer(SEPOLIA_CHAIN_ID))
+```
+
+For more information about `writer` and `writable` APIs, check the documentation for the [Ethernauta project](https://niconiahi-dev.niconiahi.workers.dev/projects/ethernauta)
