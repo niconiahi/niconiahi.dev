@@ -7,7 +7,13 @@ date: 2024-06-09
 
 ## The story
 
-Google Meet alternative which allows you to call another person without signing up.
+This one starts with some random investigation around Web APIs. I wanted to do a demo project which used one of them--one that was not so easy to implement. In this search, I came across the [WebRTC API](https://developer.mozilla.org/es/docs/Web/API/WebRTC_API/Protocols)
+
+What this technology enables is peer to peer (p2p) communication between two clients. To make the connection happen, these two clients need to share some information with each other. To share this information, it's recommended to establish a WebSocket connection and share messages with each other
+
+This information is then used to establish the _p2p connection_. Once the connection is established, the WebSocket connection can be disposed
+
+Now, these two users can share data with each other. This data includes, between others things, _video information_ captured with their camera
 
 ## Technical decisions
 
